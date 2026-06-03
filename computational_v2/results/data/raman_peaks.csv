@@ -1,0 +1,11 @@
+Band (cm-1),Assignment,bare pos (cm-1),poly pos (cm-1),shift (cm-1),Rel.int change (norm THF),Interpretation
+~181,Mg–Cl str. (less-aggregated / dissociated Mg–Cl),181.9±0.8,181.4±1.9,-0.5,x2.0 (0.031->0.062),more dissociated Mg–Cl species
+~276,Cl-bridge str. (aggregated [Mg2Cl3]+/Mg–Cl–Al),274.6±0.8,273.5±0.3,-1.1,-30% (0.048->0.034),fewer chloride-bridged aggregates / CIPs
+~915,THF ring breathing nu(C-O-C),914.8±0.1,915.2±0.0,0.3,ref,solvent framework ~unchanged
+~999/1002,[AlPh4]- phenyl ring-breathing,999.0±0.0,1001.9±0.0,2.9,+8% (0.333->0.358),anion toward FREE position -> dissociation
+~1033,phenyl C–H in-plane bend,1032.3±0.1,1032.8±0.1,0.5,~flat,minor
+~1240,THF/phenyl CH2 twist,1239.3,1239.6,0.4,lower,minor
+~1483/1486,THF CH2 deformation,1482.7±0.9,1485.8±0.2,3.2,-,coordinated-THF stiffening (Mg solvation shell)
+~1582,phenyl C=C str.,1581.0±0.2,weak/unresolved,,-41%,phenyl C=C weak in poly (not a shift)
+~2876,sym ν(C–H) THF/phenyl,2874.7±0.1,2874.9±0.0,0.2,higher,C–H framework ~unchanged
+~2962,asym ν(C–H),2963.3±0.1,2962.6±0.1,-0.8,higher,C–H framework ~unchanged

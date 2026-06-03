@@ -1,0 +1,10 @@
+%oldchk=Mg2Cl3_THF6_cation_opt.chk
+%chk=Mg2Cl3_THF6_cation_ox_adia.chk
+%nprocshared=24
+%mem=48GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt freq SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+Mg2Cl3_THF6_cation adiabatic ox opt
+
+2 2
+

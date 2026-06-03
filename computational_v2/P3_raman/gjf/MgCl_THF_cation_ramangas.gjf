@@ -1,0 +1,10 @@
+%oldchk=MgCl_THF_cation_ramanopt.chk
+%chk=MgCl_THF_cation_ramangas.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ freq=raman int=ultrafine geom=check guess=read
+
+MgCl_THF_cation gas-phase Raman activities
+
+1 1
+

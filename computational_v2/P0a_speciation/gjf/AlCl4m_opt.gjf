@@ -1,0 +1,14 @@
+%chk=AlCl4m_opt.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt freq SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+AlCl4m opt/freq SVP
+
+-1 1
+Al       0.000000       0.000000       0.000000
+Cl       1.241303       1.241303       1.241303
+Cl       1.241303      -1.241303      -1.241303
+Cl      -1.241303       1.241303      -1.241303
+Cl      -1.241303      -1.241303       1.241303
+

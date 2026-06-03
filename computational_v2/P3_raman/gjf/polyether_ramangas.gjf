@@ -1,0 +1,10 @@
+%oldchk=polyether_ramanopt.chk
+%chk=polyether_ramangas.chk
+%nprocshared=16
+%mem=24GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ freq=raman int=ultrafine geom=check guess=read
+
+polyether gas-phase Raman activities
+
+0 1
+

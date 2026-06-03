@@ -1,0 +1,126 @@
+# poly-APC v2 G16 job manifest  (name ncores mem phase [dep])
+# dep = afterok dependency jobname; throttle.sh keeps Sum(cores) <= 96
+AlCl4m_opt 8 14GB P0a_speciation
+AlCl4m_tzvp 8 14GB P0a_speciation AlCl4m_opt
+AlPhCl3m_opt 16 24GB P0a_speciation
+AlPhCl3m_tzvp 16 24GB P0a_speciation AlPhCl3m_opt
+AlPh2Cl2m_opt 16 24GB P0a_speciation
+AlPh2Cl2m_tzvp 16 24GB P0a_speciation AlPh2Cl2m_opt
+AlPh3Clm_opt 16 24GB P0a_speciation
+AlPh3Clm_tzvp 16 24GB P0a_speciation AlPh3Clm_opt
+AlPh4m_opt 24 48GB P0a_speciation
+AlPh4m_tzvp 24 48GB P0a_speciation AlPh4m_opt
+AlCl3_opt 8 14GB P0a_speciation
+AlCl3_tzvp 8 14GB P0a_speciation AlCl3_opt
+AlPh3_opt 16 24GB P0a_speciation
+AlPh3_tzvp 16 24GB P0a_speciation AlPh3_opt
+Mg2Cl3_THF6_cation_opt 24 48GB P0a_speciation
+Mg2Cl3_THF6_cation_tzvp 24 48GB P0a_speciation Mg2Cl3_THF6_cation_opt
+Mg_Cl_Al_ionpair_opt 32 64GB P0a_speciation
+Mg_Cl_Al_ionpair_tzvp 32 64GB P0a_speciation Mg_Cl_Al_ionpair_opt
+OTfm_opt 8 14GB P0a_speciation
+OTfm_tzvp 8 14GB P0a_speciation OTfm_opt
+TMSOTf_opt 16 24GB P0a_speciation
+TMSOTf_tzvp 16 24GB P0a_speciation TMSOTf_opt
+THF_opt 8 14GB P0a_speciation
+THF_tzvp 8 14GB P0a_speciation THF_opt
+Me2O_opt 8 14GB P0a_speciation
+Me2O_tzvp 8 14GB P0a_speciation Me2O_opt
+MgCl_THF_cation_opt 8 14GB P0a_speciation
+MgCl_THF_cation_tzvp 8 14GB P0a_speciation MgCl_THF_cation_opt
+AlCl4m_ox_vert 8 14GB P0b_redox
+AlCl4m_ox_adia 8 14GB P0b_redox AlCl4m_tzvp
+AlCl4m_ox_wb97xd 8 14GB P0b_redox
+AlCl4m_ox_m062x 8 14GB P0b_redox
+AlCl4m_red_vert 8 14GB P0b_redox
+AlCl4m_red_adia 8 14GB P0b_redox AlCl4m_tzvp
+AlCl4m_red_wb97xd 8 14GB P0b_redox
+AlCl4m_red_m062x 8 14GB P0b_redox
+AlCl4m_red_tzvpd 8 14GB P0b_redox
+AlCl4m_red_AlClscan 8 14GB P0b_redox
+AlPhCl3m_ox_vert 16 24GB P0b_redox
+AlPhCl3m_ox_adia 16 24GB P0b_redox AlPhCl3m_tzvp
+AlPhCl3m_ox_wb97xd 16 24GB P0b_redox
+AlPhCl3m_ox_m062x 16 24GB P0b_redox
+AlPhCl3m_red_vert 16 24GB P0b_redox
+AlPhCl3m_red_adia 16 24GB P0b_redox AlPhCl3m_tzvp
+AlPhCl3m_red_wb97xd 16 24GB P0b_redox
+AlPhCl3m_red_m062x 16 24GB P0b_redox
+AlPhCl3m_red_tzvpd 16 24GB P0b_redox
+AlPhCl3m_red_AlClscan 16 24GB P0b_redox
+AlPhCl3m_red_AlCscan 16 24GB P0b_redox
+AlPh2Cl2m_ox_vert 16 24GB P0b_redox
+AlPh2Cl2m_ox_adia 16 24GB P0b_redox AlPh2Cl2m_tzvp
+AlPh2Cl2m_ox_wb97xd 16 24GB P0b_redox
+AlPh2Cl2m_ox_m062x 16 24GB P0b_redox
+AlPh2Cl2m_red_vert 16 24GB P0b_redox
+AlPh2Cl2m_red_adia 16 24GB P0b_redox AlPh2Cl2m_tzvp
+AlPh2Cl2m_red_wb97xd 16 24GB P0b_redox
+AlPh2Cl2m_red_m062x 16 24GB P0b_redox
+AlPh2Cl2m_red_tzvpd 16 24GB P0b_redox
+AlPh2Cl2m_red_AlClscan 16 24GB P0b_redox
+AlPh2Cl2m_red_AlCscan 16 24GB P0b_redox
+AlPh3Clm_ox_vert 16 24GB P0b_redox
+AlPh3Clm_ox_adia 16 24GB P0b_redox AlPh3Clm_tzvp
+AlPh3Clm_ox_wb97xd 16 24GB P0b_redox
+AlPh3Clm_ox_m062x 16 24GB P0b_redox
+AlPh3Clm_red_vert 16 24GB P0b_redox
+AlPh3Clm_red_adia 16 24GB P0b_redox AlPh3Clm_tzvp
+AlPh3Clm_red_wb97xd 16 24GB P0b_redox
+AlPh3Clm_red_m062x 16 24GB P0b_redox
+AlPh3Clm_red_tzvpd 16 24GB P0b_redox
+AlPh3Clm_red_AlClscan 16 24GB P0b_redox
+AlPh3Clm_red_AlCscan 16 24GB P0b_redox
+AlPh4m_ox_vert 24 48GB P0b_redox
+AlPh4m_ox_adia 24 48GB P0b_redox AlPh4m_tzvp
+AlPh4m_ox_wb97xd 24 48GB P0b_redox
+AlPh4m_ox_m062x 24 48GB P0b_redox
+AlPh4m_red_vert 24 48GB P0b_redox
+AlPh4m_red_adia 24 48GB P0b_redox AlPh4m_tzvp
+AlPh4m_red_wb97xd 24 48GB P0b_redox
+AlPh4m_red_m062x 24 48GB P0b_redox
+AlPh4m_red_tzvpd 24 48GB P0b_redox
+AlPh4m_red_AlCscan 24 48GB P0b_redox
+AlCl3_ox_vert 8 14GB P0b_redox
+AlCl3_ox_adia 8 14GB P0b_redox AlCl3_tzvp
+AlCl3_ox_wb97xd 8 14GB P0b_redox
+AlCl3_ox_m062x 8 14GB P0b_redox
+AlCl3_red_vert 8 14GB P0b_redox
+AlCl3_red_adia 8 14GB P0b_redox AlCl3_tzvp
+AlCl3_red_wb97xd 8 14GB P0b_redox
+AlCl3_red_m062x 8 14GB P0b_redox
+AlCl3_red_tzvpd 8 14GB P0b_redox
+AlCl3_red_AlClscan 8 14GB P0b_redox
+AlPh3_ox_vert 16 24GB P0b_redox
+AlPh3_ox_adia 16 24GB P0b_redox AlPh3_tzvp
+AlPh3_ox_wb97xd 16 24GB P0b_redox
+AlPh3_ox_m062x 16 24GB P0b_redox
+AlPh3_red_vert 16 24GB P0b_redox
+AlPh3_red_adia 16 24GB P0b_redox AlPh3_tzvp
+AlPh3_red_wb97xd 16 24GB P0b_redox
+AlPh3_red_m062x 16 24GB P0b_redox
+AlPh3_red_tzvpd 16 24GB P0b_redox
+AlPh3_red_AlCscan 16 24GB P0b_redox
+Mg2Cl3_THF6_cation_ox_vert 24 48GB P0b_redox
+Mg2Cl3_THF6_cation_ox_adia 24 48GB P0b_redox Mg2Cl3_THF6_cation_tzvp
+Mg2Cl3_THF6_cation_ox_wb97xd 24 48GB P0b_redox
+Mg2Cl3_THF6_cation_ox_m062x 24 48GB P0b_redox
+Mg2Cl3_THF6_cation_red_vert 24 48GB P0b_redox
+Mg2Cl3_THF6_cation_red_adia 24 48GB P0b_redox Mg2Cl3_THF6_cation_tzvp
+Mg2Cl3_THF6_cation_red_wb97xd 24 48GB P0b_redox
+Mg2Cl3_THF6_cation_red_m062x 24 48GB P0b_redox
+Mg2Cl3_THF6_cation_red_tzvpd 24 48GB P0b_redox
+OTfm_red_CFscan 8 14GB P1_SEI
+OTfm_red_CSscan 8 14GB P1_SEI
+TMSOTf_red_SiOscan 16 24GB P1_SEI
+TMSOTf_red_CFscan 16 24GB P1_SEI
+THF_ramanopt 8 14GB P3_raman
+THF_ramangas 8 14GB P3_raman THF_ramanopt
+MgCl_THF_cation_ramanopt 8 14GB P3_raman
+MgCl_THF_cation_ramangas 8 14GB P3_raman MgCl_THF_cation_ramanopt
+AlPh2Cl2m_ramanopt 16 24GB P3_raman
+AlPh2Cl2m_ramangas 16 24GB P3_raman AlPh2Cl2m_ramanopt
+polyether_ramanopt 16 24GB P3_raman
+polyether_ramangas 16 24GB P3_raman polyether_ramanopt
+POSS_cage_ramanopt 16 24GB P3_raman
+POSS_cage_ramangas 16 24GB P3_raman POSS_cage_ramanopt

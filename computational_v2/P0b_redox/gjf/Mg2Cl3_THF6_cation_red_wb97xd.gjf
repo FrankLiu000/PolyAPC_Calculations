@@ -1,0 +1,10 @@
+%oldchk=Mg2Cl3_THF6_cation_opt.chk
+%chk=Mg2Cl3_THF6_cation_red_wb97xd.chk
+%nprocshared=24
+%mem=48GB
+#p wB97XD/def2TZVP SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+Mg2Cl3_THF6_cation red wb97xd SP
+
+0 2
+

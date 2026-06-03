@@ -1,0 +1,10 @@
+%oldchk=Mg_Cl_Al_ionpair_opt.chk
+%chk=Mg_Cl_Al_ionpair_tzvp.chk
+%nprocshared=32
+%mem=64GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+Mg_Cl_Al_ionpair def2-TZVP SP
+
+0 1
+

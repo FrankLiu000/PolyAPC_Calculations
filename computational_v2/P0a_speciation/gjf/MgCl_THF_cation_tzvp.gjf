@@ -1,0 +1,10 @@
+%oldchk=MgCl_THF_cation_opt.chk
+%chk=MgCl_THF_cation_tzvp.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+MgCl_THF_cation def2-TZVP SP
+
+1 1
+

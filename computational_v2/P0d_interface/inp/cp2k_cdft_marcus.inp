@@ -1,0 +1,106 @@
+&GLOBAL
+  PROJECT cdft_marcus
+  RUN_TYPE ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+&FORCE_EVAL
+  METHOD QS
+    &DFT
+      BASIS_SET_FILE_NAME BASIS_MOLOPT
+      POTENTIAL_FILE_NAME GTH_POTENTIALS
+      CHARGE 0
+      &MGRID
+        CUTOFF 400
+        REL_CUTOFF 50
+      &END MGRID
+      &QS
+        EPS_DEFAULT 1.0E-12
+        &CDFT
+          TYPE_OF_CONSTRAINT BECKE
+          &OUTER_SCF ON
+            TYPE CDFT_CONSTRAINT
+            OPTIMIZER NEWTON
+            MAX_SCF 20
+            EPS_SCF 1.0E-3
+          &END OUTER_SCF
+          &ATOM_GROUP
+            ATOMS  {ANION_ATOM_LIST}     ! indices of the [AlPh2Cl2]- fragment
+            COEFF 1.0
+            CONSTRAINT_TYPE CHARGE
+            ! states: TARGET = N (neutral anion) and N+1 (reduced) ->
+            ! dG_ET and reorganisation energy lambda via the 4-point Marcus scheme
+            TARGET 0.0
+          &END ATOM_GROUP
+          &BECKE_CONSTRAINT
+            ADJUST_SIZE .TRUE.
+            ATOMIC_RADII  Al 1.20  Cl 1.00  C 0.77  H 0.37
+            CAVITY_CONFINE .TRUE.
+            CAVITY_SHAPE VDW
+          &END BECKE_CONSTRAINT
+        &END CDFT
+      &END QS
+      &SCF
+        SCF_GUESS ATOMIC
+        EPS_SCF 1.0E-5
+        MAX_SCF 60
+        &OT ON
+          MINIMIZER DIIS
+          PRECONDITIONER FULL_SINGLE_INVERSE
+        &END OT
+        &OUTER_SCF ON
+          MAX_SCF 20
+          EPS_SCF 1.0E-5
+        &END OUTER_SCF
+      &SMEAR ON
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 500
+      &END SMEAR
+      ADDED_MOS 120
+      &END SCF
+      &XC
+        &XC_FUNCTIONAL PBE
+        &END XC_FUNCTIONAL
+        &VDW_POTENTIAL
+          POTENTIAL_TYPE PAIR_POTENTIAL
+          &PAIR_POTENTIAL
+            TYPE DFTD3
+            PARAMETER_FILE_NAME dftd3.dat
+            REFERENCE_FUNCTIONAL PBE
+          &END PAIR_POTENTIAL
+        &END VDW_POTENTIAL
+      &END XC
+    &END DFT
+    &SUBSYS
+      @INCLUDE 'iface_bare.coord.inc'
+      &KIND Al
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q3
+      &END KIND
+      &KIND C
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q4
+      &END KIND
+      &KIND Cl
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q7
+      &END KIND
+      &KIND H
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q1
+      &END KIND
+      &KIND Mg
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q2
+      &END KIND
+      &KIND O
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q6
+      &END KIND
+    &END SUBSYS
+&END FORCE_EVAL
+! ---- Marcus protocol (run as 4 jobs, bare AND poly): -----------------------
+!  (1) state A geom, constraint N     -> E_AA
+!  (2) state A geom, constraint N+1   -> E_AB
+!  (3) state B geom, constraint N+1   -> E_BB
+!  (4) state B geom, constraint N     -> E_BA
+!  dG_ET = E_BB - E_AA ; lambda = 0.5*((E_AB-E_AA)+(E_BA-E_BB))

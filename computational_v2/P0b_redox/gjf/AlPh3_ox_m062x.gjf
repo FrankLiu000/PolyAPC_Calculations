@@ -1,0 +1,10 @@
+%oldchk=AlPh3_opt.chk
+%chk=AlPh3_ox_m062x.chk
+%nprocshared=16
+%mem=24GB
+#p M062X/def2TZVP EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+AlPh3 ox m062x SP
+
+1 2
+

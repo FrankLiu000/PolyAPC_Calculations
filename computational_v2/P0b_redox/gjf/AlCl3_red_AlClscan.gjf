@@ -1,0 +1,15 @@
+%chk=AlCl3_red_AlClscan.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt=modredundant SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+AlCl3+e- Al-Cl cleavage scan
+
+-1 2
+Al       0.000000       0.000000       0.000000
+Cl       2.150000       0.000000       0.000000
+Cl      -1.075000       1.861955       0.000000
+Cl      -1.075000      -1.861955       0.000000
+
+B 1 2 S 10 0.10
+

@@ -1,0 +1,19 @@
+%chk=OTfm_red_CFscan.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt=modredundant SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+OTfm+e- C-F -> F-
+
+-2 2
+C        0.875232       0.034769       0.099182
+F        1.497415       0.761285      -0.884236
+F        1.466419      -1.203007       0.077869
+F        1.257653       0.609423       1.284749
+S       -0.981238      -0.038980      -0.111194
+O       -1.472991      -0.845169       1.014441
+O       -1.204241      -0.674951      -1.416808
+O       -1.438249       1.356631      -0.064003
+
+B 1 2 S 10 0.10
+

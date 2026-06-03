@@ -64,3 +64,9 @@ poster_requirements/
 .DS_Store
 Thumbs.db
 *~
+__pycache__/
+*.pyc
+
+# --- Deliberately re-include the v2 deliverable figures (small PNGs, versioned) ---
+!computational_v2/results/figures/
+!computational_v2/results/figures/*.png

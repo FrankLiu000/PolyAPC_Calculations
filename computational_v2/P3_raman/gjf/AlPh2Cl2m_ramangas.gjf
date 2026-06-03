@@ -1,0 +1,10 @@
+%oldchk=AlPh2Cl2m_ramanopt.chk
+%chk=AlPh2Cl2m_ramangas.chk
+%nprocshared=16
+%mem=24GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ freq=raman int=ultrafine geom=check guess=read
+
+AlPh2Cl2m gas-phase Raman activities
+
+-1 1
+
