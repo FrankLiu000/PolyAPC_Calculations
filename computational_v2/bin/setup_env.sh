@@ -5,6 +5,7 @@
 # This does NOT install Gaussian/CP2K/Multiwfn/ORCA — those are the
 # site-installed binaries referenced by run_g16.sh / run_cp2k.sh / mwfn_batch.sh.
 set -euo pipefail
+unset PYTHONPATH  # keep system site-packages out of the conda env
 
 PREFIX="${MINICONDA_PREFIX:-$HOME/miniconda3}"
 ENV_NAME="${ENV_NAME:-build}"
@@ -21,7 +22,7 @@ source "$PREFIX/etc/profile.d/conda.sh"
 
 if ! conda env list | grep -q "^$ENV_NAME "; then
   echo "[setup_env] creating conda env '$ENV_NAME'"
-  conda create -y -n "$ENV_NAME" python=3.11 ase pymatgen matplotlib numpy scipy rdkit pandas
+  conda create -y -n "$ENV_NAME" --override-channels -c conda-forge python=3.11 ase pymatgen matplotlib numpy scipy rdkit pandas
 fi
 
 conda activate "$ENV_NAME"

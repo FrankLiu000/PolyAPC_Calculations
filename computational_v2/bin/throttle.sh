@@ -36,7 +36,9 @@ while read -r name ncores mem phase dep _rest; do
     depflag=(--dependency=afterok:"${JID[$dep]}")
   fi
 
-  jid=$(sbatch --parsable -c "$ncores" --mem "$mem" -D "$phase/gjf" "${depflag[@]}" \
+  rundir="${RUNDIR:-$phase/gjf}"   # RUNDIR overrides per-phase dirs (shared chk pool)
+  # no --mem: this node tracks CPUs only (CR_CPU, RealMemory=1); Gaussian %mem self-limits
+  jid=$(sbatch --parsable -c "$ncores" -D "$rundir" "${depflag[@]}" \
         "$RUNG16" "$name")
   JID[$name]="$jid"
   echo "[throttle] submitted $name (${ncores}c ${mem}) jid=$jid ${dep:+dep=$dep}"

@@ -10,6 +10,10 @@ set -euo pipefail
 NAME="${1:?usage: run_cp2k.sh <jobname (no .inp)>}"
 NP="${SLURM_NTASKS:-${NP:-64}}"
 export OMP_NUM_THREADS=1
+# --- site wiring (CP2K inputs use relative basis/potential names) ---
+export CP2K_DATA_DIR="${CP2K_DATA_DIR:-/CH/cp2k-2025.1/data}"
+export PATH="/CH/cp2k-2025.1/tools/toolchain/install/openmpi-5.0.6/bin:$PATH"
+export OMPI_MCA_btl_vader_single_copy_mechanism=none
 
 CP2K_BIN="${CP2K_BIN:-/CH/cp2k-2025.1/exe/local/cp2k.psmp}"
 echo "[run_cp2k] $NAME on $NP MPI ranks (OMP=1)"

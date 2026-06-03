@@ -12,7 +12,7 @@ NAME="${1:?usage: run_g16.sh <jobname (no .gjf)>}"
 NCORES="${SLURM_CPUS_PER_TASK:-8}"
 
 # shellcheck disable=SC1091
-source /CH/g16/bsd/g16.profile
+set +u; source /CH/g16/bsd/g16.profile; set -u   # g16.profile references unset vars (e.g. LD_LIBRARY64_PATH)
 export GAUSS_SCRDIR="/mnt/scratch_disk/g16_scratch/${NAME}"
 mkdir -p "$GAUSS_SCRDIR"
 
