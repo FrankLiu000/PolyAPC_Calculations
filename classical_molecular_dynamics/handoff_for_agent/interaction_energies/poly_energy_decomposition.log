@@ -1,0 +1,68 @@
+                      :-) GROMACS - gmx energy, 2025.1 (-:
+
+Executable:   /lyz/gmx2025.1/bin/gmx
+Data prefix:  /lyz/gmx2025.1
+Working dir:  /lyz/Claude_workplace/polyAPC
+Command line:
+  gmx energy -f analysis/poly/ene/rerun.edr -o analysis/poly/ene/inter_E.xvg
+
+Opened analysis/poly/ene/rerun.edr as single precision energy file
+
+Select the terms you want from the following list by
+selecting either (part of) the name or the number or a combination.
+End your selection with an empty line or a zero.
+-------------------------------------------------------------------
+  1  Bond             2  Angle            3  Ryckaert-Bell.   4  LJ-14         
+  5  Coulomb-14       6  LJ-(SR)          7  Coulomb-(SR)     8  Coul.-recip.  
+  9  Potential                           10  Coul-SR:MgCluster-MgCluster       
+ 11  LJ-SR:MgCluster-MgCluster           12  Coul-14:MgCluster-MgCluster       
+ 13  LJ-14:MgCluster-MgCluster           14  Coul-SR:MgCluster-Anion           
+ 15  LJ-SR:MgCluster-Anion               16  Coul-14:MgCluster-Anion           
+ 17  LJ-14:MgCluster-Anion               18  Coul-SR:MgCluster-Solvent         
+ 19  LJ-SR:MgCluster-Solvent             20  Coul-14:MgCluster-Solvent         
+ 21  LJ-14:MgCluster-Solvent             22  Coul-SR:MgCluster-Polymer         
+ 23  LJ-SR:MgCluster-Polymer             24  Coul-14:MgCluster-Polymer         
+ 25  LJ-14:MgCluster-Polymer             26  Coul-SR:MgCluster-Initiator       
+ 27  LJ-SR:MgCluster-Initiator           28  Coul-14:MgCluster-Initiator       
+ 29  LJ-14:MgCluster-Initiator           30  Coul-SR:Anion-Anion               
+ 31  LJ-SR:Anion-Anion                   32  Coul-14:Anion-Anion               
+ 33  LJ-14:Anion-Anion                   34  Coul-SR:Anion-Solvent             
+ 35  LJ-SR:Anion-Solvent                 36  Coul-14:Anion-Solvent             
+ 37  LJ-14:Anion-Solvent                 38  Coul-SR:Anion-Polymer             
+ 39  LJ-SR:Anion-Polymer                 40  Coul-14:Anion-Polymer             
+ 41  LJ-14:Anion-Polymer                 42  Coul-SR:Anion-Initiator           
+ 43  LJ-SR:Anion-Initiator               44  Coul-14:Anion-Initiator           
+ 45  LJ-14:Anion-Initiator               46  Coul-SR:Solvent-Solvent           
+ 47  LJ-SR:Solvent-Solvent               48  Coul-14:Solvent-Solvent           
+ 49  LJ-14:Solvent-Solvent               50  Coul-SR:Solvent-Polymer           
+ 51  LJ-SR:Solvent-Polymer               52  Coul-14:Solvent-Polymer           
+ 53  LJ-14:Solvent-Polymer               54  Coul-SR:Solvent-Initiator         
+ 55  LJ-SR:Solvent-Initiator             56  Coul-14:Solvent-Initiator         
+ 57  LJ-14:Solvent-Initiator             58  Coul-SR:Polymer-Polymer           
+ 59  LJ-SR:Polymer-Polymer               60  Coul-14:Polymer-Polymer           
+ 61  LJ-14:Polymer-Polymer               62  Coul-SR:Polymer-Initiator         
+ 63  LJ-SR:Polymer-Initiator             64  Coul-14:Polymer-Initiator         
+ 65  LJ-14:Polymer-Initiator             66  Coul-SR:Initiator-Initiator       
+ 67  LJ-SR:Initiator-Initiator           68  Coul-14:Initiator-Initiator       
+ 69  LJ-14:Initiator-Initiator         
+
+Reading energy frame      0 time 10000.000         Reading energy frame      1 time 10010.000         Reading energy frame      2 time 10020.000         Reading energy frame      3 time 10030.000         Reading energy frame      4 time 10040.000         Reading energy frame      5 time 10050.000         Reading energy frame      6 time 10060.000         Reading energy frame      7 time 10070.000         Reading energy frame      8 time 10080.000         Reading energy frame      9 time 10090.000         Reading energy frame     10 time 10100.000         Reading energy frame     11 time 10110.000         Reading energy frame     12 time 10120.000         Reading energy frame     13 time 10130.000         Reading energy frame     14 time 10140.000         Reading energy frame     15 time 10150.000         Reading energy frame     16 time 10160.000         Reading energy frame     17 time 10170.000         Reading energy frame     18 time 10180.000         Reading energy frame     19 time 10190.000         Reading energy frame     20 time 10200.000         Reading energy frame     30 time 10300.000         Reading energy frame     40 time 10400.000         Reading energy frame     50 time 10500.000         Reading energy frame     60 time 10600.000         Reading energy frame     70 time 10700.000         Reading energy frame     80 time 10800.000         Reading energy frame     90 time 10900.000         Reading energy frame    100 time 11000.000         Reading energy frame    110 time 11100.000         Reading energy frame    120 time 11200.000         Reading energy frame    130 time 11300.000         Reading energy frame    140 time 11400.000         Reading energy frame    150 time 11500.000         Reading energy frame    160 time 11600.000         Reading energy frame    170 time 11700.000         Reading energy frame    180 time 11800.000         Reading energy frame    190 time 11900.000         Reading energy frame    200 time 12000.000         Reading energy frame    300 time 13000.000         Reading energy frame    400 time 14000.000         Reading energy frame    500 time 15000.000         Reading energy frame    600 time 16000.000         Reading energy frame    700 time 17000.000         Reading energy frame    800 time 18000.000         Reading energy frame    900 time 19000.000         Reading energy frame   1000 time 20000.000         Reading energy frame   1100 time 21000.000         Reading energy frame   1200 time 22000.000         Reading energy frame   1300 time 23000.000         Reading energy frame   1400 time 24000.000         Reading energy frame   1500 time 25000.000         Reading energy frame   1600 time 26000.000         Reading energy frame   1700 time 27000.000         Reading energy frame   1800 time 28000.000         Reading energy frame   1900 time 29000.000         Reading energy frame   2000 time 30000.000         Reading energy frame   3000 time 40000.000         Reading energy frame   4000 time 50000.000         Last energy frame read 4000 time 50000.000         
+
+GROMACS reminds you: "Nobody Never Learnt No-Nothing from No History" (Gogol Bordello)
+
+
+Statistics over 20000001 steps [ 10000.0000 through 50000.0000 ps ], 10 data sets
+All statistics are over 4001 points (frames)
+
+Energy                      Average   Err.Est.       RMSD  Tot-Drift
+-------------------------------------------------------------------------------
+Coul-SR:MgCluster-MgCluster    73891.6         11    87.8244    73.7148  (kJ/mol)
+LJ-SR:MgCluster-MgCluster   -4926.51         14    88.8788   -83.7592  (kJ/mol)
+Coul-SR:MgCluster-Anion    -7471.69        140    303.164   -980.128  (kJ/mol)
+LJ-SR:MgCluster-Anion      -3538.49         28    116.806   -189.298  (kJ/mol)
+Coul-SR:MgCluster-Solvent   -1189.08        130     269.03    884.329  (kJ/mol)
+LJ-SR:MgCluster-Solvent     -8818.5         60    214.466     373.34  (kJ/mol)
+Coul-SR:MgCluster-Polymer    4.45253        8.7    35.9086    45.0818  (kJ/mol)
+LJ-SR:MgCluster-Polymer    -3436.43         23    163.503    44.5165  (kJ/mol)
+Coul-SR:MgCluster-Initiator   -654.103         28    72.8584   -189.677  (kJ/mol)
+LJ-SR:MgCluster-Initiator   -152.244        5.7    23.4921   -38.4402  (kJ/mol)

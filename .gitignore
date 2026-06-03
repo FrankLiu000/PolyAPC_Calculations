@@ -1,0 +1,66 @@
+# ======================================================================
+# poly-APC v2 — track only lightweight planning/context files.
+# The heavy raw experimental data and poster sources (~2.6 GB) are kept
+# LOCAL ONLY, so remote (Ultraplan / cloud) sessions stay small and no
+# unpublished raw data is pushed off-box. The actual calculation workspace
+# lives outside this repo (/CH/poly_v2/). Re-include deliberately if needed.
+# ======================================================================
+
+# --- Raw electrochemistry / instrument data dirs (hundreds of MB each) ---
+MgMg/
+MgCu/
+MgMo6S8_0.5C_cycle/
+MgMo6S8_1C_cycle/
+Aurbach_Coulombic_Efficiency/
+critical_current_density/
+Mg_transference_number/
+
+# --- Posters, previews, requirements (large binaries) ---
+Previous_posters/
+_tmp_preview/
+poster_requirements/
+
+# --- Binary / large file types anywhere in the tree ---
+*.cex
+*.icex
+*.mdat
+*.VGD
+*.vgd
+*.rar
+*.zip
+*.7z
+*.iso
+*.pdf
+*.doc
+*.docx
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+*.tif
+*.tiff
+*.bmp
+*.png
+*.jpg
+*.jpeg
+*.psd
+*.ai
+
+# --- Large MD / simulation binaries (small .pdb/.xyz seeds are KEPT) ---
+*.gro
+*.itp
+*.top
+*.tpr
+*.trr
+*.xtc
+*.edr
+*.cpt
+*.ndx
+*.wfn
+*.chk
+*.fchk
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+*~

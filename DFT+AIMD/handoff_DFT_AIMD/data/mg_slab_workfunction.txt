@@ -1,0 +1,2 @@
+Mg(0001) slab, CP2K PBE-D3, Fermi smearing, dipole-corrected vacuum:
+  Work function  Phi = 3.97 eV   (cf. expt 3.66 eV, PBE literature ~3.7 eV)  -> slab validated.

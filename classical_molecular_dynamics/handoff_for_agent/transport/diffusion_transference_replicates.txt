@@ -1,0 +1,13 @@
+Diffusion coefficients from 3×100 ns replicates (COM-MSD, fit 20–80 ns)
+D in 10^-5 cm^2/s ; reported mean ± SEM across replicates
+
+  bare  cation [Mg2Cl3·6THF]+      reps=['0.0474', '0.0596', '0.0455']  ->  D = 0.0508 ± 0.0044  (n=3)
+  bare  anion [Ph2AlCl2]-          reps=['0.0496', '0.0591', '0.0411']  ->  D = 0.0499 ± 0.0052  (n=3)
+  bare  t+ = D+/(D++D-) per-rep=['0.489', '0.502', '0.526'] -> 0.505 ± 0.011
+
+  poly  cation [Mg2Cl3·6THF]+      reps=['0.0143', '0.0099', '0.0099']  ->  D = 0.0114 ± 0.0015  (n=3)
+  poly  anion [Ph2AlCl2]-          reps=['0.0163', '0.0097', '0.0093']  ->  D = 0.0118 ± 0.0023  (n=3)
+  poly  t+ = D+/(D++D-) per-rep=['0.468', '0.504', '0.515'] -> 0.496 ± 0.014
+
+  slowdown bare->poly  MgCluster  = ×4.5
+  slowdown bare->poly  Anion      = ×4.2

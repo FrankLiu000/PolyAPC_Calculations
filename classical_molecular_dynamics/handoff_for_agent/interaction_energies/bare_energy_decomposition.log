@@ -1,0 +1,46 @@
+                      :-) GROMACS - gmx energy, 2025.1 (-:
+
+Executable:   /lyz/gmx2025.1/bin/gmx
+Data prefix:  /lyz/gmx2025.1
+Working dir:  /lyz/Claude_workplace/polyAPC
+Command line:
+  gmx energy -f analysis/bare/ene/rerun.edr -o analysis/bare/ene/inter_E.xvg
+
+Opened analysis/bare/ene/rerun.edr as single precision energy file
+
+Select the terms you want from the following list by
+selecting either (part of) the name or the number or a combination.
+End your selection with an empty line or a zero.
+-------------------------------------------------------------------
+  1  Bond             2  Angle            3  Ryckaert-Bell.   4  LJ-14         
+  5  Coulomb-14       6  LJ-(SR)          7  Coulomb-(SR)     8  Coul.-recip.  
+  9  Potential                           10  Coul-SR:MgCluster-MgCluster       
+ 11  LJ-SR:MgCluster-MgCluster           12  Coul-14:MgCluster-MgCluster       
+ 13  LJ-14:MgCluster-MgCluster           14  Coul-SR:MgCluster-Anion           
+ 15  LJ-SR:MgCluster-Anion               16  Coul-14:MgCluster-Anion           
+ 17  LJ-14:MgCluster-Anion               18  Coul-SR:MgCluster-Solvent         
+ 19  LJ-SR:MgCluster-Solvent             20  Coul-14:MgCluster-Solvent         
+ 21  LJ-14:MgCluster-Solvent             22  Coul-SR:Anion-Anion               
+ 23  LJ-SR:Anion-Anion                   24  Coul-14:Anion-Anion               
+ 25  LJ-14:Anion-Anion                   26  Coul-SR:Anion-Solvent             
+ 27  LJ-SR:Anion-Solvent                 28  Coul-14:Anion-Solvent             
+ 29  LJ-14:Anion-Solvent                 30  Coul-SR:Solvent-Solvent           
+ 31  LJ-SR:Solvent-Solvent               32  Coul-14:Solvent-Solvent           
+ 33  LJ-14:Solvent-Solvent             
+
+Reading energy frame      0 time 10000.000         Reading energy frame      1 time 10010.000         Reading energy frame      2 time 10020.000         Reading energy frame      3 time 10030.000         Reading energy frame      4 time 10040.000         Reading energy frame      5 time 10050.000         Reading energy frame      6 time 10060.000         Reading energy frame      7 time 10070.000         Reading energy frame      8 time 10080.000         Reading energy frame      9 time 10090.000         Reading energy frame     10 time 10100.000         Reading energy frame     11 time 10110.000         Reading energy frame     12 time 10120.000         Reading energy frame     13 time 10130.000         Reading energy frame     14 time 10140.000         Reading energy frame     15 time 10150.000         Reading energy frame     16 time 10160.000         Reading energy frame     17 time 10170.000         Reading energy frame     18 time 10180.000         Reading energy frame     19 time 10190.000         Reading energy frame     20 time 10200.000         Reading energy frame     30 time 10300.000         Reading energy frame     40 time 10400.000         Reading energy frame     50 time 10500.000         Reading energy frame     60 time 10600.000         Reading energy frame     70 time 10700.000         Reading energy frame     80 time 10800.000         Reading energy frame     90 time 10900.000         Reading energy frame    100 time 11000.000         Reading energy frame    110 time 11100.000         Reading energy frame    120 time 11200.000         Reading energy frame    130 time 11300.000         Reading energy frame    140 time 11400.000         Reading energy frame    150 time 11500.000         Reading energy frame    160 time 11600.000         Reading energy frame    170 time 11700.000         Reading energy frame    180 time 11800.000         Reading energy frame    190 time 11900.000         Reading energy frame    200 time 12000.000         Reading energy frame    300 time 13000.000         Reading energy frame    400 time 14000.000         Reading energy frame    500 time 15000.000         Reading energy frame    600 time 16000.000         Reading energy frame    700 time 17000.000         Reading energy frame    800 time 18000.000         Reading energy frame    900 time 19000.000         Reading energy frame   1000 time 20000.000         Reading energy frame   1100 time 21000.000         Reading energy frame   1200 time 22000.000         Reading energy frame   1300 time 23000.000         Reading energy frame   1400 time 24000.000         Reading energy frame   1500 time 25000.000         Reading energy frame   1600 time 26000.000         Reading energy frame   1700 time 27000.000         Reading energy frame   1800 time 28000.000         Reading energy frame   1900 time 29000.000         Reading energy frame   2000 time 30000.000         Reading energy frame   3000 time 40000.000         Reading energy frame   4000 time 50000.000         Last energy frame read 4000 time 50000.000         
+
+GROMACS reminds you: "Cowardly refusing to create an empty archive" (GNU tar)
+
+
+Statistics over 20000001 steps [ 10000.0000 through 50000.0000 ps ], 6 data sets
+All statistics are over 4001 points (frames)
+
+Energy                      Average   Err.Est.       RMSD  Tot-Drift
+-------------------------------------------------------------------------------
+Coul-SR:MgCluster-MgCluster    73942.2        7.7    85.5799    49.8171  (kJ/mol)
+LJ-SR:MgCluster-MgCluster   -4942.47         20    102.471   -94.2924  (kJ/mol)
+Coul-SR:MgCluster-Anion    -7793.38        230    494.755   -1621.04  (kJ/mol)
+LJ-SR:MgCluster-Anion      -3510.94         54    150.986   -375.364  (kJ/mol)
+Coul-SR:MgCluster-Solvent    -1233.1        190    405.528    1339.99  (kJ/mol)
+LJ-SR:MgCluster-Solvent    -12109.6         89     253.23    565.614  (kJ/mol)

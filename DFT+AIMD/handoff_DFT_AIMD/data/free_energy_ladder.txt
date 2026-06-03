@@ -1,0 +1,29 @@
+species                                Gcorr          E_TZVP  NImag  G(Ha)
+[Mg₂Cl₃(THF)₆]⁺ dimer (resting)      0.63640    -3176.691032      0  -3176.054632
+[Mg₂Cl₃(THF)₅]⁺                      0.52501    -2944.092872      1  -2943.567865
+[Mg₂Cl₃(THF)₄]⁺                      0.41396    -2711.494690      0  -2711.080733
+[Mg₂Cl₃(THF)₃]⁺                      0.30451    -2478.886038      0  -2478.581528
+[MgCl(THF)]⁺                         0.08545     -892.882163      0   -892.796714
+[MgCl]⁺                             -0.02127     -660.271695      0   -660.292963
+THF                                  0.08919     -232.564208      1   -232.475017
+[MgCl(THF)]⁰ (reduced)               0.08313     -892.987576      0   -892.904449
+[MgCl]⁰ (reduced)                   -0.02213     -660.404139      0   -660.426268
+Me₂O (ether-O model)                 0.05368     -155.102183      0   -155.048502
+[MgCl(ether)]⁺ (relay product)       0.04917     -815.413437      0   -815.364272
+  [small imaginary modes (THF −36, dimer libration ~−20 cm⁻¹) are floppy-mode artifacts;
+   Gaussian's Gibbs correction omits them — negligible effect on ΔG.]
+
+=== STEP FREE ENERGIES ΔG (kcal/mol, 298 K, SMD-THF; +1.9/THF released) ===
+  --- desolvation of the resting dimer (per THF) ---
+  [Mg₂Cl₃(THF)₆]⁺ → ₅ + THF                            ΔG =    9.3
+  [Mg₂Cl₃(THF)₅]⁺ → ₄ + THF                            ΔG =    9.5
+  [Mg₂Cl₃(THF)₄]⁺ → ₃ + THF                            ΔG =   17.1
+  --- rate-limiting LAST-THF removal (mononuclear), three routes ---
+  dissociative (cation):  [MgCl(THF)]⁺ → [MgCl]⁺ + THF ΔG =   19.9
+  reduction-coupled:      [MgCl(THF)]⁰ → [MgCl]⁰ + THF ΔG =    3.9
+  network-O relay (swap): [MgCl(THF)]⁺+ether → [MgCl(ether)]⁺+THF ΔG =    5.6
+
+  ** reduction lowers the last-THF barrier by -16.0 kcal/mol (electron from the electrode) **
+  ** relay swap is BARRIERLESS (no TS: opt=ts slides to product; scans trap no maximum) **
+
+saved free_energy_ladder.png

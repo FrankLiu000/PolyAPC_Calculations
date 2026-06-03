@@ -1,0 +1,16 @@
+Mg solvation statistics  (201 frames x 160 Mg = 32160 samples)
+cutoffs nm: Mg-Cl 0.315  Mg-O 0.300  Mg-anionCl 0.345
+
+  Cl (bridge)      mean  3.00  sd 0.00   dist {3: 32160}
+  O (THF)          mean  3.16  sd 0.36   dist {3: 27120, 4: 5040}
+  O (polymer)      mean  0.01  sd 0.08   dist {0: 31960, 1: 200}
+  Cl (anion)       mean  0.80  sd 0.41   dist {0: 6509, 1: 25537, 2: 114}
+  total(Cl+O)      mean  6.16  sd 0.37   dist {6: 26920, 7: 5240}
+
+  dominant motifs (Cl,Othf,Opoly) -> count [fraction]:
+    (3, 3, 0) : 26920  [83.7%]
+    (3, 4, 0) : 5040  [15.7%]
+    (3, 3, 1) : 200  [0.6%]
+
+  Mg with >=1 anion-Cl contact: 79.8%
+  Mg with >=1 polymer-O contact: 0.6%

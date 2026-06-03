@@ -1,0 +1,11 @@
+extracted poly_r2
+extracted poly_r3
+=== AGGREGATE ===
+Collective (Einstein-Helfand) ionic conductivity, mean +/- SEM over replicates
+fit 10-40 ns; sigma in mS/cm
+
+  bare  reps=['0.036', '0.113', '0.169'] -> sigma_coll = 0.106 +/- 0.039 mS/cm  (n=3)
+        sigma_NE = 1.325 ; ionicity (coll/NE) = 0.08 +/- 0.03
+  poly  reps=['0.046', '0.035', '0.040'] -> sigma_coll = 0.040 +/- 0.003 mS/cm  (n=3)
+        sigma_NE = 0.306 ; ionicity (coll/NE) = 0.13 +/- 0.01
+ALLDONE
