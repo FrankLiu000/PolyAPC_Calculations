@@ -143,6 +143,14 @@ def redox(name, symbols, charge):
                       f"#p {fn} {disp} {SMD} {TIGHT} geom=check guess=read".replace("  ", " "),
                       f"{name} {tag} {fname} SP", q2, m2,
                       oldchk=f"{name}_opt", symbols=symbols)
+    # parent at the cross-check functionals — required to form a SAME-functional IP/EA
+    # (subtracting a B3LYP parent from a wB97XD/M06-2X ion gives nonsense, ~14-16 eV)
+    for fn, fname, disp in (("wB97XD/def2TZVP", "par_wb97xd", ""),
+                            ("M062X/def2TZVP", "par_m062x", "EmpiricalDispersion=GD3")):
+        write_gjf("P0b_redox", f"{name}_{fname}",
+                  f"#p {fn} {disp} {SMD} {TIGHT} geom=check guess=read".replace("  ", " "),
+                  f"{name} parent {fname} SP", charge, base_mult,
+                  oldchk=f"{name}_opt", symbols=symbols)
     # diffuse EA for anion reduction (extra electron needs diffuse functions)
     q_red = charge - 1
     # diffuse basis for the EA (this g16 build doesn't recognise def2TZVPD -> 6-311++G(d,p))

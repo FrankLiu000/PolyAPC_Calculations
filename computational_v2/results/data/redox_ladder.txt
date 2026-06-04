@@ -1,0 +1,12 @@
+# poly-APC v2 — redox ladder (vertical, SMD/def2-TZVP // PCM-opt geometry)
+# IP = E(parent-1e) - E(parent);  EA = E(parent) - E(parent+1e);  eV. Same functional for parent & ion.
+# Anodic weak point = lowest IP. Cross-functional band = B3LYP / wB97XD / M06-2X.
+
+species       IP_B3LYP  IP_wB97XD  IP_M062X  EA_B3LYP
+AlCl4m            7.66       8.20      8.37     -1.30
+AlPhCl3m          6.38       6.47      6.63      0.09
+AlPh2Cl2m         6.18       6.61      6.73      0.06
+AlPh3Clm          5.95       6.32      6.40      0.10
+AlPh4m            5.73       6.17      6.29      0.17
+AlCl3             9.33       9.79      9.94      1.44
+AlPh3             6.89       7.37      7.48      1.69
