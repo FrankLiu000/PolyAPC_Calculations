@@ -134,18 +134,20 @@ def redox(name, symbols, charge):
                   f"{name} adiabatic {tag} opt", q2, m2,
                   oldchk=f"{name}_opt", symbols=symbols, dep=f"{name}_tzvp")
         # cross-check functionals (single points at parent geometry)
-        for fn, fname in (("wB97XD/def2TZVP", "wb97xd"),
-                          ("M062X/def2TZVP", "m062x")):
+        # wB97XD carries its own dispersion (no GD3); M06-2X uses D3 ZERO-damping
+        # (GD3, NOT GD3BJ — M06-2X has no Becke-Johnson params -> l301 R6DS8 crash)
+        for fn, fname, disp in (("wB97XD/def2TZVP", "wb97xd", ""),
+                                ("M062X/def2TZVP", "m062x", "EmpiricalDispersion=GD3")):
             write_gjf("P0b_redox", f"{name}_{tag}_{fname}",
-                      f"#p {fn} {DISP if 'wB97' not in fn else ''} {SMD} {TIGHT} "
-                      f"geom=check guess=read".replace("  ", " "),
+                      f"#p {fn} {disp} {SMD} {TIGHT} geom=check guess=read".replace("  ", " "),
                       f"{name} {tag} {fname} SP", q2, m2,
                       oldchk=f"{name}_opt", symbols=symbols)
     # diffuse EA for anion reduction (extra electron needs diffuse functions)
     q_red = charge - 1
+    # diffuse basis for the EA (this g16 build doesn't recognise def2TZVPD -> 6-311++G(d,p))
     write_gjf("P0b_redox", f"{name}_red_tzvpd",
-              f"#p B3LYP/def2TZVPD {DISP} {SMD} {TIGHT} geom=check guess=read",
-              f"{name} EA diffuse def2-TZVPD", q_red, mult_for(symbols, q_red),
+              f"#p B3LYP/6-311++G(d,p) {DISP} {SMD} {TIGHT} geom=check guess=read",
+              f"{name} EA diffuse 6-311++G(d,p)", q_red, mult_for(symbols, q_red),
               oldchk=f"{name}_opt", symbols=symbols)
     # reductive decomposition: stretch Al-Cl and Al-C(ipso) on the reduced anion
     decomp_scans(name, symbols, q_red)
