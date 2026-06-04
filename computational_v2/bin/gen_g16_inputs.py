@@ -28,7 +28,8 @@ STRUCT = ROOT / "common" / "struct"
 MANIFEST = ROOT / "manifest.txt"
 
 DISP = "EmpiricalDispersion=GD3BJ"
-SMD = "SCRF=(SMD,Solvent=Tetrahydrofuran)"
+SMD = "SCRF=(SMD,Solvent=Tetrahydrofuran)"        # single-point energies (accurate solvation FE)
+PCM = "SCRF=(PCM,Solvent=Tetrahydrofuran)"        # geometry opt/freq (IEFPCM: smoother convergence)
 TIGHT = "int=ultrafine"
 SVP = "B3LYP/def2SVP"
 TZVP = "B3LYP/def2TZVP"
@@ -102,11 +103,11 @@ def opt_then_tzvp(phase, name, symbols, positions, charge):
     """opt freq @SVP  ->  def2-TZVP single point (chained afterok)."""
     mult = mult_for(symbols, charge)
     if name in PRIOR_CHK:
-        route_opt = (f"#p {SVP} {DISP} opt freq {SMD} {TIGHT} geom=check guess=read")
+        route_opt = (f"#p {SVP} {DISP} opt freq {PCM} {TIGHT} geom=check guess=read")
         write_gjf(phase, f"{name}_opt", route_opt, f"{name} opt/freq (restart)",
                   charge, mult, oldchk=PRIOR_CHK[name], symbols=symbols)
     else:
-        route_opt = f"#p {SVP} {DISP} opt freq {SMD} {TIGHT}"
+        route_opt = f"#p {SVP} {DISP} opt freq {PCM} {TIGHT}"
         write_gjf(phase, f"{name}_opt", route_opt, f"{name} opt/freq SVP",
                   charge, mult, symbols=symbols, positions=positions)
     route_sp = f"#p {TZVP} {DISP} {SMD} {TIGHT} geom=check guess=read"
@@ -129,7 +130,7 @@ def redox(name, symbols, charge):
                   f"{name} vertical {tag} (q={q2:+d})", q2, m2,
                   oldchk=f"{name}_opt", symbols=symbols)
         # adiabatic: re-opt+freq the ion from the parent geometry
-        route_a = f"#p {SVP} {DISP} opt freq {SMD} {TIGHT} geom=check guess=read"
+        route_a = f"#p {SVP} {DISP} opt freq {PCM} {TIGHT} geom=check guess=read"
         write_gjf("P0b_redox", f"{name}_{tag}_adia", route_a,
                   f"{name} adiabatic {tag} opt", q2, m2,
                   oldchk=f"{name}_opt", symbols=symbols, dep=f"{name}_tzvp")
@@ -169,7 +170,7 @@ def decomp_scans(name, symbols, charge):
     positions = ase_read(STRUCT / f"{name}.xyz").get_positions()
     cl = _first_index(symbols, "Cl")
     c = _first_index(symbols, "C")
-    route = f"#p {SVP} {DISP} opt=modredundant {SMD} {TIGHT}"
+    route = f"#p {SVP} {DISP} opt=modredundant {PCM} {TIGHT}"
     if cl:
         write_gjf("P0b_redox", f"{name}_red_AlClscan", route,
                   f"{name}+e- Al-Cl cleavage scan", charge, mult,
@@ -195,7 +196,7 @@ def p1_sei():
             ia, ib = _first_index(symbols, a), _first_index(symbols, b)
             if ia and ib:
                 write_gjf("P1_SEI", f"{name}_red_{a}{b}scan",
-                          f"#p {SVP} {DISP} opt=modredundant {SMD} {TIGHT}",
+                          f"#p {SVP} {DISP} opt=modredundant {PCM} {TIGHT}",
                           f"{name}+e- {desc}", q, mult,
                           symbols=symbols, positions=positions,
                           extra=f"B {ia} {ib} S 10 0.10")
@@ -209,7 +210,7 @@ def p3_raman():
             symbols, positions, charge = [], None, 0  # restart-only, coords unknown
             # use a generic medium size for restart-only species
             mult = 1
-            route_opt = f"#p {TZVP} {DISP} opt freq {SMD} {TIGHT} geom=check guess=read"
+            route_opt = f"#p {TZVP} {DISP} opt freq {PCM} {TIGHT} geom=check guess=read"
             write_gjf("P3_raman", f"{name}_ramanopt", route_opt,
                       f"{name} opt/freq SMD (restart)", charge, mult,
                       oldchk=PRIOR_CHK[name], symbols=["C"] * 30, ncores=16, mem="24GB")
@@ -221,7 +222,7 @@ def p3_raman():
             continue
         symbols, positions, charge = load(name)
         mult = mult_for(symbols, charge)
-        route_opt = f"#p {TZVP} {DISP} opt freq {SMD} {TIGHT}"
+        route_opt = f"#p {TZVP} {DISP} opt freq {PCM} {TIGHT}"
         write_gjf("P3_raman", f"{name}_ramanopt", route_opt,
                   f"{name} opt/freq SMD", charge, mult,
                   symbols=symbols, positions=positions)
