@@ -35,6 +35,7 @@ for i in $(seq 1 480); do
   running=$(squeue -h -u "$USER" -n g16 -o "%i" 2>/dev/null | wc -l)
   tot_acted=$((tot_acted + acted))
   echo "[$(ts)] tick $i: in-queue=$running acted_now=$acted total_remedied=$tot_acted" >> "$HL"
+  bash "$BIN/clean_scratch.sh" >> "$HL" 2>&1   # routine scratch cleanup of terminated jobs
   # keep monitoring (auto-remedies logged above); exit only when the molecular queue drains
   [ "$running" -eq 0 ] && { echo "[$(ts)] queue empty -> exiting (total remedied=$tot_acted)" >> "$HL"; exit 0; }
   sleep "$INT"

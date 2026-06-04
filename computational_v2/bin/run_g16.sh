@@ -15,6 +15,9 @@ NCORES="${SLURM_CPUS_PER_TASK:-8}"
 set +u; source /CH/g16/bsd/g16.profile; set -u   # g16.profile references unset vars (e.g. LD_LIBRARY64_PATH)
 export GAUSS_SCRDIR="/mnt/scratch_disk/g16_scratch/${NAME}"
 mkdir -p "$GAUSS_SCRDIR"
+# always free this job's scratch on exit — incl. segfault/crash, which g16 does NOT
+# clean up itself. Results (.chk/.fchk/.log) live in the CWD, never in scratch.
+trap '[ -n "${NAME:-}" ] && rm -rf "/mnt/scratch_disk/g16_scratch/${NAME}"' EXIT
 
 echo "[run_g16] $NAME on $NCORES cores, scratch=$GAUSS_SCRDIR"
 g16 < "${NAME}.gjf" > "${NAME}.log" 2>&1
