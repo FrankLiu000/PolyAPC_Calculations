@@ -1,0 +1,14 @@
+# poly-APC v2 — where the added electron localises on one-electron reduction of the APC anions
+# UB3LYP/def2-TZVP, SMD(THF)//PCM-opt geometry; vertical (parent geometry). All doublets, <S^2>=0.75.
+# Mulliken atomic spin density summed by element (doublet => sum = 1.0).
+#
+# anion+e-     Al     Cl(tot)  Ph(C/H)   reduction site
+AlCl4m       +1.14   -0.14    +0.00     ALUMINIUM  -> Al(0)/Al-Mg co-deposition pathway (low-BE Al 2p ~70.9 eV)
+AlPhCl3m     +0.06   +0.01    +0.93     phenyl pi* -> no direct Al deposition
+AlPh2Cl2m    +0.08   +0.01    +0.91     phenyl pi* -> no direct Al deposition
+AlPh3Clm     +0.06   +0.00    +0.94     phenyl pi* -> no direct Al deposition
+AlPh4m       +0.06   +0.00    +0.94     phenyl pi* -> no direct Al deposition
+#
+# Implication: Al co-deposition is specific to reduction of the chloride-rich AlCl4- at Al.
+# Suppressing that channel (anion immobilisation / speciation shift in the cured network)
+# leaves an oxidised Al(III) interphase -> the bare(70.9)->poly(74.0) Al 2p split.
