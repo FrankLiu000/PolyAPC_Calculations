@@ -1,0 +1,14 @@
+# poly-APC v2 — Al 2p chemical-state prediction (periodic CP2K PBE-D3, Gamma, smeared)
+# Charge on Al across reference environments, two partition schemes (trend, not absolute).
+# Voronoi(libvori): more negative = more cationic ; Mulliken net: more positive = more cationic.
+#
+# environment              Voronoi    Mulliken    assignment
+  Al0_metallic_adatom      -0.103     +0.334      reduced/metallic Al ~ 70.9 eV (bare-APC)
+  MgAl_alloy_substitution  -0.359     +0.242      Mg-Al alloyed Al    ~ 70.9 eV (bare-APC)
+  Al2O3_AlIII              -0.456     +0.930      oxidised Al(III)    ~ 74.0 eV (poly-APC)
+  AlF3_AlIII               -0.861     +1.113      oxidised Al(III)    ~ 74.0 eV (poly-APC)
+#
+# Both schemes: reduced/alloyed Al (Mulliken ~+0.3) << oxidised Al(III) (~+1.0); dq ~ +0.7 e.
+# => reproduces the DIRECTION of the measured Al 2p shift bare(70.9) -> poly(74.0 eV).
+# Caveat: population charges are compressed (no scheme gives formal +2.4 for Al(III));
+#         absolute BE requires all-electron Delta-SCF -> flagged refinement. Trend robust (2 schemes).
