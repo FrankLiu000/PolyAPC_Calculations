@@ -1,0 +1,19 @@
+======================================================================
+STORY A.2 -- large-cell (2x2x2, ~303k atoms) collective conductivity
+NVT 298 K production; sigma_coll via Einstein-Helfand (gmx current)
+======================================================================
+
+  box = 14.698 x 14.698 x 14.698 nm   V = 3.1754e-24 m^3
+
+  sigma_coll (Einstein-Helfand, S/m):
+     full trajectory : 0.0120
+     per 50ns block  : ['-0.0010', '0.0186', '0.0144', '0.0161']
+     block mean+/-SEM: 0.0120 +/- 0.0044  (n=4)
+
+  D (gmx msd, fit 40-180 ns, 1e-5 cm^2/s):
+     cation = 0.0203   anion = 0.0216
+  sigma_NE (Nernst-Einstein, S/m) = 0.0527
+
+  IONICITY  sigma_coll / sigma_NE = 0.228
+     (campaign reported ionicity ~0.08-0.13 -> heavily ion-associated;
+      does the de-noised large cell corroborate the f*D mechanism?)

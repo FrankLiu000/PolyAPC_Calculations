@@ -1,0 +1,22 @@
+================================================================
+Mg-anion SPECIATION  (SSIP / CIP / AGG)  -- converged 70-100 ns
+per-Mg classification by # anion-Cl first-shell contacts; mean +/- SEM (n=5 reps)
+free-carrier f == SSIP fraction
+================================================================
+
+  bare-APC:
+     SSIP (free)      4.6% +/- 0.6%
+     CIP (pair)      94.9% +/- 0.5%
+     AGG (aggreg.)    0.5% +/- 0.1%
+     paired total    95.4%   (CIP+AGG)
+
+  8-POSS swollen:
+     SSIP (free)     15.5% +/- 0.5%
+     CIP (pair)      84.2% +/- 0.4%
+     AGG (aggreg.)    0.3% +/- 0.1%
+     paired total    84.5%   (CIP+AGG)
+
+  -- bare -> swollen-8 shift --
+     SSIP/free    4.6% ->  15.5%   (+10.9 pts)
+     CIP         94.9% ->  84.2%   (-10.7 pts)
+     AGG          0.5% ->   0.3%   (-0.2 pts)
