@@ -1,0 +1,128 @@
+&GLOBAL
+  PROJECT pilot_q2m_dirichlet
+  RUN_TYPE MD
+  PRINT_LEVEL MEDIUM
+  WALLTIME 42000
+&END GLOBAL
+! 50-step charged-slab AIMD pilot: CHARGE -2 (cathodic bias) with MIXED_PERIODIC
+! implicit Poisson + planar Dirichlet counter-electrode at z=2 (in the vacuum gap).
+! PURPOSE: (a) does the implicit solver accept the triclinic xy cell at all,
+! (b) SCF stability under MD, (c) s/step cost vs the plain-Poisson AIMD (~22 s/step).
+! Start geometry = final frame of the 10 ps bare AIMD (abstracted state).
+! No SCCS in the pilot (one new variable at a time). EPS_SCF 1e-5 (matched, locked).
+&FORCE_EVAL
+  METHOD QS
+    &DFT
+      BASIS_SET_FILE_NAME BASIS_MOLOPT
+      POTENTIAL_FILE_NAME GTH_POTENTIALS
+      CHARGE -2
+      &MGRID
+        CUTOFF 400
+        REL_CUTOFF 50
+      &END MGRID
+      &QS
+        EPS_DEFAULT 1.0E-12
+      &END QS
+      &SCF
+        SCF_GUESS ATOMIC
+        EPS_SCF 1.0E-5
+        MAX_SCF 50
+        ADDED_MOS 200
+        &SMEAR ON
+          METHOD FERMI_DIRAC
+          ELECTRONIC_TEMPERATURE [K] 500
+        &END SMEAR
+        &DIAGONALIZATION
+          ALGORITHM STANDARD
+        &END DIAGONALIZATION
+        &MIXING
+          METHOD BROYDEN_MIXING
+          ALPHA 0.3
+          NBROYDEN 8
+        &END MIXING
+      &END SCF
+      &POISSON
+        POISSON_SOLVER IMPLICIT
+        PERIODIC XY
+        &IMPLICIT
+          BOUNDARY_CONDITIONS MIXED_PERIODIC
+          MAX_ITER 300
+          TOL 1.0E-8
+          &DIRICHLET_BC
+            &AA_PLANAR
+              V_D 0.0
+              PARALLEL_PLANE XY
+              X_XTNT 0.0 12.836
+              Y_XTNT 0.0 11.116
+              INTERCEPT 2.0
+            &END AA_PLANAR
+          &END DIRICHLET_BC
+        &END IMPLICIT
+      &END POISSON
+      &PRINT
+        &MULLIKEN
+          &EACH
+            MD 10
+          &END EACH
+        &END MULLIKEN
+      &END PRINT
+      &XC
+        &XC_FUNCTIONAL PBE
+        &END XC_FUNCTIONAL
+        &VDW_POTENTIAL
+          POTENTIAL_TYPE PAIR_POTENTIAL
+          &PAIR_POTENTIAL
+            TYPE DFTD3
+            PARAMETER_FILE_NAME dftd3.dat
+            REFERENCE_FUNCTIONAL PBE
+          &END PAIR_POTENTIAL
+        &END VDW_POTENTIAL
+      &END XC
+    &END DFT
+    &SUBSYS
+      @INCLUDE 'iface_bare_qfinal.coord.inc'
+      &KIND Al
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q3
+      &END KIND
+      &KIND C
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q4
+      &END KIND
+      &KIND Cl
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q7
+      &END KIND
+      &KIND H
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q1
+      &END KIND
+      &KIND Mg
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q10
+      &END KIND
+      &KIND O
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q6
+      &END KIND
+    &END SUBSYS
+&END FORCE_EVAL
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    STEPS 50
+    TIMESTEP 1.0
+    TEMPERATURE 300
+    &THERMOSTAT
+      TYPE NOSE
+      &NOSE
+        TIMECON 50.0
+      &END NOSE
+    &END THERMOSTAT
+  &END MD
+  &CONSTRAINT
+    &FIXED_ATOMS
+      LIST 1..32
+    &END FIXED_ATOMS
+  &END CONSTRAINT
+&END MOTION
