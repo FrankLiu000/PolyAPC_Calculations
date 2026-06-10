@@ -15,6 +15,41 @@ from analyze_interface_access import frames
 
 PICKS_PS = [0, 1, 2, 3, 4]  # + final
 CRYST = "CRYST1   12.836   12.836   55.000  90.00  90.00  60.00 P 1           1\n"
+CELL = np.array([[12.836, 0.0, 0.0], [6.418, 11.116, 0.0], [0.0, 0.0, 55.0]])  # rows A,B,C
+RCOV = {"H": 0.31, "C": 0.76, "O": 0.66, "Mg": 1.41, "Al": 1.21, "Cl": 1.02,
+        "Si": 1.11, "F": 0.57, "S": 1.05}
+
+
+def wrap_fragments(syms, xyz):
+    """Shift whole bonded fragments by lattice vectors so each centroid lies in the cell.
+    CP2K coordinates are continuous (unwrapped), so direct-distance connectivity is exact
+    and no molecule gets cut at a boundary."""
+    n = len(xyz)
+    r = np.array([RCOV[s] for s in syms])
+    d = np.linalg.norm(xyz[:, None, :] - xyz[None, :, :], axis=2)
+    bond = d < 1.3 * (r[:, None] + r[None, :])
+    # connected components (BFS)
+    comp = np.full(n, -1)
+    nc = 0
+    for i in range(n):
+        if comp[i] >= 0:
+            continue
+        stack = [i]
+        comp[i] = nc
+        while stack:
+            j = stack.pop()
+            for k in np.where(bond[j] & (comp < 0))[0]:
+                comp[k] = nc
+                stack.append(k)
+        nc += 1
+    out = xyz.copy()
+    Minv = np.linalg.inv(CELL)
+    for c in range(nc):
+        m = comp == c
+        shift = np.floor(out[m].mean(axis=0) @ Minv)
+        if shift.any():
+            out[m] -= shift @ CELL
+    return out
 
 def resid(i):
     if i < 64: return "SLB", 1
@@ -23,6 +58,7 @@ def resid(i):
     return "NET", 4
 
 def write_pdb(path, syms, xyz, label, t_ps):
+    xyz = wrap_fragments(syms, xyz)
     with open(path, "w") as f:
         f.write("TITLE     %s interface AIMD t=%.3f ps (PBE-D3, NVT 300K)\n" % (label, t_ps))
         f.write(CRYST)
