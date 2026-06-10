@@ -114,6 +114,13 @@ that is fair (the geometry difference IS the bare/poly difference) but needs rep
 is **molecular**: ΔG of `[Mg₂Cl₃(THF)₆]⁺ + [AlPh₂Cl₂]⁻ → Mg₂Cl₄(THF)₆ + AlPh₂Cl` (cluster,
 standard protocol) with and without a coordinating polyether/POSS fragment on the cation.
 
+**Sharpened by the classical 2D PMF (`pairing_pmf.txt`, 3×100 ns × 80 pairs each):** the bare
+and poly *pairing* free-energy landscapes are nearly identical at FF level (μ-Cl CIP 98.3% vs
+96.7%, ΔF_dissociation 2.43 vs 2.08 kcal/mol, same basin minimum). So the AIMD abstraction
+contrast is NOT pre-encoded in a grossly different pairing free energy — it is either genuine
+DFT-level chemistry modulated by the local network environment, or snapshot-sensitive. Run the
+molecular abstraction-ΔG test and the replicates BEFORE asserting S1.
+
 ## 5. In-flight jobs & armed harvests (check these FIRST)
 
 | Job | What | Harvest |
@@ -146,6 +153,15 @@ early — the armed harvests are keyed to job IDs with 24–48 h loops.)
 > (3) a 2D molecular constrained-opt surface (concerted-vs-stepwise detail) only if S1 survives
 > the wet-lab check and the article needs it; (4) interfacial metadynamics last, only with the
 > user's explicit go-ahead.
+>
+> Items (1)–(2) plus two more are now DONE — in `results/figures/` (generators in `bin/fig_*.py`):
+> `fig_abstraction_density.png` (AIMD sampling density, d(Al–Cl) × d(Cl–cation Mg): bare slides
+> along the abstraction channel at constant Cl–Mg ≈ 2.4 Å — the chloride rides the cation;
+> poly confined to the intact basin); `fig_bond_barcode.png` (all four Al–ligand bonds vs t);
+> `fig_spin_redirection.png` (projected spin density: intact anion → phenyl π*, post-abstraction
+> → Al; exact wavefunction property); `fig_pairing_pmf.png` (the ONE genuine free-energy heatmap:
+> −kT·ln P over 80 pairs × 3×100 ns classical MD, bare vs poly pairing landscape — FF level,
+> no bond-breaking, so it complements rather than reproduces the DFT abstraction).
 
 **S2 — "Speciation funnel: only AlCl₄⁻ deposits Al".**
    Repeated Cl⁻ abstraction + Schlenk redistribution enriches chloride-rich anions near the bare
