@@ -44,7 +44,7 @@ assignment itself needs re-examination (§7). Possibly both.
 | `reduction_spin_localization.txt` | **Only AlCl₄⁻ reduces at Al** (spin +1.14); all Ph-containing anions reduce at phenyl π* (~0.93) | high |
 | `reductive_decomposition.txt` | Reduced [AlPh₂Cl₂]²⁻: Al–Cl cleavage ΔG **−8.5** kcal/mol (Al–C +14.5); product [AlPh₂Cl]·⁻ has **83% spin on Al** = Al(II), direct Al⁰ precursor | high |
 | `depairing_ET.txt` | CIP vertical EA: bare 0.51 ≈ poly 0.48 eV; free anion 0.06 eV. Cation contact (not pairing tightness) drives reducibility; **depairing is NOT a thermodynamic gate**. Caveat: computed on intact pairs — see §4 | high (for what it tests) |
-| `chloride_abstraction.txt` | **NEW** — EA/ΔG_red of *neutral* AlPh₂Cl (auto-lands from jobs 1261–63, see §5) | in flight |
+| `chloride_abstraction.txt` | **NEW** — neutral AlPh₂Cl: EA_vert **1.71 eV** (intact free anion: 0.06), ΔG_red,adia **−2.14 eV**; vertical spin already 52% on Al (intact anion: 4–8%) | high (NImag=0, ⟨S²⟩ clean) |
 | `aimd_interface_stats.txt` | **NEW** — matched 10 ps bare/poly access + Cl-abstraction tracking (auto-lands when job 1241 ends) | in flight |
 | `al2p_prediction.txt` | Voronoi+Mulliken charge trend reproduces the *direction* of the 70.9→74.0 split (Δq ≈ +0.7 e); no absolute BEs (GTH) | medium (trend robust) |
 | `al_codeposition_periodic.txt` | Al adatom on Mg(0001) −0.08 eV (marginal); **Al-in-Mg substitution −4.44 eV (alloying favourable — the robust statement)**; Mg₁₇Al₁₂ number is an artifact, ignore | medium |
@@ -92,8 +92,11 @@ Why this closes the loop with the static chemistry already on disk:
 
 1. One-electron reduction of neutral AlPh₂Cl gives [AlPh₂Cl]·⁻ — **exactly the 83%-Al-spin
    Al(II) radical** of `reductive_decomposition.txt`, the direct Al⁰ precursor.
-2. A neutral Lewis acid is far easier to reduce than an anion (no Coulomb penalty): EA being
-   quantified now (jobs 1261–63 → `chloride_abstraction.txt`); compare intact free anion 0.06 eV.
+2. A neutral Lewis acid is far easier to reduce than an anion — now quantified
+   (`chloride_abstraction.txt`): **EA_vert(AlPh₂Cl) = 1.71 eV vs 0.06 eV** for the intact free
+   anion (~28×), ΔG_red,adia = −2.14 eV, and the electron lands on Al already at the vertical
+   point (52% spin, vs 4–8% for intact anions). Chloride loss redirects the incoming electron
+   from phenyl π* to aluminium AND removes the Coulomb penalty.
 3. Al⁰, once formed, alloys into Mg(0001) exergonically (−4.44 eV substitution) → **70.9 eV**.
 4. Poly's stretched bridge (network-imposed, from classical MD and reproduced at DFT) blocks
    the abstraction → anion stays intact → reduction is weak and phenyl-centred (2–8% Al spin)
@@ -117,7 +120,7 @@ standard protocol) with and without a coordinating polyether/POSS fragment on th
 |---|---|---|
 | 1241 (R) | poly interface AIMD, step ~8.3k/10k, ends ~06-11 01:30 | `bin/harvest_interface_stats.sh 1241` armed → writes `aimd_interface_stats.txt` + per-frame `{bare,poly}_access.txt` automatically |
 | 1242 (PD, after 1241) | bare_r2 replicate AIMD (SEED 2237), ~2.5 d | NOT auto-harvested. When done: `python3 bin/analyze_interface_access.py aimd_bare_r2-pos-1.xyz bare_r2` + the Cl148/Cl149 tracking block (copy from `harvest_interface_stats.sh`). **Key question: does the Cl⁻ abstraction recur?** |
-| 1261→1262/1263 | neutral AlPh₂Cl opt+freq → TZVP SP + vertical reduction | `bin/harvest_alph2cl.sh 1262 1263` armed → writes `chloride_abstraction.txt` automatically |
+| 1261→1262/1263 | neutral AlPh₂Cl opt+freq → TZVP SP + vertical reduction | DONE — `chloride_abstraction.txt` written (EA 1.71 eV; see §4) |
 
 Routine duties while anything runs: `squeue`; `bin/scf_health.sh`; `bin/clean_scratch.sh`;
 keep cores busy. Harvest logs: `P0d_interface/inp/_harvest_iface.log`, `run_mol/_harvest_alph2cl.log`.
