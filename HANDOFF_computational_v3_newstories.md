@@ -45,7 +45,7 @@ assignment itself needs re-examination (§7). Possibly both.
 | `reductive_decomposition.txt` | Reduced [AlPh₂Cl₂]²⁻: Al–Cl cleavage ΔG **−8.5** kcal/mol (Al–C +14.5); product [AlPh₂Cl]·⁻ has **83% spin on Al** = Al(II), direct Al⁰ precursor | high |
 | `depairing_ET.txt` | CIP vertical EA: bare 0.51 ≈ poly 0.48 eV; free anion 0.06 eV. Cation contact (not pairing tightness) drives reducibility; **depairing is NOT a thermodynamic gate**. Caveat: computed on intact pairs — see §4 | high (for what it tests) |
 | `chloride_abstraction.txt` | **NEW** — neutral AlPh₂Cl: EA_vert **1.71 eV** (intact free anion: 0.06), ΔG_red,adia **−2.14 eV**; vertical spin already 52% on Al (intact anion: 4–8%) | high (NImag=0, ⟨S²⟩ clean) |
-| `aimd_interface_stats.txt` | **NEW** — matched 10 ps bare/poly access + Cl-abstraction tracking (auto-lands when job 1241 ends) | in flight |
+| `aimd_interface_stats.txt` | **NEW** — matched full-10 ps stats: Cl⁻ abstracted in bare at 0.17 ps, far for **97%** of run (ends on cation Mg 2.41/2.56 Å); poly intact (**5%** transient stretches); Al stays 7–9 Å from slab in both, min 5.2 Å, no plating event | high (single traj each; r2 running) |
 | `al2p_prediction.txt` | Voronoi+Mulliken charge trend reproduces the *direction* of the 70.9→74.0 split (Δq ≈ +0.7 e); no absolute BEs (GTH) | medium (trend robust) |
 | `al_codeposition_periodic.txt` | Al adatom on Mg(0001) −0.08 eV (marginal); **Al-in-Mg substitution −4.44 eV (alloying favourable — the robust statement)**; Mg₁₇Al₁₂ number is an artifact, ignore | medium |
 | `interface_ET.txt` | RETRACTION + honest status of interfacial ET (read in full — §3) | n/a |
@@ -118,8 +118,8 @@ standard protocol) with and without a coordinating polyether/POSS fragment on th
 
 | Job | What | Harvest |
 |---|---|---|
-| 1241 (R) | poly interface AIMD, step ~8.3k/10k, ends ~06-11 01:30 | `bin/harvest_interface_stats.sh 1241` armed → writes `aimd_interface_stats.txt` + per-frame `{bare,poly}_access.txt` automatically |
-| 1242 (PD, after 1241) | bare_r2 replicate AIMD (SEED 2237), ~2.5 d | NOT auto-harvested. When done: `python3 bin/analyze_interface_access.py aimd_bare_r2-pos-1.xyz bare_r2` + the Cl148/Cl149 tracking block (copy from `harvest_interface_stats.sh`). **Key question: does the Cl⁻ abstraction recur?** |
+| 1241 | poly interface AIMD | DONE — full 10 ps; `aimd_interface_stats.txt` + per-frame `{bare,poly}_access.txt` written |
+| 1242 (R, started 06-10 ~23:00) | bare_r2 replicate AIMD (SEED 2237), ~2.5 d | NOT auto-harvested. When done: `python3 bin/analyze_interface_access.py aimd_bare_r2-pos-1.xyz bare_r2` + the Cl148/Cl149 tracking block (copy from `harvest_interface_stats.sh`). **Key question: does the Cl⁻ abstraction recur?** |
 | 1261→1262/1263 | neutral AlPh₂Cl opt+freq → TZVP SP + vertical reduction | DONE — `chloride_abstraction.txt` written (EA 1.71 eV; see §4) |
 
 Routine duties while anything runs: `squeue`; `bin/scf_health.sh`; `bin/clean_scratch.sh`;
