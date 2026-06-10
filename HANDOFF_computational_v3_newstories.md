@@ -135,6 +135,18 @@ early — the armed harvests are keyed to job IDs with 24–48 h loops.)
    Wet-lab: Cl 2p & Mg/Cl ratio in SEI (bare should be MgCl₂-richer); Raman 276 cm⁻¹
    (Cl-bridged aggregates — already trends right: −30% in poly).
 
+> **On 2D free-energy heatmaps for S1 (user asked; answer: not yet, and not from this data).**
+> A true F(CV₁,CV₂) map needs equilibrium recrossing statistics. The bare trajectory contains ONE
+> irreversible abstraction event (0.2 ps) and the poly one basin + excursions — −kT·ln P on 10 ps
+> of that is not a free energy and must not be presented as one. A real interfacial FES means 2D
+> metadynamics/umbrella on the 276-atom DFT cell (weeks; the biased-AIMD class the user has
+> paused). Cost-ordered substitutes: (1) the molecular 1D relaxed scan above (decisive, cheap);
+> (2) a 2D *sampling-density* heatmap d(Al–Cl) vs d(Mg_cation–Cl) from the existing trajectories —
+> good article figure, label it "sampling density (10 ps, unbiased)", never "free energy";
+> (3) a 2D molecular constrained-opt surface (concerted-vs-stepwise detail) only if S1 survives
+> the wet-lab check and the article needs it; (4) interfacial metadynamics last, only with the
+> user's explicit go-ahead.
+
 **S2 — "Speciation funnel: only AlCl₄⁻ deposits Al".**
    Repeated Cl⁻ abstraction + Schlenk redistribution enriches chloride-rich anions near the bare
    electrode; AlCl₄⁻ is the unique reduce-at-Al species (+1.14 spin). Compute: Schlenk ladder
