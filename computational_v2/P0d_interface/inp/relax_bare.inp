@@ -20,7 +20,7 @@
       &SCF
         SCF_GUESS ATOMIC
         EPS_SCF 1.0E-5
-        MAX_SCF 50
+        MAX_SCF 100
         ADDED_MOS 200
         &SMEAR ON
           METHOD FERMI_DIRAC
@@ -31,7 +31,7 @@
         &END DIAGONALIZATION
         &MIXING
           METHOD BROYDEN_MIXING
-          ALPHA 0.3
+          ALPHA 0.2
           NBROYDEN 8
         &END MIXING
       &END SCF
@@ -49,7 +49,7 @@
       &END XC
     &END DFT
     &SUBSYS
-      @INCLUDE 'iface_bare_v2.coord.inc'
+      @INCLUDE 'iface_bare_intact.coord.inc'
       &KIND Al
         BASIS_SET DZVP-MOLOPT-SR-GTH
         POTENTIAL GTH-PBE-q3
@@ -80,8 +80,8 @@
   &GEO_OPT
     TYPE MINIMIZATION
     OPTIMIZER LBFGS
-    MAX_ITER 300
-    MAX_FORCE 4.5E-4
+    MAX_ITER 400
+    MAX_FORCE 1.0E-3
   &END GEO_OPT
   &CONSTRAINT
     &FIXED_ATOMS

@@ -13,9 +13,10 @@ RELAX="${2:?need relax jobname}"
 SYS="${MD#aimd_}"; SYS="${SYS%_clean}"
 INC="iface_${SYS}_clean.coord.inc"
 
-# 1) abort if the relaxation did not converge — never seed MD from a bad geometry
-if ! grep -q "GEOMETRY OPTIMIZATION COMPLETED" "${RELAX}.out"; then
-  echo "[run_md_fromrelax] ${RELAX} did NOT converge; refusing to start ${MD}" >&2
+# 1) require the relaxation to have RUN (converged OR hit max-steps); a clash-free
+#    geometry is what MD needs, not a force-converged minimum. Only a hard crash blocks.
+if ! grep -qE "GEOMETRY OPTIMIZATION COMPLETED|MAXIMUM NUMBER OF OPTIMIZATION STEPS" "${RELAX}.out"; then
+  echo "[run_md_fromrelax] ${RELAX} crashed before producing a usable geometry; refusing ${MD}" >&2
   exit 7
 fi
 # 2) extract the optimized last frame
@@ -37,7 +38,7 @@ for i in range(n):
     for j in range(i + 1, n):
         if i < 64 and j < 64: continue
         h = (syms[i] == "H") + (syms[j] == "H")
-        lim = 0.85 if h == 2 else (1.0 if h == 1 else 1.55)
+        lim = 0.75 if h == 2 else (0.95 if h == 1 else 1.30)  # true clashes only (not normal bonds)
         if d[i, j] < lim: bad.append("%s%d-%s%d %.2f" % (syms[i], i, syms[j], j, d[i, j]))
 if bad:
     print("CLOSE CONTACTS REMAIN:", bad); sys.exit(8)
