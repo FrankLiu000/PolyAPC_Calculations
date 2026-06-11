@@ -3,6 +3,8 @@
 **For:** Claude agents who will *use, extend, or integrate* these classical-MD results
 (downstream analysis, wet-lab/DFT integration, paper-writing, or continuing the campaign).
 **Campaign status:** complete 2026-06-11. A.3 (deconfound) deliberately skipped — optional refinement, not essential.
+**➜ LATEST (2026-06-11 review round):** see `AGENT_HANDOFF_2026-06_review.md` + `reports/REVIEW_2026-06_MD_reexamination.md`
+— QC audit, 2-D/3-D descriptor heat-maps, charge-robustness re-sim (Story E done), and next stories (D/F/H/G).
 **Repo / branch:** `FrankLiu000/PolyAPC_Calculations`, branch **`computational-v2-package`**
 (NB: "computational-v2-package" is a *branch*, not a separate repo). Read this whole file before running anything.
 
