@@ -1,0 +1,42 @@
+# Charged-interface (constant-V Dirichlet) bias-AIMD PILOT — verdict (2026-06-13, supersedes 06-11)
+# Job 1278, 96 MPI ranks. bias_pilot.inp from the equilibrated bare 10 ps final frame.
+# Setup: implicit Poisson, BOUNDARY_CONDITIONS MIXED_PERIODIC, two AA_PLANAR Dirichlet
+# plates (cathode z=4 V_D=-3 V, anode z=51 V_D=+3 V; DeltaV 6 V over ~47 A ~ 0.13 V/A,
+# ~1e9 V/m compact-layer field). Vacuum dielectric (eps=1; THF explicit). Metal slab keeps
+# Fermi smearing + diagonalization. MAX_SCF 150, Broyden ALPHA 0.2.
+
+## MACHINERY: WORKS
+- Triclinic (hexagonal) cell accepted after fixing AA_PLANAR X_XTNT to the lattice dim
+  (12.836, not the 19.254 Cartesian bounding box -> earlier "extents outside range" abort).
+- Both Dirichlet plates parsed; V_D -3/+3 V -> -/+0.1102 Eh/e (correct).
+- Implicit Poisson solver converges EVERY SCF cycle (~60-127 iters cold, warm-starts after).
+- Runs under RUN_TYPE MD (NVT).
+
+## ELECTRONIC SCF: UNRELIABLE (the blocker)
+Per-MD-step SCF cycle counts and wall times:
+  step 0 (MD_INI): converged 30 cycles  (cold ATOMIC guess, ~5 min)
+  step 1:          converged 15 cycles  (404 s wall)
+  step 2:          converged 33 cycles  (102 s wall)
+  step 3:          FAILED at 150 cycles (MAX_SCF) -> CP2K ABORTED the run
+- The +-3 V field + metallic slab makes Broyden mixing slosh; convergence plateaus near
+  few x 1e-4 and intermittently cannot reach EPS_SCF 1e-5 within MAX_SCF -> abort.
+
+## COST
+- 100-400 s/step on 96 ranks for the *converging* steps = ~5-18x plain AIMD (~22 s/step/64r).
+- A 10 ps biased trajectory would be ~17-46 days AND would abort on the first bad SCF step.
+  => NOT production-ready as-is.
+
+## FIXES TO TRY BEFORE PRODUCTION (ranked)
+1. Soften the field: +-1 V (0.04 V/A) likely converges far more stably; scan up from there.
+2. SCF hardening: more ADDED_MOS, &OUTER_SCF wrapper, PULAY or tuned-Broyden mixing,
+   MAX_SCF 300, and/or a slightly looser EPS_SCF (1e-5 -> 5e-5) for biased runs only.
+3. IGNORE_CONVERGENCE_FAILURE to survive occasional bad steps (use with care; check forces).
+4. Consider single-point bias scans (RUN_TYPE ENERGY) for the field/charge response first,
+   reserving MD for one well-converged bias.
+
+## BOTTOM LINE
+The constant-V Dirichlet counter-electrode approach is the right (and only) path available in
+CP2K 2025.1 (no ESM, no grand-canonical constant-mu; see literature memo) and the MACHINERY is
+proven to run under MD. But the electronic SCF needs hardening + a gentler field before a
+production biased trajectory is affordable. Honest framing for any report: this is an idealized
+constant-VOLTAGE counter-electrode, not grand-canonical constant-mu on the metal.
