@@ -1,0 +1,10 @@
+%oldchk=MgCl2_THF4_neutral.chk
+%chk=MgCl2_THF4_neutral_tzvp.chk
+%nprocshared=16
+%mem=24GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+MgCl2_THF4_neutral def2TZVP SMD single point
+
+0 1
+
