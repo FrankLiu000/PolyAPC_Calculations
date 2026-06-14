@@ -205,6 +205,116 @@ the gel mobilizes."
 
 ---
 
+## Part VI — Story D RESULT (executed 2026-06-12, `fig_storyD.png`)
+
+Computed the correlated/Onsager transference from collective ion-COM cross-correlations
+(`analysis/review2026/compute_storyD.py`; bare ×5 reps, 8-POSS swollen ×5 seeds, last-50 ns window).
+*A COM-PBC-unwrap bug was found and fixed mid-run* (residue COMs must be taken on whole, not
+PBC-split, molecules — else self-diffusion is corrupted; after the fix t+^NE returned to ≈0.5,
+matching the campaign's gmx-msd value, confirming correctness).
+
+| system | t+^NE | ionicity σ_coll/σ_NE (this work, MSD) | t+^corr |
+|---|---|---|---|
+| bare-APC | 0.488 | 0.017 ± 0.007 | **ill-conditioned** |
+| 8-POSS swollen | 0.470 | 0.073 ± 0.019 | ill-conditioned (−1.1 ± 0.8) |
+| *Story A.2 ref (gmx-current, validated)* | — | *bare ≈0.10, swollen ≈0.23* | — |
+
+**Finding — the transference is ill-posed for this electrolyte, and that *is* the result.**
+The Nernst–Einstein t+ ≈ 0.49 (bare) / 0.47 (swollen) reproduces the campaign — but it is the *ideal,
+independent-ion* value and is **physically misleading here**. The true **ionicity σ_coll/σ_NE ≪ 1**
+(MSD estimate bare 0.017, swollen 0.073; qualitatively consistent with A.2's validated 0.10 / 0.23 —
+our 50-ns-window MSD systematically *under*-estimates vs A.2's full-trajectory Einstein–Helfand, so
+treat A.2's as the number and ours as corroborating the trend). Because cations and anions **co-move as
+correlated neutral pairs**, the net charge-MSD (e₊₊+e₋₋−2e₊₋) ≈ 0, which makes the *species-resolved*
+t+^corr a 0/0 ratio — mathematically ill-conditioned (hence the −1.1±0.8 / "ill-cond"), not a real
+negative transference. So one **cannot** meaningfully split the (tiny) net current into cation vs anion
+shares from these equilibrium trajectories.
+
+**What is robust and what it means:** (i) de-pairing *does* raise independent charge transport —
+swollen ionicity ≈ 4× bare (0.073 vs 0.017 here; 0.23 vs 0.10 in A.2) — consistent with the carrier-number
+mechanism; (ii) but the absolute ionicity stays ≪ 1, so **most apparent conductivity is correlated
+pair/aggregate motion, not clean Mg²⁺ charge separation**, and the NE t+ ≈ 0.5 vastly overstates
+independent Mg²⁺ transport. This is the **quantitative coordination paradox** and directly corroborates
+the eNMR literature (Cresce/Schönhoff *JACS* 2024: Mg²⁺ t+ collapses once clustering is accounted; NE
+overestimates). **Caveats:** species-resolved t+^corr is not resolvable at this sampling (needs much
+longer runs / an enhanced-sampling or Onsager-regression estimator); the 8-POSS *large* cell (640 ions)
+cross-check was **ABANDONED: loading that 24 GB .xtc into MDAnalysis exhausts RAM and hard-crashes
+the machine** (reproducibly). It adds no new conclusion (would only re-confirm ionicity≪1), so Story D
+rests on the bare + 8-POSS-swollen replicates (5 each). TOOLCHAIN RULE: never read the `large_swollen8`
+trajectory with MDAnalysis — use `gmx` streaming tools for that cell only.
+
+---
+
+## Part VII — Story H RESULT (executed 2026-06-13, `fig_storyH.png`)
+
+Classified every Mg–anion-Cl contact (within 0.345 nm of a cluster Mg) by its polar angle in the
+[Mg₂(μ-Cl)₃] body frame (z = Mg–Mg axis): **axial** |cosθ|>0.6 (end-on, the open coordination face)
+vs **equatorial** |cosθ|<0.4 (the μ-Cl bridging belt). `analysis/review2026/compute_storyH.py`.
+
+| system | axial % | equatorial % | axial contacts/cluster — *with* polymer-O | *without* |
+|---|---|---|---|---|
+| bare-APC | 88.1 | 10.0 | — (no polymer) | 1.52 |
+| 4-POSS gel | 87.5 | 11.1 | **0.42** | 1.39 |
+| 8-POSS swollen | 92.1 | 6.2 | **0.86** | 1.53 |
+| 16-POSS dense | 88.8 | 9.0 | **0.60** | 0.97 |
+
+**Findings.**
+1. **The contact ion pair is overwhelmingly AXIAL (~88–92 %), not equatorial.** The anion docks end-on at a
+   Mg's open coordination face; the equatorial belt is already taken by the 3 μ-Cl + inner THF. This refines
+   the 1-D RDF picture (which cannot see the angle) and matches the SDF lobes in Fig 3.
+2. **The geometry is loading-invariant** — the axial:equatorial ratio barely moves bare→16-POSS, so
+   de-pairing removes both modes roughly proportionally (it is not, at the population level, axial-selective).
+3. **But the latent-ligand acts AT the axial site:** clusters that carry a polymer-O contact hold **1.6–3.3×
+   fewer axial anion contacts** (0.42–0.86 vs 1.39–1.53 per cluster) than clusters without. I.e. the cured
+   ether/hydroxyl oxygen **competes for and occupies the open axial face, displacing the axial anion** — the
+   structural mechanism of latent-ligand de-pairing (Story 3) localized to a specific coordination site.
+
+**Caveat:** correlational (per-frame co-occurrence), not a measured displacement free energy; and the
+axial/equatorial cut (0.6/0.4) is a reasonable but arbitrary split. Robust trend: with-O < without-O in
+every poly system.
+
+---
+
+## Part VIII — Story F RESULT (executed 2026-06-13/14, `fig_storyF.png`)
+
+Rebuilt 4/8/16-POSS as **matched single percolating networks** (100% epoxide conversion, `cure_full.py`
+with per-arm THF-graft budgets 225/450/900), each with a proper **50 ns NPT pre-eq** (fixing the 1-ns
+caveat) → 100 ns NVT. All three converged to **POSS-components = 1** and percolate (extent/box ≈ 1.0;
+bonds crossing PBC 1.4 % / 1.4 % / 2.1 % for 4/8/16) — so POSS *loading* is now the only variable, with
+network topology held fixed. `storyF/`, `analysis/review2026/compute_storyF.py`.
+
+| system | CIP % (matched) | CIP % (orig, confounded) | Mg–polymer-O % | D(cat) | D(an) | t₊ |
+|---|---|---|---|---|---|---|
+| 4-POSS | 90.6 | 86.4 | 2.9 | 0.026 | 0.028 | 0.48 |
+| 8-POSS | 85.3 | 83.8 | 3.2 | 0.011 | 0.013 | 0.45 |
+| 16-POSS | 71.5 | **57.4** | 3.1 | 0.003 | 0.004 | 0.45 |
+*(D in 10⁻⁵ cm²/s, self-MSD last 50 ns, unwrap-before-COM; single cell per system.)*
+
+**Findings.**
+1. **De-pairing is REAL and loading-driven, not a topology artifact.** At fixed (percolating) connectivity,
+   CIP still falls monotonically with loading (90.6 → 85.3 → 71.5 %). The campaign's central de-pairing
+   mechanism survives the deconfounding. ✓
+2. **…but its magnitude was inflated by the confound.** The original 16-POSS reached 57 % CIP; the matched
+   16-POSS only 71.5 %. So part of the original's dramatic de-pairing came from its particular build
+   (extra free coordinating-O / higher effective conversion), not pure loading. Report the deconfounded
+   trend (≈19-pt drop 4→16) as the defensible one, not the original ≈29-pt drop.
+3. **The original 8-POSS "swollen mobility advantage" was largely a TOPOLOGY artifact.** In the original
+   set D was *non-monotonic* — 8-POSS (0.033) diffused FASTER than the lower-loading 4-POSS (0.011),
+   because its network was fragmented/short (2530 atoms, marginally percolating). At matched connectivity
+   D falls **monotonically** (0.026 → 0.011 → 0.003): the 8-POSS anomaly disappears. The swollen-8's
+   apparent mobility benefit was its disconnected network giving less obstruction, not swelling per se.
+4. **t₊ ≈ 0.45–0.48, ~loading-invariant** — consistent with the iso-mobility tortuosity brake (Story 5).
+5. **Mg–polymer-O contact is ~constant (~3 %) across loading** at matched per-arm grafting (vs the original
+   1.3→4.9 % rise) — the latent-ligand contact per Mg is set by *local* network density, not total loading.
+
+**Net:** Story F **validates** the de-pairing mechanism (real, loading-driven) while **revising** two
+campaign details — the de-pairing magnitude was somewhat over-stated, and the swollen-8 mobility advantage
+was mostly network topology. **Caveats:** single replicate per matched system (not ×5); self-MSD D is
+window-sensitive (matched-set *internal* trend is robust; absolute cross-comparison to the original build,
+which used gmx-msd, is qualitative); 100 ns NVT from a 50 ns NPT pre-eq.
+
+---
+
 ## Appendix — provenance
 - Analysis code + figures: `polyAPC/analysis/review2026/` (descriptors.py, extract_sdf.py, integrity.py,
   fig_*.py); figures copied to `figs_review2026/`.
