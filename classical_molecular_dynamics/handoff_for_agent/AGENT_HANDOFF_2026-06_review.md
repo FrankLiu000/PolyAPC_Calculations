@@ -1,11 +1,14 @@
-# Agent Handoff — review round (QC + heatmaps + new stories), 2026-06-11
+# Agent Handoff — review round (QC + heatmaps + new stories), 2026-06-11 (updated 2026-06-14: D/E/F/H DONE)
 
 **For:** the next Claude agent continuing the poly-APC classical-MD campaign.
 **Read first:** the original `AGENT_HANDOFF.md` (campaign A.1/A.2/A.4/B/C) and the new
 `reports/REVIEW_2026-06_MD_reexamination.md` (this round). This file tells you *what changed,
 what is safe to reuse, and exactly what to do next*.
 **Repo/branch:** `FrankLiu000/PolyAPC_Calculations`, branch **`computational-v2-package`**
-(it is a *branch*, not a separate repo). This round = commit **c8925c3** (report + figs).
+(it is a *branch*, not a separate repo). Commits: **c8925c3** (QC+heatmaps+proposals, Parts 0–V),
+**a05961d** (this handoff), **b6461c2** (Story D/H/F results, Parts VI–VIII). All pushed.
+**STATUS: the classical-MD review campaign is COMPLETE** — Stories D, E, F, H all done (see §3);
+only G (monomer/dimer) remains and it is a DFT/AIMD handoff, not classical MD.
 
 ---
 
@@ -62,47 +65,65 @@ Figures (committed, gitignored so force-added): `reports/figs_review2026/fig1–
 | `descriptors.py` | per-Mg shell counts + g(r) → `desc_{sys}.npz` (de-pairing/PMF/fingerprint inputs) |
 | `extract_sdf.py` | cluster-frame 3-D SDF + radial-angular CDF → `sdf_{sys}.npz` |
 | `integrity.py` | structural-integrity QC (percolation/PBC/Rg/core) |
-| `fig_*.py` | the 7 figures |
-| `analyze_q15.py` | Story-E CIP comparison (+1.2 vs +1.5); `finalize_storyE.sh` ran it at 40 ns |
+| `fig_*.py` | the heat-map figures (fig1–7) |
+| `analyze_q15.py` | Story-E CIP comparison (+1.2 vs +1.5); `prod/charge15/` |
+| `compute_storyD.py` | Story D — correlated/Onsager transference (`--out`, system filter; unwrap-before-COM) |
+| `compute_storyH.py` | Story H — axial-vs-equatorial CIP classification |
+| `compute_storyF.py` | Story F — matched-set CIP/D/t₊/Mg-polyO; reads `storyF/{4,8,16}poss/prod.*` |
+| `storyF/run_storyF.sh` | Story F build+sim driver (cure_full → 50 ns NPT → 100 ns NVT, sequential) |
 
 Reproduce a figure: `polyAPC/.viz_venv/bin/python analysis/review2026/fig_solv_pmf.py` (etc.).
+13 figures total in `figs_review2026/` (fig1–7 + fig_storyD/H/F).
 
 ---
 
-## 3. Next stories — priority order, with concrete starting points
+## 3. Stories — DONE this round (results in report Parts VI–VIII), + the one remainder
 
-### ★ Story D — true (Onsager/correlated) transference  **[do first; analysis-only, no new sims]**
-**Why:** the campaign's t₊≈0.5 used Nernst–Einstein D₊/(D₊+D₋), which **overestimates** transference by
-ignoring ion–ion correlations (eNMR shows Mg²⁺ t₊≈0.22; correlations can even give negative t₊). Tests
-whether "de-pairing → σ" is genuine charge separation or correlated/vehicular co-motion.
-**How:** on `prod/large_swollen8/prod.xtc` (200 ns, proper 50-ns pre-eq) and the bare replicates, compute the
-distinct (cross) diffusion terms ⟨Δrᵢ·Δrⱼ⟩ for ++/−−/+− (group COMs = MgCluster, Anion) and assemble the
-Onsager L matrix; report t₊^corr and ionicity vs the NE value. The σ_coll/`gmx current` Einstein–Helfand
-machinery from Story A.2 gives the diagonal; you add the cross terms (custom MDAnalysis script or
-`gmx msd -mol` on group-COM trajectories). Expected: t₊^corr < 0.5.
+### ✅ Story D — true (Onsager/correlated) transference  **[DONE; report Part VI; `compute_storyD.py`]**
+RESULT: **the transference is ill-posed for this electrolyte.** t₊^NE ≈ 0.49(bare)/0.47(swollen) reproduces
+the campaign, but ionicity σ_coll/σ_NE ≪ 1 (bare ~0.10, swollen ~0.23 from A.2's validated gmx-current) →
+cations+anions co-move as neutral pairs, net charge-MSD ≈ 0, so species-resolved t₊^corr is a 0/0
+ill-conditioned ratio. NE t₊≈0.5 vastly overstates independent Mg²⁺ transport = quantitative coordination
+paradox. **Bug fixed:** must `unwrap(compound='fragments')` before residue COM or self-diffusion is corrupted.
+**Large-cell 640-ion cross-check ABANDONED — reading the 24 GB `large_swollen8` xtc with MDAnalysis OOM-crashes
+the machine** (see §4). Conclusion rests on bare + 8-POSS-swollen (5 reps each).
 
-### Story F — matched-connectivity scan  **[high value; needs new builds + runs]**
-**Why:** deconfound POSS loading from network percolation (§0.3). Build tooling: `polyAPC/{cure,poss8,
-poss16,build}/`. Build 4/8/16-POSS as **single percolating networks** (and a swollen-vs-dense matched-free-THF
-pair); EM → **≥50 ns NPT** → 100 ns NVT (298 K, v-rescale, match `prod.tpr` settings); read CIP, D, t₊,
-Mg–polymer-O. Hypothesis: at fixed connectivity, de-pairing collapses onto one curve vs loading×conversion,
-while transport tracks percolation/tortuosity.
+### ✅ Story E — charge-scaling robustness (Mg +1.2 vs ECC +1.5)  **[DONE; `prod/charge15/`, fig7]**
+de-pairing gap bare−swollen 10.4→8.1 pts → conclusion robust to the Mg charge.
 
-### Story H — bimodal CIP geometry  **[analysis-only]**
-The new CDF/SDF (Fig 2b/3) show two contact modes: **equatorial bridging** (r≈0.2 nm, cosθ≈0) and **axial
-end-on** (cosθ≈±1). Extend `extract_sdf.py` to classify each pair per frame and test whether the latent-ligand
-polymer-O preferentially displaces the *axial* anion first (open coordination face) as loading rises.
+### ✅ Story F — matched-connectivity scan  **[DONE; report Part VIII; `storyF/`, `compute_storyF.py`]**
+Rebuilt 4/8/16-POSS as matched single percolating networks (`cure_full.py` budgets 225/450/900, 100% conv,
+50 ns NPT pre-eq → 100 ns NVT; all POSS-comps=1, percolate). RESULTS: (1) de-pairing is **real/loading-driven**
+— CIP 90.6→85.3→71.5 % at fixed connectivity (validates the campaign); (2) but the **magnitude was inflated**
+by the confound (matched 16-POSS 71.5 % vs original 57.4 %); (3) the original **8-POSS "swollen mobility
+advantage" was a TOPOLOGY artifact** — matched D falls monotonically 0.026→0.011→0.003, removing the 8-POSS
+speed anomaly. Caveat: single replicate/system; self-MSD window-sensitive.
 
-### Story G — monomer vs dimer  **[NOT classical-MD → DFT/AIMD handoff]**
+### ✅ Story H — bimodal CIP geometry  **[DONE; report Part VII; `compute_storyH.py`]**
+Mg–anion contact is ~88–92 % **axial** (end-on at the open Mg face), not equatorial. Clusters bearing a
+polymer-O contact carry 1.6–3.3× fewer axial anion contacts → the latent-ligand O blocks the axial face
+(Story-3 mechanism localized).
+
+### ⬜ Story G — monomer vs dimer  **[REMAINING — NOT classical-MD → DFT/AIMD handoff]**
 The FF hard-codes the dinuclear dimer as a bonded complex; Canepa/Persson (EES 2015) argue the **MgCl⁺
 monomer** is the equilibrium-stable cation in THF. Classical MD *cannot* address this. Route to the
 `computational_v2/` DFT/AIMD program: does swelling shift the monomer↔dimer balance / which carrier is mobilized?
+This is the **only** open item from the review round.
 
 ---
 
 ## 4. Pitfalls / do-not-repeat
-- Don't recompute the headline de-pairing result — it's solid and now charge-robust (§0.5).
+- **⚠ NEVER load the `large_swollen8` 24 GB trajectory into MDAnalysis — it exhausts the 29 GB RAM and
+  HARD-CRASHES/REBOOTS the machine** (happened 2026-06-14; killed every large-cell attempt). Use `gmx`
+  streaming tools (trjconv/msd/current) for that cell only. Small systems (~38k atoms, ~1.5 GB) read fine.
+- **⚠ Never chain background jobs with `while pgrep -f <name>`** — the waiter's own command line matches the
+  pattern → infinite self-wait (created two zombie loops). Use sequential commands in one script, or marker files.
+- When reading trajectories with MDAnalysis, you MUST `unwrap(compound='fragments')` before residue COM
+  (else PBC-split molecules corrupt COM/self-diffusion — this was the Story-D bug). Wrap MDAnalysis reads in
+  `( ulimit -v 6000000; … )` as an OOM backstop (but NOT gmx — CUDA needs the virtual address space).
+- Don't recompute the headline de-pairing result — solid, charge-robust (§0.5), and loading-driven (Story F).
 - Don't trust c-rescale volume-fluctuation moduli (Story C caveat) — use Parrinello–Rahman or finite-strain.
 - Don't take f/CIP from <50 ns or from a sub-window of the slow ion-pairing transient.
 - Don't read absolute energies/kinetics as ab-initio — scaled-charge OPLS, short-range-only decomposition.
-- Always state the 8-POSS connectivity caveat when comparing transport/mechanics across loading.
+- Report the **deconfounded** loading trends (Story F), and note the original 8-POSS swollen mobility was a
+  topology artifact, when comparing transport/mechanics across loading.
