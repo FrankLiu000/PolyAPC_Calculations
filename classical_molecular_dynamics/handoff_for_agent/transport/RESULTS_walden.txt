@@ -1,0 +1,21 @@
+======================================================================
+WALDEN ANALYSIS -- bare-APC vs 8-POSS swollen (single cell, NVT 298 K)
+eta in cP (GK -vis & Einstein -evisco); sigma_coll via gmx current; Lambda=sigma/c
+======================================================================
+
+  bare-APC:
+     eta  GK=1.091  Einstein=1.707 cP
+     sigma_coll=0.0262 S/m  Lambda=0.750 S cm^2/mol  fluidity=71.48 P^-1
+     Walden ionicity (vs KCl line) = 0.008
+
+  8-POSS swollen:
+     eta  GK=8.781  Einstein=11.992 cP
+     sigma_coll=0.0466 S/m  Lambda=1.392 S cm^2/mol  fluidity=9.63 P^-1
+     Walden ionicity (vs KCl line) = 0.115
+
+  -- bare -> swollen --
+     eta:        1.399 -> 10.387 cP  (x7.42)
+     Lambda:     0.750 -> 1.392 S cm^2/mol
+     Walden ion: 0.008 -> 0.115
+
+  Cross-check these Walden ionicities against sigma_coll/sigma_NE (RESULTS_storyA2.txt).

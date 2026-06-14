@@ -1,0 +1,23 @@
+================================================================
+ARRHENIUS  D(T) -> Ea   (bare-APC vs 8-POSS swollen)
+D = avg(cation,anion) per T, 1e-5 cm^2/s; fit ln D vs 1/T
+================================================================
+
+  bare-APC:
+     T=273 K  D=0.0187
+     T=288 K  D=0.0294
+     T=298 K  D=0.0279
+     T=313 K  D=0.0594
+     T=333 K  D=0.1009
+     -> Ea = 21.4 kJ/mol = 0.222 eV   (R^2=0.939, n=5)
+
+  8-POSS swollen:
+     T=273 K  D=0.0141
+     T=288 K  D=0.0136
+     T=298 K  D=0.0265
+     T=313 K  D=0.0355
+     T=333 K  D=0.0381
+     -> Ea = 14.8 kJ/mol = 0.154 eV   (R^2=0.836, n=5)
+
+  NB: this is the BULK migration barrier; compare against (do not equate with)
+  the experimental DRT R_ct interfacial-desolvation barrier (solvation/desolvation).
