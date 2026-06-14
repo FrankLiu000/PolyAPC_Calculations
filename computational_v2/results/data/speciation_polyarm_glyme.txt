@@ -1,0 +1,25 @@
+# Story G POLY ARM — does a polyether-O (glyme=DME) shift the monomer<->dimer balance?
+# B3LYP-D3BJ/def2-TZVP//def2-SVP(opt=loose), SMD-THF.  Bare redistribution dG = +10.4 kcal/mol (dimer).
+# Differential glyme effect:  ddG = [G(glyme_mono)-G(mono)] - [G(glyme_dimer)-G(dimer)]  (THF,DME cancel)
+#   ddG<0 => glyme prefers the MONOMER => network shifts speciation toward monomer.
+
+species                              E_tzvp(Ha)      Gcorr(Ha)            G(Ha)
+mono  [MgCl(THF)5]+ (bare)                                          -1822.759528
+dimer [Mg2Cl3(THF)6]+ (bare)                                        -3176.055250
+DME                                 -309.009082       0.108046       -308.901036
+glyme_mono [MgCl(DME)(THF)3]+      -1667.151888       0.444210      -1666.707678
+glyme_dimer [Mg2Cl3(DME)(THF)4]+   -3020.558613       0.552660      -3020.005953
+
+# glyme binding (X + DME -> X.DME + 2THF):   monomer +0.1 | dimer -1.5 kcal/mol
+ddG (differential, mono vs dimer) = +1.6 kcal/mol   (glyme slightly PREFERS the dimer)
+=> effective redistribution dG in poly = 10.4 + (+1.6) = +12.0 kcal/mol
+
+VERDICT: the polyether does NOT shift the balance toward the monomer -> DIMER favoured in BOTH
+         bare (+10.4) and poly (+12.0).  Carrier identity is NOT the bare-vs-poly differentiator.
+# Interpretation: glyme chelation does not preferentially mobilize a monomer; if anything it marginally
+# stabilises the dimer. Combined with the matched DFT/classical-MD nulls (reduction EA 0.51~0.48 eV,
+# phenyl-centred reduction in both, pairing PMF ~identical, abstraction refuted), this is a 4th
+# independent null on a CHEMICAL bare-vs-poly differentiator. The supported difference is COORDINATION/
+# TRANSPORT GATING: network de-pairing (classical MD CIP 95->84%) + polymer-O blocking the axial Mg
+# face (Story H). The Al 2p XPS split, if real, must be FIELD-amplified (bias AIMD) and/or partly an
+# XPS differential-charging artifact (70.88 eV is below metallic Al; poly is insulating).
