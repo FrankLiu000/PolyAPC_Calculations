@@ -40,3 +40,16 @@ CP2K 2025.1 (no ESM, no grand-canonical constant-mu; see literature memo) and th
 proven to run under MD. But the electronic SCF needs hardening + a gentler field before a
 production biased trajectory is affordable. Honest framing for any report: this is an idealized
 constant-VOLTAGE counter-electrode, not grand-canonical constant-mu on the metal.
+
+# ===== SOFTENED RETRY (bias_pilot_v2, +-1 V, ALPHA0.15/NBROYDEN12/ADDED_MOS400/MAX_SCF250) — 2026-06-14 =====
+# Job 1301, 96 ranks, from the equilibrated bare 10 ps final frame. Two-plate Dirichlet, +-1 V
+# (DeltaV 2 V over ~47 A = 0.043 V/A ~ 4e8 V/m, a realistic EDL field); vacuum dielectric (THF explicit).
+RESULT: PROGRAM ENDED; completed all 50 MD steps; SCF converged every step; 0 SCF failures.
+  T mean 247 K / max 300 K (controlled, no explosion); conserved-quantity drift 0.009 a.u. (flat).
+VERDICT: the SOFTENED +-1 V constant-V Dirichlet bias AIMD is PRODUCTION-VIABLE (vs +-3 V which
+  aborted at step 3). The field machinery + electronic SCF are now both validated under MD at a
+  realistic compact-layer field. Honest framing unchanged: idealized constant-VOLTAGE counter-
+  electrode, NOT grand-canonical constant-mu (CP2K 2025.1 lacks ESM + GC-SCF).
+NEXT (production): extend to ~10 ps bare + poly at +-1 V (and a small bias ladder), tracking anion
+  desolvation/approach + spin/Bader, to test whether the field AMPLIFIES the coordination-gating
+  contrast into the Al0/Al3+ XPS split. ~ cost: from the pilot s/step above x 10000 steps.
