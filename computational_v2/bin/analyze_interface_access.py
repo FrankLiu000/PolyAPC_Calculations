@@ -23,6 +23,7 @@ B = np.array([6.418, 11.116, 0.0])
 N_SLAB_MG = 64
 AL_IDX = 147
 ANION = list(range(147, 172))
+CATION_MG = [64, 65]  # the [Mg2Cl3] dimer core (electrolyte Mg); approach->slab = plating tendency
 
 
 def frames(path):
@@ -66,6 +67,7 @@ def min_image_xy(d):
 
 def analyze(path, label, out_prefix=None):
     heights, mindists, last = [], [], None
+    cat_h, cat_d = [], []
     for syms, x in frames(path):
         if len(x) <= max(ANION):
             continue
@@ -76,6 +78,12 @@ def analyze(path, label, out_prefix=None):
         d = min_image_xy(al - x[:N_SLAB_MG])
         d[:, 2] = al[2] - x[:N_SLAB_MG, 2]
         mindists.append(np.sqrt((d ** 2).sum(axis=1)).min())
+        # cation Mg core: height above front + nearest-slab distance (plating-approach tracking)
+        cm = x[CATION_MG].mean(axis=0)
+        cat_h.append(cm[2] - surf)
+        dc = min_image_xy(cm - x[:N_SLAB_MG])
+        dc[:, 2] = cm[2] - x[:N_SLAB_MG, 2]
+        cat_d.append(np.sqrt((dc ** 2).sum(axis=1)).min())
         last = (syms, x)
     h, m = np.array(heights), np.array(mindists)
     if out_prefix:
@@ -87,6 +95,9 @@ def analyze(path, label, out_prefix=None):
           % (label, len(h), h.mean(), h.std(), h.min(), h[half:].mean()))
     print("%-10s            slabMg : mean %.2f sd %.2f min %.2f | last-half mean %.2f"
           % ("", m.mean(), m.std(), m.min(), m[half:].mean()))
+    ch, cd = np.array(cat_h), np.array(cat_d)
+    print("%-10s            catMg+ : height mean %.2f min %.2f | nearest-slabMg mean %.2f min %.2f | last-half h %.2f"
+          % ("", ch.mean(), ch.min(), cd.mean(), cd.min(), ch[half:].mean()))
     if last is not None:
         syms, x = last
         al = x[AL_IDX]
