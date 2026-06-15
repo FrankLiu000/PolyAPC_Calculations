@@ -70,3 +70,4 @@ __pycache__/
 # --- Deliberately re-include the v2 deliverable figures (small PNGs, versioned) ---
 !computational_v2/results/figures/
 !computational_v2/results/figures/*.png
+computational_v2/mlff/*scaffold*.xyz
