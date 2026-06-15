@@ -1,3 +1,14 @@
+# ============================================================================
+# *** RETRACTED 2026-06-15: the interfacial "abstraction gateway" is an ARTIFACT. ***
+# The bare-interface AIMD that motivated this file (aimd_interface_stats.txt, Cl149
+# departs at 0.17 ps) started from a CORRUPTED cation geometry (Cl66/67/68 stacked,
+# Mg-Mg 2.81 A, T>1000 K explosion). The clean-start rerun (aimd_clean_bare.txt) keeps
+# BOTH Al-Cl bonds intact for 10 ps (frac>3A = 0.00) -> no abstraction. The molecular
+# numbers below (neutral AlPh2Cl reduces at Al, EA 1.71 eV, 83% Al spin) remain valid
+# IN-VACUO chemistry, but the interfacial mechanism that would GENERATE neutral AlPh2Cl
+# at the bare anode is withdrawn. See REPORT_polyAPC_v2_master.md sec.3b.
+# ============================================================================
+#
 # Chloride-abstraction story: neutral AlPh2Cl reducibility
 # (B3LYP-D3BJ/def2-TZVP,SMD-THF // def2-SVP,PCM opt+freq; same protocol as redox ladder)
 #
