@@ -12,7 +12,7 @@ Writes <out_prefix>.dat (CV timeseries, header carries z0/k/kT/zref for WHAM).
 """
 import sys
 import numpy as np
-from ase.io import read
+from ase.io import read, write
 from ase import units
 from ase.md.langevin import Langevin
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
@@ -22,7 +22,7 @@ from mace.calculators import MACECalculator
 model, start = sys.argv[1], sys.argv[2]
 z0, k = float(sys.argv[3]), float(sys.argv[4])
 nsteps = int(sys.argv[5]); prefix = sys.argv[6]
-DT_FS, T_K, LOG_EV, EQUIL = 1.0, 300.0, 20, 2000   # log every 20 fs; discard first 2 ps as equilibration
+DT_FS, T_K, LOG_EV, EQUIL, TRAJ_EV = 1.0, 300.0, 20, 2000, 200  # log 20fs; discard 2ps; save a frame every 200 fs
 kT = units.kB * T_K
 
 at = read(start)
@@ -79,11 +79,16 @@ def log(step):
 print(f"# window z0={z0} k={k} zref={z_ref:.2f} cat_mg={cat_mg.tolist()} nsteps={nsteps}")
 cv0, _ = log(0)
 print(f"  start CV={cv0:.2f} A")
+traj = []
 for step in range(1, nsteps + 1):
     dyn.run(1)
     if step % LOG_EV == 0:
         cv, fmax = log(step)
+    if step % TRAJ_EV == 0 and step >= EQUIL:
+        traj.append(at.copy())
     if step % 2000 == 0:
         print(f"  step {step} CV={cv:.2f} Fmax={fmax:.1f}")
+if traj:
+    write(f"{prefix}_traj.xyz", traj)
 f.close()
 print(f"# DONE {prefix}.dat (discard first {EQUIL} steps as equilibration in WHAM)")

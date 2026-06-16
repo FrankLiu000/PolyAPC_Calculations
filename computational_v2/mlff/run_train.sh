@@ -43,7 +43,7 @@ echo "=== MACE fine-tune: name=$NAME epochs=$EPOCHS dtype=$DTYPE batch=$BATCH fw
   --max_num_epochs="$EPOCHS" \
   $([ "$SWA" = yes ] && echo --swa) \
   --ema --ema_decay=0.99 \
-  --seed=20260616 \
+  --seed="${SEED:-20260616}" \
   --device=cuda --default_dtype="$DTYPE" \
   --save_cpu \
   --restart_latest \

@@ -11,8 +11,13 @@ Writes <out_prefix>_pmf.dat and prints the barrier/well summary.
 import sys
 import numpy as np
 
-args = [a for a in sys.argv[1:] if not a.startswith("--")]
-opts = {sys.argv[i]: sys.argv[i + 1] for i in range(len(sys.argv)) if sys.argv[i].startswith("--")}
+argv = sys.argv[1:]; opts = {}; args = []
+i = 0
+while i < len(argv):
+    if argv[i].startswith("--"):
+        opts[argv[i]] = argv[i + 1]; i += 2
+    else:
+        args.append(argv[i]); i += 1
 out = args[0]; files = args[1:]
 EQUIL = int(opts.get("--equil", 2000)); NBINS = int(opts.get("--bins", 60))
 

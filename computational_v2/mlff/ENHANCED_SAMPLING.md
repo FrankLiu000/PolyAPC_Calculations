@@ -59,3 +59,36 @@ Bare, 5 windows z0 = 8.0–10.0 Å (k=1.0 eV/Å², 6 ps/window, 2 ps discarded, 
 **Verdict: the umbrella+WHAM pipeline is built and validated.** It is ready to drive the desolvation
 profile; the scientifically-meaningful near-surface region needs the Stage-1 active-learning loop
 (committee + EPYC DFT labeling) before its PMF can be trusted.
+
+## Stage 1a — committee + σ_F extrapolation detector (BUILT + VALIDATED, 2026-06-16)
+Committees of **3 members/system** (production seed 20260616 + two new seeds s2/s3, identical recipe,
+60 ep; member binaries local in `run_{bare,poly}_s{2,3}/`, RMSE_F 144–158 all). `committee_uncertainty.py`
+computes per-atom force std across members; σ_F(frame) = max over the electrolyte atoms. `run_committee.sh`
+trains them; `umbrella.py` now also dumps a trajectory (`*_traj.xyz`) for queueing.
+
+**σ_F discriminates extrapolation — cleanly for bare, noisily for poly:**
+
+| committee | in-dist σ_F (held-out, ~9 Å) | near-surface σ_F (pull to ~4.6–4.9 Å) | separation | thresh |
+|---|---|---|---|---|
+| **bare** (172 at) | mean 49, max 124 | **mean 1713, max 2844** | ~35× (no overlap) | 150 → 0/53 FP, 21/21 TP |
+| **poly** (276 at) | mean 115, max 362 | mean 314, max 512 | ~2.7× (**overlaps**) | 150 → 8/44 FP |
+
+The single model's |F| looked benign (~3.5 eV/Å) through both pulls — only the committee reveals the
+extrapolation. **Bare detector is clean** (threshold 150 meV/Å, 0 false positives, 100% recall on the
+pulled frames). **Poly detector is noisier**: its in-distribution baseline is ~2× higher and overlaps the
+near-surface range — genuine higher epistemic uncertainty of the larger/more-flexible POSS system (~440
+frames covering many more DOF), not just under-convergence (poly s2/s3 RMSE_F 152/154 ≈ bare's). → the
+poly AL loop needs **more committee members / more training data** and a **higher per-system threshold
+(~400 meV/Å)** before σ_F is reliable; report poly σ_F-flagging as provisional.
+
+**First AL queues written:** `al_queue_bare.xyz` (21 frames, σ_F 884–2844 — high-confidence) +
+`al_queue_poly.xyz` (21 frames, σ_F 176–512 — provisional) — near-surface configs for EPYC to DFT-label.
+
+## Stage 1b — the active-learning loop (next, needs EPYC)
+1. **Push** `al_queue_{bare,poly}.xyz` → EPYC labels them (`bin/label_forces.py`, n_slab=64 slab-mask) →
+   appends to `dataset_{train,poly_train}.xyz` → pushes back.
+2. **Retrain** the committee on the extended data; re-run a deeper steered pull; re-flag.
+3. **Iterate** (steer toward smaller z each round) until σ_F stays < ~150 meV/Å along the whole approach
+   coordinate — then the umbrella windows down to ~2 Å are trustworthy.
+4. **Stage 2:** converged desolvation F(z), barrier + CN profile, **bare vs poly**. Hybrid: hand the
+   final near-surface desolvated snapshots to EPYC for the DFT reduction step.
