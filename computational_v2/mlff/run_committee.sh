@@ -4,12 +4,9 @@
 set -e
 cd "$(dirname "$0")"
 EPOCHS=${EPOCHS:-60}
-# spec: label:seed:trainfile
-for spec in \
-  "bare:2:mlff_bare_train.xyz" \
-  "bare:3:mlff_bare_train.xyz" \
-  "poly:2:mlff_poly_train.xyz" \
-  "poly:3:mlff_poly_train.xyz" ; do
+# spec: label:seed:trainfile  (override the default set via SPECS env)
+SPECS=${SPECS:-"bare:2:mlff_bare_train.xyz bare:3:mlff_bare_train.xyz poly:2:mlff_poly_train.xyz poly:3:mlff_poly_train.xyz"}
+for spec in $SPECS ; do
   IFS=: read lab seed tf <<< "$spec"
   name="apc_${lab}_s${seed}"; work="run_${lab}_s${seed}"
   echo "=== committee member $name (seed $seed, $tf, $EPOCHS ep) $(date) ==="

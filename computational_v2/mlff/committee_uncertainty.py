@@ -5,8 +5,11 @@ For each frame, evaluates every committee member and computes the per-atom force
 members; σ_F(frame) = max over the ELECTROLYTE atoms (64..) of that per-atom std (slab is masked).
 Low σ_F = in-distribution (members agree); high σ_F = extrapolation (members diverge) = queue for DFT.
 
-Usage: python committee_uncertainty.py <frames.xyz> <m1.model> <m2.model> [...] [--thresh 0.15] [--queue al_queue.xyz]
+Usage: python committee_uncertainty.py <frames.xyz> <m1.model> <m2.model> [...]
+         [--thresh 0.15] [--calib <indist.xyz>] [--queue al_queue.xyz]
 Prints per-frame σ_F + a summary; with --queue, writes frames with σ_F>thresh (eV/Å) for DFT labeling.
+--calib <indist.xyz>: self-calibrate the per-system threshold from an in-distribution reference set
+  (thresh = mean + 5·std of its σ_F, capped below at --thresh) — robust to a system's intrinsic σ_F baseline.
 """
 import sys
 import numpy as np
@@ -26,25 +29,31 @@ queue = opts.get("--queue")
 N_SLAB = 64
 
 calcs = [MACECalculator(model_paths=[m], device="cuda", default_dtype="float32") for m in models]
+
+def sigf(frames):
+    """per-frame max electrolyte committee force-std (eV/Å)."""
+    s = []
+    for at in frames:
+        F = []
+        for c in calcs:
+            a = at.copy(); a.calc = c; F.append(a.get_forces())
+        per_atom = np.sqrt((np.array(F).std(axis=0) ** 2).sum(axis=1))   # (natom,)
+        s.append(float(per_atom[N_SLAB:].max()))
+    return np.array(s)
+
+# self-calibrate threshold from an in-distribution reference (handles per-system σ_F baseline)
+calib = opts.get("--calib")
+if calib:
+    cs = sigf(read(calib, ":"))
+    thresh = max(thresh, float(cs.mean() + 5 * cs.std()))
+    print(f"calibrated from {calib}: in-dist σ_F mean={cs.mean()*1000:.0f} std={cs.std()*1000:.0f} "
+          f"max={cs.max()*1000:.0f} -> thresh={thresh*1000:.0f} meV/Å")
+
 frames = read(frames_file, ":")
 print(f"committee of {len(calcs)} on {len(frames)} frames from {frames_file} (thresh {thresh*1000:.0f} meV/Å)")
-
-sig_max, flagged = [], []
-for i, at in enumerate(frames):
-    F = []
-    for c in calcs:
-        a = at.copy(); a.calc = c; F.append(a.get_forces())
-    F = np.array(F)                                  # (M, natom, 3)
-    per_atom = np.sqrt((F.std(axis=0) ** 2).sum(axis=1))   # (natom,) force-std magnitude
-    s = float(per_atom[N_SLAB:].max())               # electrolyte max σ_F
-    sig_max.append(s)
-    if s > thresh:
-        flagged.append(at)
-    if i % max(1, len(frames) // 10) == 0:
-        print(f"  frame {i}: σ_F(max,electrolyte) = {s*1000:.0f} meV/Å")
-
-sig_max = np.array(sig_max)
-print(f"\nσ_F (max electrolyte) over {len(frames)} frames: "
+sig_max = sigf(frames)
+flagged = [frames[i] for i in range(len(frames)) if sig_max[i] > thresh]
+print(f"σ_F (max electrolyte) over {len(frames)} frames: "
       f"mean={sig_max.mean()*1000:.0f}  median={np.median(sig_max)*1000:.0f}  "
       f"p95={np.percentile(sig_max,95)*1000:.0f}  max={sig_max.max()*1000:.0f} meV/Å")
 print(f"flagged (>{thresh*1000:.0f} meV/Å): {len(flagged)}/{len(frames)}")
