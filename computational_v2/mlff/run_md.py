@@ -48,10 +48,12 @@ print(f"identified: Al={i_Al}  anion_Cl={anion_Cl.tolist()}  cation_Cl={cation_C
       f"cation_Mg={cation_Mg.tolist()}  n_slab_Mg={len(slab_Mg)}")
 print(f"slab z-range {zslab.min():.2f}-{zslab.max():.2f} A; cation Mg z={pos[cation_Mg,2]}")
 
-# --- fix bottom slab layer (electrode anchor) ---
-bottom = slab_Mg[zslab < (zslab.min() + 1.0)]
-at.set_constraint(FixAtoms(indices=bottom.tolist()))
-print(f"fixed bottom slab layer: {len(bottom)} Mg atoms (z<{zslab.min()+1.0:.2f})")
+# --- fix the WHOLE Mg slab (rigid electrode) ---
+# Round-1 workaround model has slab forces ~0 (labels masked), so the slab must be held rigid;
+# only the electrolyte evolves. This is the intended use case (electrolyte dynamics at a fixed electrode).
+fixed = slab_Mg
+at.set_constraint(FixAtoms(indices=fixed.tolist()))
+print(f"fixed entire Mg slab (rigid electrode): {len(fixed)} atoms; electrolyte (108 atoms) mobile")
 slab_top_z = zslab.max()
 
 MaxwellBoltzmannDistribution(at, temperature_K=T_K)

@@ -21,6 +21,8 @@ E0S=${E0S:-average}             # 'average' = least-squares atomic E0 from our d
                                 # CP2K-GTH<->MACE-MP reference offset so energy starts near-correct (no spike).
                                 # 'foundation' leaves the offset for the interactions to learn (spikes, slow).
 MULTIHEAD=${MULTIHEAD:-False}   # False = specialize on our PES only (single-system production potential)
+SWA=${SWA:-yes}                 # 'no' disables SWA stage-two (whose energy_weight=1000 jump is harmful for
+                                # force-only training when E/F are not a consistent pair)
 TRAIN=${TRAIN:-mlff_train.xyz}
 WORK=${WORK:-run_${NAME}}
 mkdir -p "$WORK"
@@ -39,7 +41,7 @@ echo "=== MACE fine-tune: name=$NAME epochs=$EPOCHS dtype=$DTYPE batch=$BATCH fw
   --r_max=5.0 \
   --batch_size="$BATCH" --valid_batch_size="$BATCH" \
   --max_num_epochs="$EPOCHS" \
-  --swa \
+  $([ "$SWA" = yes ] && echo --swa) \
   --ema --ema_decay=0.99 \
   --seed=20260616 \
   --device=cuda --default_dtype="$DTYPE" \

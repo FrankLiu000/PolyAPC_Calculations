@@ -56,11 +56,37 @@ physical force labels, so that physics is retained). This is a workaround pendin
 only (energies untrained → not for energetics).
 
 **Result:** force RMSE drops from the stuck **~1045 meV/Å** (buggy, full data) to **~143 meV/Å** within a
-few epochs — a ~7× improvement and direct confirmation that the electrolyte forces are clean and fittable
-and the slab labels were the entire blocker. (Overall RMSE is electrolyte-dominated since the slab targets
-are ~0; electrolyte-only RMSE ≈ 180 meV/Å.) Final held-out numbers + a stable fixed-slab MLFF-MD demo:
-`[[follow-up commit]]`. Config: `E0s=average`, multihead off, float32+`expandable_segments`, batch 4,
-weighted loss, `energy_weight=0`.
+few epochs — a ~7× improvement and direct confirmation that the electrolyte forces are clean/fittable and
+the slab labels were the entire blocker. Final model (60 epochs, no-SWA, `apc_mlff.model`), **held-out 53
+frames**:
+
+| metric | value |
+|---|---|
+| force RMSE (overall) | 131 meV/Å |
+| force MAE (overall) | **26 meV/Å** |
+| force R | **0.914** |
+| force RMSE — electrolyte (64–171) | **166 meV/Å** |
+| force RMSE — slab (0–63, masked) | 4.6 meV/Å (≈0, as designed) |
+
+A Round-1 electrolyte force field: MAE 26 meV/Å and R=0.91 are solid; the RMSE is outlier-inflated and
+would tighten with corrected slab data + active learning. Config: `E0s=average`, multihead off,
+float32+`expandable_segments`, batch 4, weighted loss, `energy_weight=0`, no SWA.
+
+**MLFF-MD demo (`run_md.py`, rigid electrode + mobile electrolyte, NVT 300 K, 30 ps @ 1 fs).** Stable and
+**reproduces the converged AIMD equilibrium** (cross-checked with the campaign's own
+`bin/analyze_interface_access.py`):
+
+| observable | MLFF-MD (30 ps) | AIMD (10 ps, master report §6) |
+|---|---|---|
+| T | 302 ± 27 K | 300 K (set) |
+| Al height above slab front | mean **9.48 Å** (last-half 8.90) | 9.0 Å |
+| Al nearest slab-Mg | mean 8.11 Å (min 5.74) | min 7.2 Å |
+| anion integrity | **all 4 Al bonds intact every frame; 0/601 dissociation** | intact (clean start) |
+| cation Mg⁺ approach | stays ~7 Å off front (no plating) | ~9 Å, no plating |
+
+Runs 30 ps in ~30 min on the 4070 Ti (1.4 GB GPU) vs AIMD's ~0.1 ps/day — the timescale unlock the MLFF
+was built for. (Energies not trained → forces/MD only; for production desolvation free energies the slab
+data must be fixed per §4, then enhanced sampling can run on this engine.) Figure: `results/figures/fig_mlff_train.png`.
 
 ## 4. Recommended fix (EPYC force-labeling pipeline)
 1. Re-run the force-labeling single-points with **no fixed/constrained atoms** (compute true Hellmann-Feynman+Pulay

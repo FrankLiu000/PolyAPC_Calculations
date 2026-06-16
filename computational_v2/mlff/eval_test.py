@@ -40,6 +40,10 @@ per_el = {}
 for el in sorted(set(sym)):
     m = sym == el
     per_el[el] = float(np.sqrt((df[m]**2).mean()) * 1000)
+# region-resolved force RMSE (slab 0..63 vs electrolyte 64..171), repeated per frame
+nfr = len(frames)
+region = np.tile(np.where(np.arange(nat) < 64, "slab", "electrolyte"), nfr)
+per_region = {r: float(np.sqrt((df[region == r]**2).mean()) * 1000) for r in ("slab", "electrolyte")}
 # force-magnitude correlation
 fmag_dft = np.linalg.norm(f_dft, axis=1); fmag_ml = np.linalg.norm(f_ml, axis=1)
 R = float(np.corrcoef(fmag_dft, fmag_ml)[0, 1])
@@ -48,7 +52,7 @@ out = dict(model=model, test=test, n_frames=len(frames), natoms=nat,
            energy_mae_meV_per_atom_raw=float(e_mae_raw),
            energy_rmse_meV_per_atom_rel=float(e_rmse_rel),
            force_rmse_meV_per_A=float(f_rmse), force_mae_meV_per_A=float(f_mae),
-           force_R=R, force_rmse_per_element=per_el)
+           force_R=R, force_rmse_per_element=per_el, force_rmse_per_region=per_region)
 json.dump(out, open("eval_test.json", "w"), indent=2)
 np.savez("parity_forces.npz", f_dft=f_dft, f_ml=f_ml, e_dft=e_dft, e_ml=e_ml, sym=sym)
 print(json.dumps(out, indent=2))

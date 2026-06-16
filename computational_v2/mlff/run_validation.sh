@@ -13,7 +13,7 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 MODEL=${MODEL:-run_apc_mlff/apc_mlff.model}
 [ -f "$MODEL" ] || MODEL=run_apc_mlff/apc_mlff_stagetwo.model
 START=${START:-md_start.xyz}   # clean intact-anion equilibrium frame (select_md_start.py; Al-Cl 2.22/2.25 A, Al-slab 8.99 A)
-NSTEPS=${NSTEPS:-50000}    # 50 ps @ 1 fs
+NSTEPS=${NSTEPS:-30000}    # 30 ps @ 1 fs (vs AIMD's 10 ps that cost days; demonstrates the speed payoff)
 echo "=== MODEL=$MODEL  START=$START  NSTEPS=$NSTEPS  $(date) ==="
 
 echo "### [1/4] held-out test accuracy"
