@@ -18,6 +18,7 @@ from ase.io import read, write
 
 src = sys.argv[1] if len(sys.argv) > 1 else "dataset_train.xyz"
 test_frac = float(sys.argv[2]) if len(sys.argv) > 2 else 0.10
+prefix = sys.argv[3] if len(sys.argv) > 3 else "mlff"   # outputs <prefix>_train.xyz / <prefix>_test.xyz
 SEED = 20260616
 
 frames = read(src, ":")
@@ -54,8 +55,8 @@ idx = rng.permutation(n)
 n_test = max(1, int(round(test_frac * n)))
 test_idx = sorted(idx[:n_test].tolist())
 train_idx = sorted(idx[n_test:].tolist())
-write("mlff_train.xyz", [frames[i] for i in train_idx])
-write("mlff_test.xyz",  [frames[i] for i in test_idx])
-print(f"\nsplit -> mlff_train.xyz ({len(train_idx)})  mlff_test.xyz ({len(test_idx)})  seed={SEED}")
+write(f"{prefix}_train.xyz", [frames[i] for i in train_idx])
+write(f"{prefix}_test.xyz",  [frames[i] for i in test_idx])
+print(f"\nsplit -> {prefix}_train.xyz ({len(train_idx)})  {prefix}_test.xyz ({len(test_idx)})  seed={SEED}")
 print(f"test |F|max range {fmax_all[test_idx].min():.2f}-{fmax_all[test_idx].max():.2f} eV/A "
       f"(covers force regime: {'YES' if fmax_all[test_idx].max() > np.percentile(fmax_all,90) else 'narrow'})")

@@ -14,6 +14,7 @@ import numpy as np
 from ase.io import read, write
 
 src = sys.argv[1] if len(sys.argv) > 1 else "dataset_train.xyz"
+outfn = sys.argv[2] if len(sys.argv) > 2 else "md_start.xyz"
 frames = read(src, ":")
 best = None
 for k, at in enumerate(frames):
@@ -49,6 +50,6 @@ for k, at in enumerate(frames):
 if best is None:
     print("NO qualifying clean frame found"); sys.exit(1)
 score, k, d_anion, al_slab = best
-write("md_start.xyz", frames[k])
+write(outfn, frames[k])
 print(f"selected frame {k}/{len(frames)}: Al-Cl={d_anion[0]:.2f}/{d_anion[1]:.2f} A, "
-      f"Al-slab(min)={al_slab:.2f} A -> md_start.xyz")
+      f"Al-slab(min)={al_slab:.2f} A -> {outfn}")

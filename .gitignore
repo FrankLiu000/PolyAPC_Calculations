@@ -74,13 +74,17 @@ computational_v2/mlff/*scaffold*.xyz
 
 # --- MLFF working artifacts (derived/large; keep scripts + TRAIN_REPORT.md only) ---
 computational_v2/mlff/run_*/
-computational_v2/mlff/mlff_train.xyz
-computational_v2/mlff/mlff_test.xyz
+computational_v2/mlff/mlff_*train.xyz
+computational_v2/mlff/mlff_*test.xyz
 computational_v2/mlff/dataset_train_*.xyz
-computational_v2/mlff/md_start.xyz
+computational_v2/mlff/md_*start.xyz
 computational_v2/mlff/md_bare_*
+computational_v2/mlff/md_cmp_*
 computational_v2/mlff/mp_finetuning-*.xyz
 computational_v2/mlff/apc_*_valid_indices_*.txt
 computational_v2/mlff/*.model
+!computational_v2/mlff/models/
 computational_v2/mlff/parity_forces.npz
 computational_v2/mlff/eval_test.json
+computational_v2/mlff/eval_bare.json
+computational_v2/mlff/eval_poly.json

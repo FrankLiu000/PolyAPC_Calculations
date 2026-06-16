@@ -116,3 +116,29 @@ Both train cleanly (no longer stuck at ~1 eV/Å). `diagnose_forces.py` gate upda
 data (was reporting a misleading global-ΣF FAIL). **Status: unblocked — matched bare-vs-poly electrolyte
 potentials are now trainable.** Residual: a fully momentum-conserving set (dipole/decoupled-Poisson
 correction, no masking) is deferred by EPYC — fine, since the slab is held fixed in production MLFF-MD.
+
+## 6. Matched bare-vs-poly production models (2026-06-16)
+Both trained with the **identical recipe** (force-only `energy_weight=0`, `E0s=average`, multihead off,
+float32+`expandable_segments`, batch 4, lr 0.01, no-SWA, 100 epochs) so the comparison is fair.
+Models (committed): `models/apc_bare.model`, `models/apc_poly.model` (6.6 MB each). Regenerate:
+`NAME=apc_bare EPOCHS=100 DTYPE=float32 E0S=average LOSS=weighted EWEIGHT=0 SWA=no MULTIHEAD=False
+TRAIN=mlff_bare_train.xyz WORK=run_bare bash run_train.sh` (and `_poly`).
+
+**Held-out force accuracy (independent test sets, region-resolved):**
+
+| model | system | force RMSE | force MAE | R | electrolyte RMSE | slab (masked) |
+|---|---|---|---|---|---|---|
+| `apc_bare` | bare interface (172 at) | 131.6 | **27.0** | 0.913 | 166.0 | 4.6 |
+| `apc_poly` | poly/POSS gel (276 at) | 158.8 | **33.4** | 0.951 | 181.2 | 2.9 |
+
+Comparable Round-1 quality; poly's larger RMSE tracks its larger/more-heterogeneous system (POSS network),
+with a tighter overall R. Both are usable electrolyte force fields for the fixed-electrode regime.
+
+**Matched MLFF-MD (rigid electrode + mobile electrolyte, NVT 300 K, 15 ps each, same ~9 Å intact-anion
+start):** both stable, anion intact (0 dissociation), no plating. Bare: T 306±30 K, Al–slab mean 8.3 Å.
+Poly: stable, anion intact. Figure `results/figures/fig_mlff_matched.png`.
+
+**Next (the science the MLFF was built for):** enhanced sampling (umbrella/metadynamics on Mg²⁺–surface z
+and first-shell coordination) → **desolvation & CIP↔SSIP free energies, bare vs poly**, with replicates +
+large cells. The reduction/plating step stays DFT (hybrid, §1). These force-only fixed-slab potentials are
+the right engine for the gating free energies.
