@@ -71,3 +71,16 @@ __pycache__/
 !computational_v2/results/figures/
 !computational_v2/results/figures/*.png
 computational_v2/mlff/*scaffold*.xyz
+
+# --- MLFF working artifacts (derived/large; keep scripts + TRAIN_REPORT.md only) ---
+computational_v2/mlff/run_*/
+computational_v2/mlff/mlff_train.xyz
+computational_v2/mlff/mlff_test.xyz
+computational_v2/mlff/dataset_train_*.xyz
+computational_v2/mlff/md_start.xyz
+computational_v2/mlff/md_bare_*
+computational_v2/mlff/mp_finetuning-*.xyz
+computational_v2/mlff/apc_mlff_valid_indices_*.txt
+computational_v2/mlff/*.model
+computational_v2/mlff/parity_forces.npz
+computational_v2/mlff/eval_test.json
