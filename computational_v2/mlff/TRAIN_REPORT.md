@@ -135,8 +135,10 @@ Comparable Round-1 quality; poly's larger RMSE tracks its larger/more-heterogene
 with a tighter overall R. Both are usable electrolyte force fields for the fixed-electrode regime.
 
 **Matched MLFF-MD (rigid electrode + mobile electrolyte, NVT 300 K, 15 ps each, same ~9 Å intact-anion
-start):** both stable, anion intact (0 dissociation), no plating. Bare: T 306±30 K, Al–slab mean 8.3 Å.
-Poly: stable, anion intact. Figure `results/figures/fig_mlff_matched.png`.
+start):** both stable, anion intact (0/301 dissociation each), no plating. Bare: T 306±30 K, Al–slab
+mean 8.3 Å (6.9–9.4). Poly: T 298±18 K, Al–slab mean 9.0 Å (7.8–10.2) — the anion sits slightly *further*
+from the electrode in poly, directionally consistent with the campaign's network anion-segregation finding
+(an unbiased 15 ps snapshot, not an equilibrium free energy). Figure `results/figures/fig_mlff_matched.png`.
 
 **Next (the science the MLFF was built for):** enhanced sampling (umbrella/metadynamics on Mg²⁺–surface z
 and first-shell coordination) → **desolvation & CIP↔SSIP free energies, bare vs poly**, with replicates +
