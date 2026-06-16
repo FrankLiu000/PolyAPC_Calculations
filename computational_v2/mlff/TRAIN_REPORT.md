@@ -94,3 +94,25 @@ data must be fixed per §4, then enhanced sampling can run on this engine.) Figu
 2. **Assert ‖ΣF‖ < ~0.1 eV/Å per frame** when writing the dataset (a one-line guard that would have caught this).
 3. Write the **single-point energy** (not the AIMD energy) so E and F are a consistent pair.
 4. Re-push `dataset_train.xyz`; the GPU pipeline here will fine-tune + validate unchanged.
+
+## 5. Fix VERIFIED (2026-06-16, EPYC commit d385aaa)
+EPYC confirmed the finding and pushed clean bare(528) + poly(441) sets. Root cause (sharper than §2):
+the source AIMD held the **bottom 32 slab atoms fixed at unrelaxed ideal-lattice positions**; a free
+single-point exposes their true forces — a +z **asymmetric-slab dipole artifact** (~92 eV/Å net,
+momentum-non-conserving) that the AIMD hid inside the constrained atoms. Their parser is bit-faithful
+(not a parse bug); **energies were already single-point** (my §2 worry about AIMD energies was wrong).
+Fix = mask (zero) the fixed-slab forces 0–63 — the same approach as §3, now the agreed convention
+(slab is fixed in production MLFF-MD). `bin/label_forces.py` gained an `n_slab` mask arg + a free-region
+momentum guard; `mlff/zero_slab_forces.py` post-processes existing sets.
+
+**Independent verification on this node (`diagnose_forces.py`, gate = slab ΣF≈0 AND electrolyte R>0.7):**
+
+| dataset | slab ΣF | electrolyte ΣF (resid.) | electrolyte R(label,foundation) | gate | force-only retrain |
+|---|---|---|---|---|---|
+| bare (528×172) | 0.00 | 2.6 | 0.886 | **PASS** | 143–166 meV/Å (§3) |
+| poly (441×276) | 0.00 | 3.7 | 0.909 | **PASS** | held-out MAE 34, R 0.95, elec RMSE 181 (20 ep) |
+
+Both train cleanly (no longer stuck at ~1 eV/Å). `diagnose_forces.py` gate updated to accept masked-slab
+data (was reporting a misleading global-ΣF FAIL). **Status: unblocked — matched bare-vs-poly electrolyte
+potentials are now trainable.** Residual: a fully momentum-conserving set (dipole/decoupled-Poisson
+correction, no masking) is deferred by EPYC — fine, since the slab is held fixed in production MLFF-MD.
