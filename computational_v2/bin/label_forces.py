@@ -23,7 +23,8 @@ CP2K = os.environ.get("CP2K_BIN", "/CH/cp2k-2025.1/exe/local/cp2k.psmp")
 lat = latcsv.split(",")
 A, B, C = lat[0:3], lat[3:6], lat[6:9]
 tmpl = open(TEMPLATE).read()
-work = "label_work"; os.makedirs(work, exist_ok=True)
+work = "label_work_" + os.path.basename(out).replace(".xyz", "")  # unique per output -> no cross-job .out collision
+os.makedirs(work, exist_ok=True)
 
 done = 0
 if os.path.exists(out):
