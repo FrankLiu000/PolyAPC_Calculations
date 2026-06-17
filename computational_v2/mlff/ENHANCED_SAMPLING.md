@@ -126,3 +126,29 @@ poly, gentler near-contact steering + a DFT spot-check at 3.4 Å. **Stage 2 is n
 trustworthy **partial desolvation PMF over ~3.2–9 Å (bare) / ~3.4–9 Å (poly)** — most of the bulk→near-contact
 approach — is *already* feasible with the round-2 models (run umbrella windows over that range + WHAM).
 Hybrid: hand near-contact desolvated snapshots to EPYC for the DFT reduction step (MLFF can't change oxidation state).
+
+## Stage 2 — partial desolvation PMF (bare vs poly, ~3.5–9.5 Å, 2026-06-17)
+Chained umbrella (13 windows/system, z0 9.5→3.5 Å, k=0.5 eV/Å², 5 ps/window, round-2 models) + WHAM.
+`fig_pmf_compare.png`. **The headline gating result — bare and poly approach the electrode oppositely:**
+
+| | bare | poly |
+|---|---|---|
+| F(z) shape (bulk=0) | **monotonically downhill** to contact (~−90 kJ/mol) | **min ~7.7 Å, steep barrier** (~+100 kJ/mol by 4.3 Å) |
+| first shell on approach | **desolvates**: Mg–O (THF) 6→1, Mg–Cl ~6→2 | **shell retained**: Mg–O ≈ 6, Mg–Cl ≈ 6 almost to 4 Å |
+
+**Mechanism (panel B explains panel A):** the bare cation sheds its THF/Cl shell as it nears the Mg(0001)
+surface → barrierless favorable approach (it plates). The POSS network **prevents desolvation** (the
+solvation shell stays locked, CN ≈ 6) → the cation **cannot approach** → a large free-energy barrier with a
+preferred ~7.7 Å standoff. This is the **first free-energy-level confirmation of the campaign's
+coordination/transport "gating"** (master report §1/§10: network de-pairs + blocks the Mg face,
+immobilises/segregates the carrier) — now as a desolvation/approach PMF.
+
+**Caveats (this is semi-quantitative).** (1) Magnitudes (~90–107 kJ/mol) are uncertain — moderate sampling
+(5 ps/window), k=0.5, 0.5 Å spacing, single committee member, chained descent (possible hysteresis); the
+**shapes, sign, and the CN-desolvation contrast are robust** (the CN data is directly counted, not WHAM-
+processed, and independently explains the PMF), but absolute kJ/mol are likely overestimated. (2) Zero-field,
+scaled-charge (Mg +1.2), fixed-slab, force-only MLFF — this is the *intrinsic* approach free energy; the real
+cell's overpotential/field lowers the barrier (poly *does* plate, just with higher R_ct — consistent with the
+DRT). (3) Bare's deepest windows (~3.0 Å) are mild extrapolation (round-2 covers ~3.2); poly's deepest (~4.1 Å)
+are within coverage. **To harden:** more sampling + replicate seeds + bidirectional windows; then it's a
+master-report-grade result. Reduction stays DFT (hybrid).

@@ -93,5 +93,6 @@ for step in range(1, nsteps + 1):
         print(f"  step {step} CV={cv:.2f} Fmax={fmax:.1f}")
 if traj:
     write(f"{prefix}_traj.xyz", traj)
+write(f"{prefix}_last.xyz", at)          # final equilibrated config -> start for the next (chained) window
 f.close()
 print(f"# DONE {prefix}.dat (discard first {EQUIL} steps as equilibration in WHAM)")
