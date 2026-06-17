@@ -152,3 +152,28 @@ cell's overpotential/field lowers the barrier (poly *does* plate, just with high
 DRT). (3) Bare's deepest windows (~3.0 Å) are mild extrapolation (round-2 covers ~3.2); poly's deepest (~4.1 Å)
 are within coverage. **To harden:** more sampling + replicate seeds + bidirectional windows; then it's a
 master-report-grade result. Reduction stays DFT (hybrid).
+
+### Stage 2 hardening — what more sampling revealed (2026-06-18)
+Two hardening passes exposed that **the round-2 PMF was under-converged** and **the desolvation PMF does
+not fully converge at accessible cost** (a slow solvation-shell/cluster-reorg mode):
+- **Pass 1 (12 ps, k=0.5):** bare span 88→56 kJ/mol AND the soft springs let the deep windows *collapse*
+  (z0=3.5/4.0/4.5 all sampled ~4.3–5.1 Å, leaving a 3.5–4.3 Å gap) → unreliable near-surface. Poly segfaulted.
+- **Pass 2 — proper re-do (k=3 stiff springs, 0.3 Å spacing, 21 windows, 15 ps, bootstrap; `umb_*_r3`,
+  `fig_pmf_r3.png`):** stiff springs FIX the collapse — full range 3.3–9.6 Å now tiled. Bootstrap
+  (statistical) error is small (**±2–4 kJ/mol**), BUT first/second-half **convergence drift is 19 (bare)/
+  30 (poly) kJ/mol** → a slow mode is not equilibrated in 15 ps. Bare span has wandered 88→56→80 across
+  passes — **the absolute magnitudes are not converged.**
+
+**Robust (consistent across passes / from direct data):**
+- Both systems have a **preferred standoff well + a steep surface (desolvation) barrier**; the cation does
+  NOT spontaneously plate at zero field (the round-2 "bare downhill to contact" was a chained-pull artifact).
+- **Poly's standoff well is further from the electrode (~7 Å) than bare's (~5.5 Å)** — the network holds the
+  cation back (round-2 poly min 7.7, r3 7.06; consistent).
+- **Poly retains its solvation shell much longer on approach** (Mg–O ≈ 6 down to ~5 Å, then sheds abruptly)
+  vs bare's progressive desolvation (Mg–O 6→1) — directly counted, WHAM-independent. = the gating signature.
+
+**NOT robust:** absolute well depths / barrier heights (~60–80 kJ/mol ± ~20–30 systematic), and which
+system's surface barrier is higher (flips between passes). **A converged quantitative PMF needs beyond-15 ps
+sampling / replica-exchange / an explicit slow-mode (shell-CN) second CV — a major effort.** The defensible
+deliverable is the **qualitative gating** (standoff difference + shell retention), which corroborates the
+master report's coordination/transport mechanism. Magnitudes: report as semi-quantitative.
