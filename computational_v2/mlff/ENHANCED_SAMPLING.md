@@ -89,11 +89,40 @@ POSS sampling) — i.e. the AL loop itself.
 **AL queues written:** `al_queue_bare.xyz` (21 frames, σ_F 884–2844 — high-confidence) +
 `al_queue_poly.xyz` (13 frames, σ_F > 433 — high-confidence after strengthening) — for EPYC to DFT-label.
 
-## Stage 1b — the active-learning loop (next, needs EPYC)
-1. **Push** `al_queue_{bare,poly}.xyz` → EPYC labels them (`bin/label_forces.py`, n_slab=64 slab-mask) →
-   appends to `dataset_{train,poly_train}.xyz` → pushes back.
-2. **Retrain** the committee on the extended data; re-run a deeper steered pull; re-flag.
-3. **Iterate** (steer toward smaller z each round) until σ_F stays < ~150 meV/Å along the whole approach
-   coordinate — then the umbrella windows down to ~2 Å are trustworthy.
-4. **Stage 2:** converged desolvation F(z), barrier + CN profile, **bare vs poly**. Hybrid: hand the
-   final near-surface desolvated snapshots to EPYC for the DFT reduction step.
+## Stage 1b — AL loop turning: round-1 + round-2 DONE (2026-06-17)
+**Round-1.** EPYC DFT-labeled the queues (`al_queue_{bare,poly}_labeled.xyz`, 21 frames each, slab-masked,
+electrolyte R 0.94/0.93, gate PASS). Folded into extended train sets (`mlff_{bare,poly}_r2_train.xyz`,
+496/418 frames) and retrained 3-member committees per system (`run_{bare,poly}_r2_s{1,2,3}/`, 60 ep).
+
+**The loop demonstrably works — near-surface force accuracy vs DFT ground truth:**
+
+| system | round-1 model (never saw near-surface) | round-2 model (trained on it) |
+|---|---|---|
+| **bare** | RMSE 1222, MAE 259, **R 0.585** (badly extrapolating) | RMSE 258, MAE 83, **R 0.992** |
+| **poly** | RMSE 261, MAE 80, R 0.931 (already decent) | RMSE 190, MAE 58, R 0.963 |
+
+Bare near-surface went from badly-extrapolating to excellent; poly improved modestly (its round-1 model was
+already reasonable there — the POSS network constrains the near-surface configs).
+
+**Frontier advanced — and bare vs poly diverge (informative):**
+- **Bare:** round-1 model went wild past ~4.6 Å; **round-2 steers stably to ~3.2 Å** (near-contact). The
+  3.2 Å frames are still uncertain (σ_F up to 9130, calibrated thresh 2553) → **`al_queue_bare_r2.xyz`
+  (7 near-contact frames)** for EPYC round-2 labeling → bare round-3.
+- **Poly:** round-2 steers stably to **~3.4 Å with LOW σ_F (mean 253, 0/41 flagged)** — it already
+  extrapolates confidently there (POSS-constrained configs generalize well). But pushing to ~2.8 Å
+  **destabilizes** (cation slams the POSS-crowded surface → force singularity; the new blow-up guard in
+  `umbrella.py` aborts cleanly). So poly has **no clean round-2 queue** — it is either confident (≥3.4 Å)
+  or exploding (<3 Å), with no stable uncertain frames to label. Poly's near-contact (<3 Å) needs gentler
+  round-3 steering (e.g., stiff restraint from a stable 3.4 Å start).
+
+**σ_F refinement (learned this round):** σ_F is an *absolute* force-std, so it scales with the intrinsically
+larger near-surface forces — it stays elevated even where accuracy is now excellent (bare 4.7 Å σ_F ~830 at
+R 0.992). So σ_F is a *relative* flag: calibrate each round on the *now-covered* band, queue frames well
+above it. (Caveat: low σ_F = members agree ≈ likely accurate, but a same-data committee can be
+"confidently wrong" — spot-check poly's 3.4 Å confidence with a couple of DFT labels.)
+
+**Iterate (round-3+):** EPYC labels `al_queue_bare_r2.xyz` → fold in → retrain → steer bare to ~2 Å; for
+poly, gentler near-contact steering + a DFT spot-check at 3.4 Å. **Stage 2 is now partly unlocked:** a
+trustworthy **partial desolvation PMF over ~3.2–9 Å (bare) / ~3.4–9 Å (poly)** — most of the bulk→near-contact
+approach — is *already* feasible with the round-2 models (run umbrella windows over that range + WHAM).
+Hybrid: hand near-contact desolvated snapshots to EPYC for the DFT reduction step (MLFF can't change oxidation state).

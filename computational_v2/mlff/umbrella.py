@@ -84,6 +84,9 @@ for step in range(1, nsteps + 1):
     dyn.run(1)
     if step % LOG_EV == 0:
         cv, fmax = log(step)
+        if not np.isfinite(cv) or fmax > 5e3:      # blow-up guard (deep extrapolation -> NaN); abort cleanly
+            print(f"  ABORT step {step}: CV={cv} Fmax={fmax:.1f} (force blow-up / extrapolation singularity)")
+            break
     if step % TRAJ_EV == 0 and step >= EQUIL:
         traj.append(at.copy())
     if step % 2000 == 0:
