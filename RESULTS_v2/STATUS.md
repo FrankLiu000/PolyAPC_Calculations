@@ -17,7 +17,7 @@
 | **T8** | **SEI electronic structure (DOS/gap)** | CPU | ● **done** | **Al⁰ 0.00 eV (metal/leaky), Mg₁₇Al₁₂ ≈0 (metal); SiO₂ 8.46, Al₂O₃ 6.2, MgO 3.9, MgCl₂ 2.9 eV (insulators/passivating)** |
 | T9 | Mg²⁺ migration NEB through SEI | CPU | ○ todo | MgCl₂/MgO NEB decks exist; add SiO₂; (MgF₂ excluded — no-F) |
 | T10 | constant-µ interface AIMD (real ions) | CPU | ◐ partial | bias machinery + bias_prod_bare exist; add Al-anion + poly + replicas |
-| T11 | XPS Al 2p + Si 2p shifts | CPU | ◐ partial | Al 2p direction (Δq +0.7 e) done; **Si 2p NEW**; ΔSCF refinement flagged |
+| T11 | XPS Al 2p + Si 2p shifts | CPU | ● done | Si 2p shift +1.28 eV reproduced (SiH₄ 98.6≈99.5); Al³⁺ poly side ≈74 reproduced; bare 70.9=metallic Al⁰ (needs metal, =T8) |
 | T12 | Raman/IR assignment | CPU | ○ todo | NEW (v2 skipped); free vs Mg-bound THF, anion, polyether, POSS |
 | T13 | nucleation / texture | CPU | ○ todo | NEW: Mg adatom binding+diffusion on clean vs Al-decorated Mg(0001) |
 | T14 | self-discharge / overcharge mechanism | desk | ● done | bare metallic-SEI electron-leak → parasitic redox (CE 27%, −320 mV/h); poly insulating → CE ~100% |

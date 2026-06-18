@@ -1,0 +1,7 @@
+element,reference,environment,core_2p_eigenvalue_eV,approx_BE_eV,note
+Si,SiH4,Si(0)-like (Si-H),-98.65,98.65,exp Si0 2p 99.5 (bare)
+Si,Si(OH)4,siloxane Si-O,-99.93,99.93,exp siloxane 101.7 (poly); computed shift +1.28
+Al,Al2,Al(0) molecular (Al-Al),-73.38,73.38,molecular Al0 still ion-like (no metallic screening)
+Al,AlH3,Al(III) hydride,-72.98,72.98,Al(III)
+Al,Al(OH)3,Al(III) oxide,-73.13,73.13,exp Al3+ 74.0 (poly) -- reproduced
+Al,AlF3,Al(III) fluoride,-74.69,74.69,Al(III) upper (most ionic)

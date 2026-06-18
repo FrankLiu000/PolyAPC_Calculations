@@ -1,0 +1,6 @@
+! B3LYP def2-TZVP TightSCF Opt
+%pal nprocs 6 end
+* xyz 0 3
+Al 0.0 0.0 0.0
+Al 0.0 0.0 2.50
+*
