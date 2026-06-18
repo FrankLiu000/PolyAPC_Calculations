@@ -43,7 +43,8 @@ The cured POSS network **de-pairs the electrolyte** (CIP 95→84 %, loading-driv
 |---|---|---|
 | ToF-SIMS Al ↓ (×0.02–0.5), confined ~90 nm | poly Al-poor, surface-confined | C1 (Al reducible on bare) + C2 (poly segregates) + C3/T8 (passivates) |
 | ToF-SIMS/XPS Si ↑ (×20–34) | poly Si-rich | POSS/SiOₓ surface layer (T7) |
-| XPS Al 2p **70.9 vs 74.0 eV** | Al⁰/alloy (bare) vs Al³⁺ (poly) | C1 + T4 + T11 (core-level, pending) |
+| XPS Al 2p **70.9 vs 74.0 eV** | Al⁰/alloy (bare) vs Al³⁺ (poly) | C1 + T4 + **T11**: molecular Al³⁺ refs reproduce poly 74.0; bare 70.9 = metallic Al⁰ (screening, =T8 metal) → split is metal-vs-ion |
+| XPS Si 2p **99.5 vs 101.7 eV** | elemental Si vs siloxane (POSS) | **T11**: SiH₄ 98.6≈99.5; siloxane shift +1.28 eV (dir. of +2.2) |
 | GITT CE **100 % vs 27 %**, −320 mV/h self-discharge | reversibility | **C3/T8** (bare leaky → parasitic redox; poly insulating) + C1 |
 | GITT + MD Mg²⁺ D **equal** | transport not the lever | honest spine — no transport advantage invented |
 
