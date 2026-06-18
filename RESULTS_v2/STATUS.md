@@ -12,7 +12,7 @@
 | T3 | reductive decomposition → Al⁰ | CPU | ● done | C1: [AlPh₂Cl₂]²⁻ Al–Cl cleavage −8.5 (vs Al–C +14.5) → 83% Al-spin radical → Al⁰ |
 | T4 | Al co-deposition / alloying (periodic) | CPU | ● done | C1: adatom E_ads −0.08 eV; Al-in-Mg E_sub −4.44 eV (alloying favourable) |
 | T5 | anion interface dynamics (MD) | GPU | ○ deferred | GPU node (gmx absent here); v2 classical-MD has anion access/residence |
-| T6 | e⁻-transfer / passivation barrier | CPU | ○ todo | NEW: SiOₓ/POSS layer on Mg(0001) |
+| T6 | e⁻-transfer / passivation barrier | CPU | ● done | Mg Fermi in SiO₂ gap → 3.07 eV injection barrier; tunnelling through 50–90 nm SiOₓ ≈0 → blocks Al-anion reduction (CDFT-on-metal invalid, band-align route) |
 | T7 | candidate SEI phase set + stability | CPU | ● done | all SEI phases stable; **SiO₂ E_f −9.2 eV/fu (=exp)**; Al₂O₃ −15.4, MgO −4.0, MgCl₂ −4.2; Mg₁₇Al₁₂ artifact (use E_sub) |
 | **T8** | **SEI electronic structure (DOS/gap)** | CPU | ● **done** | **Al⁰ 0.00 eV (metal/leaky), Mg₁₇Al₁₂ ≈0 (metal); SiO₂ 8.46, Al₂O₃ 6.2, MgO 3.9, MgCl₂ 2.9 eV (insulators/passivating)** |
 | T9 | Mg²⁺ migration NEB through SEI | CPU | ◑ honest | NEB unconverged (F-centre vacancy, as v2 MgF₂); DRT link carried by T8 electronic structure + literature |

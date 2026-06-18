@@ -1,0 +1,14 @@
+quantity,value,source
+Mg(0001) work function Phi (eV),3.97,v2 validated
+SiO2 band gap (eV),8.46,T8 this session
+SiO2 electron affinity chi (eV),0.9,literature
+SiO2 CBM vs vacuum (eV),-0.90,=-chi
+SiO2 VBM vs vacuum (eV),-9.36,=-chi-gap
+Mg Fermi vs vacuum (eV),-3.97,=-Phi
+Mg-Fermi-in-SiO2-gap,TRUE,band alignment
+electron injection barrier Mg->SiO2 CBM (eV),3.07,CBM - Ef
+tunneling kappa (A^-1),0.898,sqrt(2m*phi)/hbar
+T(0.5nm),1.3e-4,WKB
+T(1nm),1.6e-8,WKB
+T(5nm),1.0e-39,WKB
+T(50-90nm poly),~0,WKB
