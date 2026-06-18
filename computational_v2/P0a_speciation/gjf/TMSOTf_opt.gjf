@@ -1,0 +1,10 @@
+%oldchk=TMSOTf.chk
+%chk=TMSOTf_opt.chk
+%nprocshared=16
+%mem=24GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt freq SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+TMSOTf opt/freq (restart)
+
+0 1
+

@@ -1,0 +1,10 @@
+%oldchk=Mg2Cl3_THF6_cation_opt.chk
+%chk=Mg2Cl3_THF6_cation_red_m062x.chk
+%nprocshared=24
+%mem=48GB
+#p M062X/def2TZVP EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+Mg2Cl3_THF6_cation red m062x SP
+
+0 2
+

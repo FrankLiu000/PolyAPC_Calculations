@@ -1,0 +1,37 @@
+# ============================================================================
+# *** RETRACTED 2026-06-15: the interfacial "abstraction gateway" is an ARTIFACT. ***
+# The bare-interface AIMD that motivated this file (aimd_interface_stats.txt, Cl149
+# departs at 0.17 ps) started from a CORRUPTED cation geometry (Cl66/67/68 stacked,
+# Mg-Mg 2.81 A, T>1000 K explosion). The clean-start rerun (aimd_clean_bare.txt) keeps
+# BOTH Al-Cl bonds intact for 10 ps (frac>3A = 0.00) -> no abstraction. The molecular
+# numbers below (neutral AlPh2Cl reduces at Al, EA 1.71 eV, 83% Al spin) remain valid
+# IN-VACUO chemistry, but the interfacial mechanism that would GENERATE neutral AlPh2Cl
+# at the bare anode is withdrawn. See REPORT_polyAPC_v2_master.md sec.3b.
+# ============================================================================
+#
+# Chloride-abstraction story: neutral AlPh2Cl reducibility
+# (B3LYP-D3BJ/def2-TZVP,SMD-THF // def2-SVP,PCM opt+freq; same protocol as redox ladder)
+#
+# Context: bare-interface AIMD shows the [Mg2Cl3(THF)6]+ cation abstracts one Cl- from
+# [AlPh2Cl2]- within 0.2 ps and keeps it for the whole 10 ps -> the bare anion actually
+# present at the interface is NEUTRAL 3-coordinate AlPh2Cl. In poly the anion stays intact.
+# One-electron reduction of AlPh2Cl gives [AlPh2Cl]·- = the 83%-Al-spin Al(II) radical
+# (reductive_decomposition.txt) -> direct Al(0) precursor.
+#
+E_neutral_tzvp_smd  = -1166.3099963 Ha
+Gcorr_neutral(SVP)  = 0.140737 Ha
+E_redvert_tzvp_smd  = -1166.37288837 Ha  (anion at neutral geometry)
+E_radanion_tzvp_smd = -1166.38596172 Ha ; Gcorr = 0.138109 (frag_AlPh2Cl, adiabatic)
+#
+EA_vert(AlPh2Cl)    = 1.71 eV    (vs intact free [AlPh2Cl2]- : 0.06 eV)
+dG_red_adiabatic    = -2.14 eV  = -49.3 kcal/mol   (AlPh2Cl + e- -> [AlPh2Cl]·-)
+#
+# Compare: intact-anion reduction is phenyl-centred (8% Al spin) and weak (EA 0.06 eV free,
+# ~0.5 eV in cation contact); neutral-AlPh2Cl reduction is Al-centred (83%) and (this file)
+# much more exergonic -> chloride abstraction is the gateway that converts the inert anion
+# into the Al(0)-forming species. Poly blocks the gateway (bridge stretched, no abstraction).
+#
+# Quality gates: NImag=0 (neutral opt); <S^2>=0.7501 after annihilation (clean doublet).
+# Vertical reduced state already has 52% spin on Al (Mulliken) -> relaxes to 83% (adiabatic).
+# The intact-anion vertical reduction puts only 4-8% on Al: chloride loss redirects the
+# incoming electron from phenyl pi* to ALUMINIUM.

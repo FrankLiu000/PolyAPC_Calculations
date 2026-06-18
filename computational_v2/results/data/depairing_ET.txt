@@ -1,0 +1,15 @@
+# Ionic-depairing electron-transfer test (molecular, B3LYP-D3BJ/def2TZVP, SMD-THF, vertical EA at MD geometry)
+# EA_vert = E(neutral) - E(reduced@neutral geom);  Al_spin = unpaired-e- fraction on Al in the reduced state.
+# Contact ion pair = [Mg2Cl3(THF)6]+ . [AlPh2Cl2]- (mu-Cl bridged).  Bare: tight bridge (Mg-Al 4.11A); Poly: stretched (4.73A).
+
+system        EA_vert(eV)   Al_spin(reduced)
+bare_pair        0.51        0.04 of 1.00  (4% on Al)
+poly_pair        0.48        0.02 of 1.00  (2% on Al)
+free_anion       0.06        (isolated anion; cation absent)
+
+# Reading:
+# - Cation contact makes the anion ~8x more reducible (0.5 vs 0.06 eV) regardless of pairing tightness.
+# - EA barely changes with depairing (bare 0.51 ~ poly 0.48 eV) -> depairing is NOT a strong thermodynamic gate at the molecular level.
+# - The discriminator is WHERE the electron goes: bare 4% vs poly 2% on Al.
+# - Implication: molecular reduction thermodynamics are similar; suppression is dominated by anion ACCESS to the
+#   electrode + the full interface environment -> see periodic CDFT (interface_ET.txt) and poly AIMD.

@@ -1,0 +1,10 @@
+%oldchk=AlCl3_opt.chk
+%chk=AlCl3_ox_wb97xd.chk
+%nprocshared=8
+%mem=14GB
+#p wB97XD/def2TZVP SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+AlCl3 ox wb97xd SP
+
+1 2
+

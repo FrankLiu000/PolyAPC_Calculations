@@ -1,0 +1,10 @@
+%oldchk=THF_opt.chk
+%chk=THF_tzvp.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+THF def2-TZVP SP
+
+0 1
+

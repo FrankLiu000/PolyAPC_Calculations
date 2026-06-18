@@ -1,0 +1,42 @@
+Story A.1 — ion-pairing equilibration (contact-pairing time series)
+====================================================================
+Metric: % of Mg with >=1 anion-Cl contact within 0.345 nm (same cutoff as the
+campaign's bare_solv_summary). f_free = 1 - contact-fraction.
+Method: solvation.py per-frame records -> contact_timeseries.py (10 ns blocks),
+full 0-100 ns at 1 ns stride.
+
+Contact-pairing % vs trajectory time:
+
+  window(ns)   bare r1   bare r4   swollen seed1
+   0-10          57.1      56.9       64.4
+  10-20          74.3      72.2       71.9
+  20-30          81.8      77.8       77.6
+  30-40          86.1      82.8       81.5
+  40-50          89.9      85.5       81.9
+  50-60          91.4      88.6       81.7
+  60-70          92.9      91.9       83.2
+  70-80          94.7      92.4       83.1
+  80-90          95.2      93.2       82.7
+  90-100         95.6      94.3       84.6
+  ------------------------------------------------
+  FULL 0-100     86.0      83.7       79.3   (trajectory-average; misleading)
+
+Interpretation
+--------------
+* Both systems START ~57-64% paired (NPT-equilibrated structures are under-associated)
+  and PAIR UP during production. The 1 ns pre-equilibration does NOT equilibrate ion
+  association: bare plateaus ~80 ns (~95%), swollen ~40 ns (~82-83%).
+* This reconciles the previously-inconsistent contact numbers, all at the SAME cutoff:
+    - campaign bare_solv_summary.txt  49.7%  ~ first ~5 ns
+    - MANIFEST headline                83.3%  ~ mid-window
+    - naive last-50 ns read            94%    ~ late/bare-converged
+  Nobody used a wrong cutoff; they sampled different points on an unconverged transient.
+* bare r1 (original) and bare r4 (new seed) drift identically -> systematic/reproducible.
+
+Converged free-carrier fraction f (70-100 ns window, mean +/- SEM over 5 reps):
+    bare-APC      f = 0.046 +/- 0.006   (95.4% paired)
+    8-POSS swollen f = 0.155 +/- 0.005   (84.5% paired)
+    -> swollen de-pairs ~3.4x vs bare.
+
+Consequence for protocol: use >=50 ns pre-equilibration in all subsequent stories, and read
+f (and ideally D) from the converged window only. See reports/REPORT_storyA1.md.

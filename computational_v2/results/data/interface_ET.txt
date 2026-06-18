@@ -1,0 +1,35 @@
+# Interface electron transfer, bare vs poly — HONEST STATUS / LIMITATION
+#
+# GOAL: quantify whether the poly network suppresses Al3+ -> Al0 reduction at the Mg
+#       plating front relative to bare APC.
+#
+# METHOD A (CDFT/Becke-Marcus) — NOT RELIABLE HERE.
+#   Becke charge-density constraint on the anion fragment at the Mg(0001) real-ion
+#   interface. The Becke real-space integration does NOT conserve charge on this
+#   metallic-electrode system: total Becke charge came out -13 e (bare) / +11 e (poly)
+#   for charge-neutral cells, and the fragment population N0 was unphysical and
+#   environment-inconsistent (bare ~88, poly ~49-64 e for the same 25-atom anion,
+#   formal ~76). Root cause: CDFT/Becke does not cleanly partition the delocalized,
+#   Fermi-smeared electrons of a metal slab (a known limitation, flagged in the plan
+#   as the top methodological risk). Radii values/order and cavity confinement were
+#   all tested; none restored charge conservation. -> No dE_ET reported from CDFT.
+#
+# METHOD: equilibrium AIMD anion access (bare 10 ps; poly 6.4 ps and running).
+#   Al-to-SLAB-Mg distance, matched 6.4 ps:  bare 9.0 A (min 7.2) ; poly 9.1 A (min 7.3).
+#   The anion remains solvent/ion-separated ~9 A from the plating front in BOTH; no
+#   contact/plating event on the accessible timescale (expected: deposition is a rare,
+#   overpotential-driven event). -> no clean bare-vs-poly access difference at 6-10 ps.
+#
+# WHAT IS ROBUST (other files):
+#   - Anion is intrinsically reducible to Al0: reductive_decomposition.txt (Al-Cl
+#     cleavage dG -8.5 kcal/mol, 83% Al spin on the radical).
+#   - Molecular reduction thermodynamics ~equal bare vs poly: depairing_ET.txt
+#     (contact-pair EA 0.51 vs 0.48 eV) -> reduction energetics are NOT the lever.
+#   - Ionic depairing is structural: poly stretches the Mg-(mu-Cl) bridge 2.23->2.70 A,
+#     Mg-Al 4.11->4.73 A (MD-sampled) -> weakens the inner-sphere ET pathway.
+#
+# HONEST CONCLUSION: the decisive interfacial-reduction step is a rare, potential-driven
+#   event not captured by equilibrium DFT/AIMD, and CDFT is invalid on the metal. The
+#   bare-vs-poly differentiator that IS supported computationally is ion pairing/
+#   transport (depairing + confinement, classical-MD + structural DFT), not a cleanly
+#   computable interfacial dG_ET at this level.

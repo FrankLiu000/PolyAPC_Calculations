@@ -1,0 +1,24 @@
+# Matched bare-vs-poly interface AIMD statistics (PBE-D3, NVT 300K, 1fs, EPS_SCF 1e-5)
+# Metric definitions: slab Mg = atoms 0..63 ONLY (cation Mg excluded); Al = atom 147 (0-based);
+# height = Al z - mean z of 16 top-layer slab Mg. Generated 2026-06-10 23:03:40 by harvest_interface_stats.sh
+
+bare       frames=10001  height: mean 8.50 sd 0.95 min 7.30 | last-half mean 8.03
+                      slabMg : mean 8.27 sd 1.13 min 6.72 | last-half mean 7.61
+           final-frame Al bonds (<2.6 A): Cl148 2.21; C150 1.99; C161 1.99
+
+poly       frames=10001  height: mean 9.18 sd 0.72 min 8.23 | last-half mean 8.91
+                      slabMg : mean 8.10 sd 1.41 min 5.19 | last-half mean 7.13
+           final-frame Al bonds (<2.6 A): Cl148 2.35; Cl149 2.25; C150 1.94; C161 1.96
+
+# --- Cl-abstraction tracking (Al-Cl148 / Al-Cl149 distances) ---
+bare  Al-Cl148 mean 2.18 final 2.21 | Al-Cl149 mean 7.66 final 8.67 | frac(Cl149>3A) 0.97  first-departure t=0.17 ps
+bare  Cl149 final neighbors: Mg65 2.41, Mg64 2.56, H100 2.62
+poly  Al-Cl148 mean 2.32 final 2.35 | Al-Cl149 mean 2.38 final 2.25 | frac(Cl149>3A) 0.05  first-departure t=0.16 ps
+poly  Cl149 final neighbors: Al147 2.25, Mg65 2.97, H115 3.06
+
+# Interpretation: in BARE the cation abstracts one chloride from [AlPh2Cl2]- within ~0.2 ps
+# and keeps it (anion runs as NEUTRAL AlPh2Cl, 3-coordinate Lewis acid, for ~97% of 10 ps);
+# in POLY the mu-Cl bridge stretches transiently but the anion stays intact [AlPh2Cl2]-.
+# Neither anion reaches the plating front (min Al-to-slab-Mg > 5 A); no reduction event in 10 ps.
+# Caveat: single trajectory per condition from MD-sampled CIP starts; bare_r2 (new velocity seed)
+# tests seed-sensitivity of the abstraction, not start-geometry sensitivity.

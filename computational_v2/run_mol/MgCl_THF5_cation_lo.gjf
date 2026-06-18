@@ -1,0 +1,10 @@
+%oldchk=MgCl_THF5_cation.chk
+%chk=MgCl_THF5_cation_lo.chk
+%nprocshared=16
+%mem=24GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt=loose freq SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine scf=xqc geom=check guess=read
+
+MgCl_THF5_cation loose reopt+freq from stuck geometry
+
+1 1
+

@@ -1,0 +1,14 @@
+# Monomer<->dimer speciation (Story G; B3LYP-D3BJ/def2-TZVP//def2-SVP, SMD-THF)
+# G = E[TZVP,SMD] + Gcorr[SVP freq];  reaction: [Mg2Cl3(THF)6]+ + 3 THF <-> [MgCl(THF)5]+ + [MgCl2(THF)4]
+# (Canepa/Persson: MgCl+ monomer favoured | Moss/FF: dimer.  dG<0 => monomers; dG>0 => dimer)
+
+species                          E_tzvp(Ha)      Gcorr(Ha)            G(Ha)
+dimer+   [Mg2Cl3(THF)6]+       -3176.690999       0.635749     -3176.055250
+cat_mono [MgCl(THF)5]+         -1823.290549       0.531021     -1822.759528
+neu_mono [MgCl2(THF)4]         -2051.123721       0.415438     -2050.708283
+THF                             -232.564549       0.088191      -232.476358
+
+dG(redistribution) = 10.4 kcal/mol
+VERDICT: DIMER favoured (Moss/FF assumption)
+# note: bimolecular; sign/direction is the robust statement (standard-state/conc terms shift magnitude).
+# Next: repeat in a polyether-O-rich micro-environment to test whether the network shifts the balance (Story G poly arm).

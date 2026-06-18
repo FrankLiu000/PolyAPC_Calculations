@@ -1,0 +1,20 @@
+# Reductive decomposition of the reduced APC anion [AlPh2Cl2]2- (B3LYP-D3BJ/def2-TZVP//def2-SVP, SMD-THF)
+# G = E[def2TZVP,SMD] + Gcorr[def2SVP freq];  dG in kcal/mol at 298 K
+# reference G(reduced [AlPh2Cl2]2-, doublet) = -1626.634752 Ha  (Etz=-1626.768699 + Gcorr=0.133947)
+
+species                           G (Ha)
+[AlPh2Cl]·- (d2)            -1166.247853
+[AlPhCl2]·- (d2)            -1394.880728
+Ph- (s)                      -231.730953
+Cl- (s)                      -460.400521
+
+# Cleavage pathways (one-electron-reduced anion):
+Al-Cl cleavage : [AlPh2Cl2]2- -> [AlPh2Cl]·- + Cl-   dG = -8.5 kcal/mol  (SEI-forming; Cl- -> MgCl2, Al-centred radical -> Al0)
+Al-C  cleavage : [AlPh2Cl2]2- -> [AlPhCl2]·- + Ph-   dG = +14.5 kcal/mol
+
+Preference: Al-Cl cleavage favoured by 23.0 kcal/mol
+
+# Spin localization of the Al-Cl cleavage product [AlPh2Cl]·- (Mulliken, B3LYP-D3BJ/def2SVP, SMD-THF):
+#   Al spin = +0.834 (83% of the unpaired electron) ; remainder delocalized over phenyl C.
+#   -> Al-centred radical (Al(II)), the direct precursor to Al(0). Confirms reduction is Al-centred,
+#      not ligand/phenyl-centred. Links to bare-electrode 70.9 eV (reduced/alloyed Al0) vs poly 74.0 eV (Al3+).

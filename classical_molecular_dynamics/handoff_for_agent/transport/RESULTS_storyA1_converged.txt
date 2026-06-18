@@ -1,0 +1,25 @@
+==========================================================================
+STORY A.1 (CONVERGED f, 70-100 ns)  --  8-POSS swollen vs bare-APC, 5x100 ns
+D: COM-MSD fit 20-80 ns (1e-5 cm^2/s) | f: converged 70-100 ns window | mean +/- SEM
+==========================================================================
+
+  bare      cation [Mg2Cl3.6THF]+    D = 0.0530 +/- 0.0030 (n=5)
+  bare      anion [Ph2AlCl2]-        D = 0.0527 +/- 0.0036 (n=5)
+  bare      free-carrier f (70-100ns) per-rep=['0.048', '0.032', '0.049', '0.066', '0.035'] -> f = 0.046 +/- 0.006 (n=5)
+
+  swollen8  cation [Mg2Cl3.6THF]+    D = 0.0332 +/- 0.0024 (n=5)
+  swollen8  anion [Ph2AlCl2]-        D = 0.0327 +/- 0.0026 (n=5)
+  swollen8  free-carrier f (70-100ns) per-rep=['0.166', '0.161', '0.157', '0.139', '0.152'] -> f = 0.155 +/- 0.005 (n=5)
+
+  -- mobility slowdown  bare -> swollen8 --
+     MgCluster   x1.60
+     Anion       x1.61
+
+  -- conductivity proxy  sigma ~ f * <D(cat,an)>  (trend-level; sigma_coll = Story A.2) --
+     f(bare)=0.046+/-0.006  f(swollen)=0.155+/-0.005
+     <D>bare=0.0529  <D>swollen=0.0330
+     sigma(swollen)/sigma(bare) = 2.10 +/- 0.32   [f*D ratio, propagated SEM]
+     (campaign estimate was ~1.44; de-pairing-dominated, partly offset by D loss)
+
+  CAVEAT: D fit window (20-80 ns) overlaps the pairing drift -> D is over a
+  non-stationary state; a clean fix needs >=50 ns pre-eq or longer production.

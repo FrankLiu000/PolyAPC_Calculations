@@ -1,0 +1,10 @@
+%oldchk=THF_ramanopt.chk
+%chk=THF_ramangas.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ freq=raman int=ultrafine geom=check guess=read
+
+THF gas-phase Raman activities
+
+0 1
+

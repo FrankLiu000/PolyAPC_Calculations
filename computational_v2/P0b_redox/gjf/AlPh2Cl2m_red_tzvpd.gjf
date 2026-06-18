@@ -1,0 +1,10 @@
+%oldchk=AlPh2Cl2m_opt.chk
+%chk=AlPh2Cl2m_red_tzvpd.chk
+%nprocshared=16
+%mem=24GB
+#p B3LYP/def2TZVPD EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine geom=check guess=read
+
+AlPh2Cl2m EA diffuse def2-TZVPD
+
+-2 2
+

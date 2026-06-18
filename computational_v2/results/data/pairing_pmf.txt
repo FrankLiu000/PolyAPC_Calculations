@@ -1,0 +1,24 @@
+# Ion-pairing 2D free-energy landscape (classical MD, OPLS-type FF, 300 K)
+# F(x,y) = -kT ln P(x,y);  x = d(Al - nearest cation Mg), y = d(anion Cl - nearest cation Mg)
+# Sampling: 80 ion pairs x 3 replicas x 100 ns per condition (frames every 20 ps; N = 1.2e6 each)
+# Figure: results/figures/fig_pairing_pmf.png ; histogram: pairing_pmf_hist.npz
+# Generator: bin/fig_pairing_pmf.py (accumulate) + bin/fig_pairing_pmf_plot.py (plot)
+#
+# system   P(mu-Cl CIP, y<3.25A)   dF(CIP->free, population)   CIP basin minimum (x, y)
+bare              98.3%                  2.43 kcal/mol               (4.43, 2.43) A
+poly              96.7%                  2.08 kcal/mol               (4.43, 2.43) A
+#
+# READING (honest):
+# 1. The pairing landscapes are NEARLY IDENTICAL at force-field level: poly destabilizes the
+#    mu-Cl CIP by only ~0.3 kcal/mol and both systems sit in the same basin minimum.
+#    Consistent with Raman (-30% Cl-bridged aggregates, x2 dissociated Mg-Cl in poly) as a
+#    MODEST population shift, not a qualitative depairing.
+# 2. This is the only statistically defensible free-energy heatmap in the campaign
+#    (equilibrium sampling with recrossings). The DFT-level Cl-ABSTRACTION channel is
+#    invisible here (FF cannot break the Al-Cl bond).
+# 3. IMPLICATION FOR THE GATEWAY STORY (S1): the bare/poly contrast seen in interface AIMD
+#    (abstraction vs intact) is NOT pre-encoded in a grossly different pairing free energy;
+#    either it is genuine DFT-level chemistry modulated by the local network environment,
+#    or it is sensitive to the particular MD-sampled starting snapshots. This SHARPENS the
+#    need for the molecular abstraction-dG test (with/without network fragment) and more
+#    AIMD replicates (bare_r2 running) before S1 is asserted.

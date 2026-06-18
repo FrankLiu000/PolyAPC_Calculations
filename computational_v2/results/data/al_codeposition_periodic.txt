@@ -1,0 +1,25 @@
+# poly-APC v2 — periodic DFT: Al co-deposition / alloying thermodynamics on Mg(0001)
+# CP2K PBE-D3, DZVP-MOLOPT-SR-GTH(/PBE0), GTH-PBE; Gamma-point, Fermi smearing 500 K.
+# References (single-point, fixed lattice): mu_Mg=-63.4057 Ha/atom (hcp, a=3.209),
+#                                           mu_Al=-2.0145 Ha/atom (fcc, a=4.050).
+# Clean Mg(0001) 3x3x4 slab (36 Mg, ideal termination): E=-2278.0677 Ha.
+#
+# Al(0) ADATOM adsorption: E_ads = E[slab+Al] - E[slab] - mu_Al   (eV; <0 favours co-deposition vs bulk Al)
+#   site      E_ads(eV)
+   fcc        -0.083
+   hcp        -0.083
+   bridge     -0.083     # fcc/hcp/bridge near-degenerate (Al relaxes into the hollow)
+   ontop      +0.135
+#   => Al(0) adsorbs weakly-favourably at hollow sites -> a (modest) co-deposition driving force.
+#
+# Al-in-Mg SUBSTITUTION: E_sub = E[Mg35Al] - E[Mg36] + mu_Mg - mu_Al = -4.44 eV (favourable -> alloying)
+#
+# Mg17Al12 (beta) formation: +1.05 eV/atom  *** ARTIFACT — approximate Wyckoff structure, CELL_OPT
+#   not converged to true beta phase. NEEDS a proper crystallographic Mg17Al12 (I43m) + CELL_OPT. ***
+#
+# CAVEAT: Gamma-only + smeared metal energetics; the small adatom value (~-0.08 eV) is at the
+# +/-0.1 eV reference-uncertainty level. The substitution/alloying sign is the robust statement.
+#
+# STORY: pairs with molecular result (AlCl4- reduces AT Al -> Al0). Periodic side: Al0 then
+# adsorbs/alloys favourably with Mg(0001) => complete bare-APC pathway to 70.9 eV reduced/alloyed Al.
+# Cured network blocks this UPSTREAM (suppresses anion reduction) => oxidised Al(III), 74.0 eV (poly).

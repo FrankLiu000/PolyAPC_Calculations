@@ -1,0 +1,33 @@
+Mg-anion ion-pair residence time -- intermittent survival ACF (Impey-Madden)
+============================================================================
+Prompted by the solvation/desolvation review (coordination EXCHANGE RATE governs
+sigma/t+). Cutoff Mg-anionCl 0.345 nm; window 50-100 ns @ 200 ps (251 frames).
+C(tau) = < |pairs(t) ∩ pairs(t+tau)| / |pairs(t)| >.
+
+  system        <pairs/frame>   C(1 ns)   C(5 ns)   tau_c(1/e)
+  bare    r1        151.1         0.971     0.921     > 25 ns
+  bare    r2        153.3         0.966     0.904     > 25 ns
+  swollen8 r1       133.0         0.980     0.955     > 25 ns
+  swollen8 r2       133.3         0.988     0.972     > 25 ns
+
+Interpretation
+--------------
+* Mg-anion contact pairs are VERY long-lived in BOTH systems: the ACF barely
+  decays over 25 ns (C(5ns) ~ 0.90-0.97), tau_c(1/e) is only a LOWER BOUND (>25 ns,
+  i.e. >> the transport timescale). These strongly-bound divalent complexes do NOT
+  exchange ion-pair partners on the conduction timescale.
+* swollen pairs are if anything MORE persistent than bare (C(5ns) 0.96-0.97 vs
+  0.90-0.92) -- the gel does NOT accelerate coordination exchange; it slightly slows it.
+* Fewer pairs in swollen (~133 vs ~151 per 160 Mg) -- consistent with CIP->SSIP
+  de-pairing (SSIP/CIP/AGG analysis: 84% vs 95% CIP).
+
+Mechanistic conclusion
+----------------------
+The swollen-gel conductivity gain is CARRIER-NUMBER-driven (thermodynamic de-pairing,
+more SSIP), NOT exchange-rate-driven. In the review's framing these Mg complexes sit in
+the 'rigid / slow-exchange, whole-entity movement' regime, NOT the 'fast coordination
+exchange / hopping' regime that benefits Li+. Therefore the swollen ÷1.6 mobility drop
+is NOT caused by changed ion-pair kinetics (pairs are kinetically frozen in both) -> it
+points to network confinement / tortuosity / friction (a Story C / mechanics question),
+not to ion-pair dynamics. Caveat: intermittent ACF + 25 ns max lag give a lower bound on
+tau_c; a continuous-lifetime definition over longer windows would sharpen the absolute value.

@@ -1,0 +1,157 @@
+&GLOBAL
+  PROJECT bias_prod_poly
+  RUN_TYPE MD
+  PRINT_LEVEL MEDIUM
+  WALLTIME 1600000
+&END GLOBAL
+! ====================================================================
+! Charged-interface PILOT (rebuilt). Two-plate Dirichlet capacitor across
+! the cell: cathode plane in the lower vacuum (z~4), anode plane in the
+! upper vacuum (z~51), DeltaV = 6 V over ~47 A ~= 0.13 V/A (~1e9 V/m, a
+! realistic compact-layer field). Implicit Poisson (MIXED_PERIODIC) with a
+! VACUUM dielectric (eps=1) because THF is explicit -> no double counting.
+! Metallic Mg slab keeps Fermi smearing + diagonalization (OT cannot smear).
+! PURPOSE: (a) does the implicit-Poisson + Dirichlet solver converge the
+! ELECTRONIC SCF for this metal/electrolyte cell, (b) stability under MD,
+! (c) s/step on 96 ranks. Start = well-equilibrated bare 10 ps final frame.
+! Sign/magnitude of bias are NOT yet referenced to V vs Mg2+/Mg (production
+! needs work-function calibration); this is a machinery+cost pilot only.
+! ====================================================================
+&FORCE_EVAL
+  METHOD QS
+    &DFT
+      BASIS_SET_FILE_NAME BASIS_MOLOPT
+      POTENTIAL_FILE_NAME GTH_POTENTIALS
+      CHARGE 0
+      &MGRID
+        CUTOFF 400
+        REL_CUTOFF 50
+      &END MGRID
+      &QS
+        EPS_DEFAULT 1.0E-12
+      &END QS
+      &SCF
+        SCF_GUESS ATOMIC
+        EPS_SCF 1.0E-5
+        MAX_SCF 250
+        ADDED_MOS 550
+        &SMEAR ON
+          METHOD FERMI_DIRAC
+          ELECTRONIC_TEMPERATURE [K] 500
+        &END SMEAR
+        &DIAGONALIZATION
+          ALGORITHM STANDARD
+        &END DIAGONALIZATION
+        &MIXING
+          METHOD BROYDEN_MIXING
+          ALPHA 0.15
+          NBROYDEN 12
+        &END MIXING
+        &OUTER_SCF
+          TYPE NONE
+          MAX_SCF 8
+          EPS_SCF 1.0E-5
+        &END OUTER_SCF
+      &END SCF
+      &POISSON
+        POISSON_SOLVER IMPLICIT
+        PERIODIC XY
+        &IMPLICIT
+          BOUNDARY_CONDITIONS MIXED_PERIODIC
+          MAX_ITER 300
+          TOL 1.0E-6
+          OR_PARAMETER 0.1
+          &DIELECTRIC
+            DIELECTRIC_CONSTANT 1.0
+            RHO_MIN 1.0E-4
+            RHO_MAX 1.0E-3
+            DERIVATIVE_METHOD CD3
+          &END DIELECTRIC
+          &DIRICHLET_BC
+            &AA_PLANAR
+              V_D [volt] -1.0
+              PARALLEL_PLANE XY
+              INTERCEPT 4.0
+              X_XTNT 0.0 12.836
+              Y_XTNT 0.0 11.116
+              THICKNESS 0.8
+              SMOOTHING_WIDTH 0.2
+              PERIODIC_REGION .TRUE.
+            &END AA_PLANAR
+            &AA_PLANAR
+              V_D [volt] 1.0
+              PARALLEL_PLANE XY
+              INTERCEPT 51.0
+              X_XTNT 0.0 12.836
+              Y_XTNT 0.0 11.116
+              THICKNESS 0.8
+              SMOOTHING_WIDTH 0.2
+              PERIODIC_REGION .TRUE.
+            &END AA_PLANAR
+          &END DIRICHLET_BC
+        &END IMPLICIT
+      &END POISSON
+      &XC
+        &XC_FUNCTIONAL PBE
+        &END XC_FUNCTIONAL
+        &VDW_POTENTIAL
+          POTENTIAL_TYPE PAIR_POTENTIAL
+          &PAIR_POTENTIAL
+            TYPE DFTD3
+            PARAMETER_FILE_NAME dftd3.dat
+            REFERENCE_FUNCTIONAL PBE
+          &END PAIR_POTENTIAL
+        &END VDW_POTENTIAL
+      &END XC
+    &END DFT
+    &SUBSYS
+      @INCLUDE 'iface_bias_poly.coord.inc'
+      &KIND Si
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q4
+      &END KIND
+      &KIND Al
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q3
+      &END KIND
+      &KIND C
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q4
+      &END KIND
+      &KIND Cl
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q7
+      &END KIND
+      &KIND H
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q1
+      &END KIND
+      &KIND Mg
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q10
+      &END KIND
+      &KIND O
+        BASIS_SET DZVP-MOLOPT-SR-GTH
+        POTENTIAL GTH-PBE-q6
+      &END KIND
+    &END SUBSYS
+&END FORCE_EVAL
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    STEPS 10000
+    TIMESTEP 1.0
+    TEMPERATURE 300
+    &THERMOSTAT
+      TYPE NOSE
+      &NOSE
+        TIMECON 50.0
+      &END NOSE
+    &END THERMOSTAT
+  &END MD
+  &CONSTRAINT
+    &FIXED_ATOMS
+      LIST 1..32
+    &END FIXED_ATOMS
+  &END CONSTRAINT
+&END MOTION

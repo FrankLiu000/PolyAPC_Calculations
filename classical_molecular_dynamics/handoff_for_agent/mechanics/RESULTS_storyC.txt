@@ -1,0 +1,42 @@
+================================================================================
+STORY C -- mechanics / morphology (free-THF percolation, swelling, moduli)
+================================================================================
+
+1. FREE-THF CHANNEL PERCOLATION (connected-cluster, O-O cutoff 0.70 nm, converged window)
+   system     free-THF   box(nm)   largest-channel fraction   verdict
+   bare         2120       7.25         1.000                  continuous
+   4-POSS       1399       7.23         0.997                  continuous
+   8-swollen    2040       7.35         1.000                  continuous
+   16-dense     1220       7.36         0.993                  continuous
+
+   -> The free-THF phase PERCOLATES in ALL systems, even the dense gel. The pinch-off
+      hypothesis is REFUTED: the solvent never disconnects. So the transport contrast
+      (swollen mobile, dense slow) is NOT due to channel disconnection.
+
+2. SWELLING (the real differentiator)
+   free-THF number density (free THF / box volume):
+   system     free-THF / nm^3
+   8-swollen    5.14   <- most swollen (abundant, wide channels)
+   4-POSS       3.70
+   16-dense     3.06   <- least swollen (denser, narrower channels)
+   -> swollen holds ~1.7x the free-THF density of dense. The transport difference comes from
+      channel ABUNDANCE / WIDTH (degree of swelling) + de-pairing, not channel topology.
+
+3. MECHANICAL MODULI
+   - Bulk modulus K from the existing NPT volume fluctuations is UNRELIABLE: the c-rescale
+     barostat suppresses volume fluctuations ~75x (dV/V ~ 4e-5 vs the ~3e-3 a ~1 GPa medium
+     would show), giving an unphysical K ~ thousands of GPa. NOT reported.
+   - A reliable static modulus (shear G / bulk K) needs DEDICATED runs (Parrinello-Rahman NPT
+     with correct fluctuations, or finite-strain box deformation). Exploratory; deferred.
+   - The MEASURED mechanical property is the A.2 viscosity: swollen ~7.4x more viscous than bare
+     (1.4 -> 10.4 cP). These swollen gels are liquid-like (viscous, low static shear expected).
+
+SYNTHESIS (dendrite suppression, Monroe-Newman): the swollen gel suppresses dendrites NOT via a
+high static shear modulus (it is liquid-like) but via (a) a much higher viscosity / flux-homogenizing
+tortuosity (A.2, x7.4) and (b) an abundant, percolating, wide free-THF channel network that keeps
+ion flux uniform AND mobile (low Ea, Stokes-Einstein decoupling). Dendrite suppression is INFERRED
+via these mechanisms, not directly simulated (true electrodeposition is beyond equilibrium MD).
+
+CAVEATS: percolation cutoff 0.70 nm is generous (all systems read as continuous -> the metric does
+not resolve channel WIDTH/tortuosity, which is where the real difference lives); single rep per
+system; 16-dense from a 50 ns trajectory. Moduli are FF-dependent and exploratory.

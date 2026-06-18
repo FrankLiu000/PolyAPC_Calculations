@@ -1,0 +1,25 @@
+# MgF2 Mg2+ vacancy-migration barrier (CI-NEB) — UNRESOLVED BY FORMULATION
+#
+# Setup: 2x2x2 rutile MgF2 supercell (48 atoms) with one Mg2+ vacancy (47 atoms,
+#        net cell charge -2 + uniform background), PBE-D3, DZVP-MOLOPT-SR-GTH,
+#        Mg q10 / F q7, CUTOFF 400/REL 50, EPS_SCF 1e-6 (OT).
+#
+# Outcome: the charged-vacancy ENDPOINT relaxations do not converge. The per-step
+#   SCF converges cleanly every step, but the ionic optimization does not settle:
+#     - BFGS (no trust radius): energy oscillates +/-2-3 eV/step (overstepping)
+#     - CG + 2pt line search + MAX_DR 0.10: amplitude reduced to ~0.5 eV but RMS
+#       gradient floors at 0.030-0.045 Ha/bohr (target 1e-3) and will not descend.
+#   The persistent large force (not SCF noise) indicates a frustrated/shallow-rough
+#   PES around the charged vacancy: the under-coordinated F- shell around the
+#   Mg2+ vacancy in this affordable cell has no clean local minimum (charged-image
+#   interaction in a 9.25 A cell). A converged migration saddle is therefore not
+#   obtainable from this formulation without a substantially larger (and far more
+#   expensive) supercell + Schottky-neutral defect chemistry.
+#
+# Honest framing for the report: we DO NOT report a computed MgF2 Mg2+ barrier.
+#   For the SEI Mg2+-transport / DRT R_ct discussion we note the established
+#   literature range for Mg2+ migration in fluoride/MgF2 SEI (~0.5-1.0 eV), which
+#   is consistent with MgF2 being a comparatively resistive (poly-specific) SEI
+#   component. The transport/SEI story does NOT hinge on this number; the headline
+#   is interfacial Al/redox chemistry (see redox_ladder, reductive_decomposition,
+#   al2p_prediction, interface CDFT).
