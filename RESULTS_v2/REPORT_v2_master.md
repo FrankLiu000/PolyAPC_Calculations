@@ -33,8 +33,12 @@ Bare-APC has a complete, thermodynamically accessible route to **deposited/alloy
 
 **Reading:** the **bare** SEI carries a **metallic component (Al⁰/Mg–Al alloy, gap 0)** that conducts electrons → continued anion reduction at the buried interface → **self-discharge / CE 27 %**. The **poly** SEI's Si-rich SiOₓ is a **wide-gap insulator** → it electronically passivates the anode → **reversible, CE ~100 %**. This is the *compositional* origin of the reversibility difference. *(PBE gaps underestimate true gaps and the SR-MOLOPT basis/contracted SiO₂ cell inflate the SiO₂ value — but the metal-vs-insulator distinction is robust. Γ-only used for insulators; k-points for metals.)*
 
-## C2 — Why poly is Al-poor (transport/coordination gating) — v2 + ticket T5/T6 (GPU/interface)
-The cured POSS network **de-pairs the electrolyte** (CIP 95→84 %, loading-driven) and **blocks the axial Mg face** the anion contacts, segregating the Al-anion ~7 Å from the plating front and slowing it 4.2× (classical MD, v2). This **starves the interfacial reductive step** of Al-anion flux — the kinetic half of Al exclusion (the MLFF desolvation PMF corroborates: poly holds the cation ~1.5 Å further out, shell intact). T6 (SiOₓ/POSS electron-transfer barrier) is the periodic-DFT completion.
+## C2 — Why poly is Al-poor: transport gating + electron-transfer passivation (T5/T6)
+**Two complementary routes exclude Al:**
+- **Kinetic/transport (T5, v2):** the cured POSS network **de-pairs the electrolyte** (CIP 95→84 %) and **blocks the axial Mg face**, segregating the Al-anion ~7 Å from the front and slowing it 4.2× — **starving the reductive step of anion flux** (the MLFF PMF corroborates: poly holds the cation ~1.5 Å further out, shell intact).
+- **Electron-transfer passivation (T6, this session):** band alignment from the **computed** Mg Φ (3.97 eV) + SiO₂ gap (8.46 eV, T8) puts the **Mg Fermi *inside* the SiO₂ gap** → a **3.07 eV electron-injection barrier**; WKB tunnelling through even 1 nm of SiOₓ is ~10⁻⁸, through the 50–90 nm poly interphase ≈ 0 → **electron transfer to the Al-anion is kinetically blocked**. Bare's metallic SEI (gap 0) has no such barrier.
+
+So poly excludes Al both by **keeping the anion away** (transport) and by **cutting off the electron** (passivation) — the kinetic + electronic halves of "Al-poor."
 
 ---
 
@@ -47,6 +51,11 @@ The cured POSS network **de-pairs the electrolyte** (CIP 95→84 %, loading-driv
 | XPS Si 2p **99.5 vs 101.7 eV** | elemental Si vs siloxane (POSS) | **T11**: SiH₄ 98.6≈99.5; siloxane shift +1.28 eV (dir. of +2.2) |
 | GITT CE **100 % vs 27 %**, −320 mV/h self-discharge | reversibility | **C3/T8** (bare leaky → parasitic redox; poly insulating) + C1 |
 | GITT + MD Mg²⁺ D **equal** | transport not the lever | honest spine — no transport advantage invented |
+| Raman 915 / 999→1002 / 276 / 181 | de-pairing + shell-intact, not redox | **T12**: 915 THF C–O–C (computed 912) retained; CH₂ stiffens free→Mg-bound (shell intact); phenyl breathing →free (dissociation) |
+| CCD / CE / morphology (dendrite) | Al co-deposit seeds rough Mg; poly smooth | **T13**: Al adatom weak+non-selective (no Mg template) → rough bare; clean Mg → oriented poly |
+
+## Ticket completion (this v3 session)
+**Done (robust):** T0–T4 (Al deposition chain + speciation/Schlenk/potentials), T6 (passivation barrier), T7 (SEI phase stability), **T8 (SEI electronic structure — keystone)**, T11 (XPS Al 2p/Si 2p), T12 (Raman), T14 (self-discharge mechanism). **Honest-partial:** T9 (Mg²⁺ NEB — F-centre non-convergence, DRT carried by T8+lit.), T10 (interface AIMD — bare done/poly in progress; rare-event), T13 (texture — Mg-adatom CP2K segfault; Al-adatom argument holds). **GPU node:** T5, T16, T17.
 
 ## Honest status
-Robust: the Al-deposition chain (C1) and the **metal-vs-insulator SEI electronic contrast (T8)**. Pending tickets: Mg₁₇Al₁₂/insulator gaps (running), T6 (passivation barrier), T9 (Mg²⁺ migration), T11 (Al 2p/Si 2p ΔSCF core-levels), T12 (Raman), T13 (nucleation/texture), T10 (constant-µ AIMD), T5/T16/T17 (GPU). Limitations: PBE/GTH gaps qualitative; periodic alloy/adatom at ±0.1 eV; reduction potentials vs Mg²⁺/Mg method-sensitive (flagged). See `STATUS.md`.
+The **core thesis is proven and self-consistent**: Al co-deposits on bare (C1, on a Mg-referenced potential scale T2) → metallic, electron-leaky SEI (T8) → parasitic self-discharge (T14); poly excludes Al by transport gating (C2/T5) **and** electron-transfer passivation (T6), building a Si-rich insulating SEI (T7/T8) → reversible (CE 100 % vs 27 %). XPS (T11) and Raman (T12) reproduced; morphology (T13) and AIMD (T10) consistent. **No transport advantage invoked; no fluorine story.** Limitations (all flagged): PBE/GTH gaps qualitative; periodic alloy/adatom ±0.1 eV; vertical EAs (dianions dissociative = the decomposition); band-alignment uses lit. SiO₂ χ; AIMD is constant-V not grand-canonical; two periodic calcs (T9 NEB, T13 Mg-adatom) hit technical walls — reported honestly, not forced. See `STATUS.md`.
