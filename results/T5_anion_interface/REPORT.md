@@ -7,10 +7,11 @@
 ## TL;DR
 1. **Transport NULL confirmed for the canonical poly model** (4-POSS gel, never cleanly tested before — Story A.1 only did the swollen-8 artifact): D(cation) ×4.5 slower, D(anion) ×4.2 slower, **t₊ = 0.50 in both**, de-pairing f 0.046→0.13. Matches GITT (D≈equal) → kills the rate hypothesis.
 2. **The cured network preferentially sequesters the Al-anion (bulk):** the anion is **~2× more network-associated than the Mg-cation** (47.5 % vs 24.7 % within 0.5 nm of the network; 80 % of anions within 0.7 nm) **and 4.2× slower**. The reducible anion is matrix-held and retarded.
-3. **Bare reference (new interface MD, ~ongoing):** in the free liquid the **Al-anion reaches the Mg(0001) electrode** (a populated contact layer at ≈0.4–0.7 nm) — nothing in bare excludes the anion from the anode. *(Qualitative; the ρ(z) profile shape is well-sampled, precise near-surface statistics still accumulating toward 20–40 ns.)*
-4. **The sequestration is KINETIC/structural, not an equilibrium standoff.** Existing MLFF/AIMD put the anion ~9 Å off the front in **both** bare and poly (≈ null); and a poly *atomistic* electrode interface is infeasible in classical MD (percolating network, below). So the network lowers the anion's **flux** to the front (slower + matrix-held), it does not electrostatically repel it from the surface.
+3. **Bare reference (interface MD, 40 ns converged):** at a *neutral* electrode the **Al-anion reaches the Mg(0001) surface slightly closer than the cation** (closest approach 0.41 vs 0.47 nm; near-surface 0.033 vs 0.052 ions/nm²) — at equilibrium nothing excludes the anion from the bare anode.
+4. **The network's sequestration is KINETIC** (slower + matrix-held → lower flux), **not an equilibrium standoff** — existing MLFF/AIMD put the anion ~9 Å off the front in **both** bare and poly (≈ null), and a poly *atomistic* interface is infeasible in classical MD (percolating network, below).
+5. **NEW — under plating bias the anion is electrostatically excluded from the cathode** (40 ns, +0.3 V/nm field run): a clean electric double layer forms — anion **0.12× bulk at the cathode face vs 0.78× at the anode**, while the neutral electrode is symmetric (`fig_field.png`). → **Three independent mechanisms** keep the Al-anion off the plating front: **(i) electrostatic** field exclusion (this), **(ii) kinetic** network sequestration (#2), **(iii) electron-transfer passivation** by the Si-rich SEI (EPYC T6).
 
-**Reconciles with v3:** the network's contribution to the Al-poor interphase is to **kinetically starve the anode of the reducible anion**; the decisive *reactive* suppression (reduction energetics, electron-blocking) is EPYC's C1/C3 + the reactive MLFF T17. We do not over-claim.
+**Reconciles with v3:** the network's contribution to the Al-poor interphase is to **kinetically starve the anode of the reducible anion** (on top of the electrostatic bias-exclusion that operates even on bare); the decisive *reactive* suppression (reduction energetics, electron-blocking) is EPYC's C1/C3 + T6 + the reactive MLFF T17. We do not over-claim.
 
 ---
 
@@ -45,22 +46,32 @@ Mg–polymer-O direct contact is only ~1 % → the de-pairing/sequestration is *
 
 The reducible anion sits in contact with the covalent matrix **~2× more often than the cation**, and diffuses **4.2× slower** than in bare. → in the gel the Al-anion is structurally held and kinetically retarded; its diffusive flux toward any reductive front is suppressed.
 
-### R3 — Bare reference: the anion reaches the anode in the free liquid
-Interface MD (NVT 298 K, run accumulating toward 40 ns):
-- The Al-anion density profile shows the expected vdW depletion (<0.25 nm) then a **populated first contact layer (~0.4–0.7 nm)** at the Mg(0001) surface, with both ions present — **no anion exclusion at a neutral Mg surface**; the anion freely contacts the anode in the liquid.
-- Precise closest-approach / near-surface populations are small-number statistics (only ~1–3 anions near-surface at any instant) and are still converging; the qualitative conclusion (anion reaches the anode) is robust.
-- This is the contrast partner to R2: with **no network** the anion contacts the anode; **with the network** (R1/R2) it is retarded (×4.2) and matrix-held (~2× the cation).
+### R3 — Bare reference: the anion reaches the anode in the free liquid (40 ns)
+Neutral Mg(0001) interface MD (NVT 298 K, **40 ns**, 8001 frames; 80 anions × 2 faces):
+- The Al-anion profile shows the vdW depletion (<0.25 nm) then a **populated contact layer**; the anion's **closest approach (0.41 nm) is slightly closer than the cation's (0.47 nm)**, near-surface (<0.8 nm) populations anion 0.033 / cation 0.052 ions/nm². **No anion exclusion at a neutral Mg surface** — the anion freely contacts the anode in the liquid.
+- Contrast partner to R2: with **no network** the anion contacts the anode; **with the network** (R1/R2) it is retarded (×4.2) and matrix-held (~2× the cation).
+
+### R5 — Plating bias electrostatically excludes the anion from the cathode (40 ns field run)
+A static **+0.3 V/nm** field (≈ the ±1 V/47 Å AIMD field, master §7) on the same bare interface drives a clean **electric double layer** the neutral run lacks (`fig_field.png`):
+
+| anion density / bulk | neutral | +0.3 V/nm |
+|---|---|---|
+| anode face | 0.17 | **0.78** (anion accumulates) |
+| **cathode face** | 0.20 | **0.12** (anion excluded) |
+| cation at cathode / bulk | 0.15 | **0.40** (cation enriched) |
+
+→ **Even on a bare electrode, plating polarization excludes the Al-anion from the cathode (the plating front) electrostatically** (0.12× bulk) while concentrating it at the counter-electrode — a *third*, field-driven exclusion mechanism on top of R2 (kinetic network sequestration) and EPYC's T6 (electron-transfer passivation), operating in the right direction for plating. *(Model: neutral frozen UFF wall + uniform field, no metal image-charge screening — the field is the physical lever, the double-layer response is the result.)*
 
 ### R4 — Equilibrium standoff is ≈ null, and a poly atomistic interface is infeasible
 - Existing MLFF/AIMD (small single-ion cells): the anion sits **~9 Å off the front in *both* bare and poly** (master report §6) → the network does **not** create a larger *equilibrium* standoff. The effect is kinetic (R1/R2), not a thermodynamic surface repulsion.
 - **A poly atomistic electrode interface cannot be built in classical MD:** NET1 is one covalent network percolating across every PBC face; a free electrode surface needs broken z-periodicity, but a percolating molecule has no consistent unwrap → GROMACS aborts (`mshift.cpp`, "inconsistent shifts over periodic boundaries"). Cutting the z-crossing bonds does not help (x,y percolation still breaks the shift map). Hence the network's anion effect is quantified in the **bulk** (where it is properly periodic) — R2.
 
 ## Honest caveats
-- **Kinetic, not equilibrium.** We claim the network *retards/sequesters* the anion (slower + matrix-held → lower flux), **not** that it electrostatically repels it from the surface (the equilibrium standoff is null).
+- **Network = kinetic; bias = electrostatic (kept distinct).** The *network's* contribution is kinetic (slower + matrix-held → lower flux), **not** an equilibrium standoff (null in both at zero field). The electrostatic exclusion (R5) is a *separate* effect supplied by the applied plating bias even on bare — we don't conflate the two.
 - **Model electrode.** Neutral, frozen, structureless-but-atomistic UFF Mg(0001) wall; non-reactive. Valid for ion approach/structure; the **reactive** Al-exclusion (reduction suppression, electron-blocking SEI) is EPYC's C1/C3 + reactive MLFF **T16/T17 (blocked on EPYC's T10)**.
 - **No transport advantage invented** (guardrail honoured): bulk Mg²⁺ is *slower* in poly; the point is the *anion's* access to the anode.
 - Interface bulk density ~5 % below the periodic reference (matched protocol → cancels in contrasts); residence/flux statistics are liquid-like and short — reported qualitatively.
 
 ## Provenance
 Workspace `/lyz/Claude_workplace/polyAPC/storyT5/` — `build_interface.py`, `build_poly_interface.py` (infeasible, documented), `analyze_interface.py`, `bulk_sequestration.py`, `fig_T5.py`, `mdp/`, `bare/` (slab+interface+MD), `bulk/bulk_poly.json`, `analysis/profile_bare.csv`. Transport: `analysis/msd_rep/RESULTS.txt`, `analysis/solv_poly_conv/`. GROMACS 2025.1 (CUDA), LYZ-ROG. Figure `fig_T5.png`.
-*Committed to `computational-v3-interface` as `results/T5_anion_interface/`. Bare-interface R3 finalizes at 12 ns (follow-up commit).*
+*Stage to branch `computational-v3-interface` (coordinate with EPYC) as `results/T5_anion_interface/` — NOT to `main`.*

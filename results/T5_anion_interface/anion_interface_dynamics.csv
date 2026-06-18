@@ -3,11 +3,17 @@ D_cation,0.0508,0.0114,1e-5_cm2/s,final,COM-MSD 20-80ns 3rep; poly x4.5 slower
 D_anion,0.0499,0.0118,1e-5_cm2/s,final,poly x4.2 slower (anion sequestration kinetics)
 transference_tplus,0.505,0.496,-,final,~0.50 both (Nernst-Einstein)
 free_carrier_f,0.046,0.13,-,final,1-contact, converged 70-100ns window
-anion_network_contact_frac_0p5nm,,0.475,-,final,poly bulk: fraction of Al-anions within 0.5nm of NET1
-cation_network_contact_frac_0p5nm,,0.247,-,final,poly bulk: cation reference (anion ~2x more associated)
+anion_network_contact_frac_0p5nm,,0.475,-,final,poly bulk: Al-anion within 0.5nm of NET1
+cation_network_contact_frac_0p5nm,,0.247,-,final,poly bulk: cation ref (anion ~2x more associated)
 anion_network_within_0p7nm,,0.799,-,final,poly bulk
 anion_network_median_dist,,0.513,nm,final,poly bulk
 cation_network_median_dist,,0.551,nm,final,poly bulk
-equilibrium_anion_standoff,9.0,9.1,Angstrom,from_v2,MLFF/AIMD ~null in BOTH (master sec6); sequestration is kinetic not equilibrium
-bare_interface_anion_reaches_electrode,1,,bool,preliminary,bare interface MD (finalizing at 12ns): anion contacts Mg(0001), populated contact layer
-poly_atomistic_interface,infeasible,,,note,percolating covalent network breaks GROMACS mshift; bulk route used; MLFF route (T17) can do it
+equilibrium_anion_standoff,9.0,9.1,Angstrom,from_v2,MLFF/AIMD ~null both; sequestration is kinetic not equilibrium
+bare_neutral_anion_closest,0.41,,nm,final_40ns,neutral Mg(0001) interface MD 40ns; anion reaches electrode
+bare_neutral_cation_closest,0.47,,nm,final_40ns,cation closest approach (anion gets closer)
+bare_neutral_anion_nearsurf,0.033,,ions/nm2,final_40ns,<0.8nm of electrode
+bare_neutral_cation_nearsurf,0.052,,ions/nm2,final_40ns,
+field_cathode_anion_over_bulk,0.12,,-,final_40ns,+0.3V/nm: anion EXCLUDED from cathode face (vs neutral 0.20)
+field_anode_anion_over_bulk,0.78,,-,final_40ns,+0.3V/nm: anion accumulates at anode face
+field_cathode_cation_over_bulk,0.40,,-,final_40ns,+0.3V/nm: cation enriched at cathode (vs neutral 0.15)
+poly_atomistic_interface,infeasible,,,note,percolating net breaks GROMACS mshift; bulk route used; MLFF (T17) can do it
