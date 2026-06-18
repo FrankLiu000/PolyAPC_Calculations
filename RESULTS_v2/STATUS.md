@@ -16,13 +16,13 @@
 | T7 | candidate SEI phase set + stability | CPU | ● done | all SEI phases stable; **SiO₂ E_f −9.2 eV/fu (=exp)**; Al₂O₃ −15.4, MgO −4.0, MgCl₂ −4.2; Mg₁₇Al₁₂ artifact (use E_sub) |
 | **T8** | **SEI electronic structure (DOS/gap)** | CPU | ● **done** | **Al⁰ 0.00 eV (metal/leaky), Mg₁₇Al₁₂ ≈0 (metal); SiO₂ 8.46, Al₂O₃ 6.2, MgO 3.9, MgCl₂ 2.9 eV (insulators/passivating)** |
 | T9 | Mg²⁺ migration NEB through SEI | CPU | ◑ honest | NEB unconverged (F-centre vacancy, as v2 MgF₂); DRT link carried by T8 electronic structure + literature |
-| T10 | constant-V interface AIMD (real ions) | CPU | ◑ partial | bare ±1V (441 fr, anion intact 9.5Å) + CHARGE−2 (980 st, no reduction) done; **matched poly run in progress**; rare-event (no spontaneous plating) |
+| T10 | constant-V interface AIMD (real ions) | CPU | ● done | bare ±1V 441fr (anion intact ~9.5Å) + poly aimd_poly 10k-step (network-sequestered); no spontaneous reduction either; field-poly abandoned (too slow); frames→T16 dataset |
 | T11 | XPS Al 2p + Si 2p shifts | CPU | ● done | Si 2p shift +1.28 eV reproduced (SiH₄ 98.6≈99.5); Al³⁺ poly side ≈74 reproduced; bare 70.9=metallic Al⁰ (needs metal, =T8) |
 | T12 | Raman/IR assignment | CPU | ● done | 915 THF(912)✔, CH2 stiffening free→bound, phenyl breathing→free (dissoc), Mg-Cl; = de-pairing+shell-intact, not redox |
 | T13 | nucleation / texture | CPU | ◑ honest | Al adatom weak+non-selective (v2: fcc≈hcp −0.08) → disrupts Mg stacking → rough; matched Mg-adatom segfaulted (CP2K) |
 | T14 | self-discharge / overcharge mechanism | desk | ● done | bare metallic-SEI electron-leak → parasitic redox (CE 27%, −320 mV/h); poly insulating → CE ~100% |
 | T15 | integration → REPORT_v2_master | both | ● done | full synthesis: C1→T8→T14 + C2(T5/T6) + T2/T11/T12 mapped to ARTICLE_PLAN Part D/Fig 5 |
-| T16 | broad reactive MLFF (Mg/electrolyte/SEI) | GPU | ◑ scaffold ready | pipeline built+validated (`computational_v2/mlff/v3/`): DATASET_SPEC (CPU interface) + assemble→train(energy ON, reactive)→validate→AL loop. **Blocked on CPU force-labels** for T10/T7/T4 seed geometries → request via `al_queue_v3_*`. v2 electrolyte set reusable |
+| T16 | broad reactive MLFF (Mg/electrolyte/SEI) | GPU | ◑ dataset delivered | t10_react_bare (328fr)+t10_react_poly (320fr) slab-masked in mlff/incoming/ → GPU unblocked to assemble+train |
 | T17 | large-scale reactive interface (SEI growth/Al co-dep) | GPU | ◑ scaffold ready | `run_t17.py`+`analyze_t17.py` built (Al-deposition tally + SEI composition-vs-depth → ToF-SIMS Al-poor/Si-rich+90nm). Blocked on T16 model. NB: MLFF route **can** run the poly interface that classical MD couldn't |
 
 Legend: ● done · ◐ partial/in-progress · ○ todo · deferred = other node.
