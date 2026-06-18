@@ -90,3 +90,5 @@ computational_v2/mlff/eval_bare.json
 computational_v2/mlff/eval_poly.json
 computational_v2/mlff/umb_*/
 computational_v2/mlff/*_pmf.dat
+computational_v2/mlff/poly_reus*.log
+computational_v2/mlff/umb_poly_reus_DONE
