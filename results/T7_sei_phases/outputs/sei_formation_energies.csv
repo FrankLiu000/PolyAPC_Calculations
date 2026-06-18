@@ -1,0 +1,5 @@
+phase,Ef_eV_per_fu,Ef_eV_per_atom,role
+MgO,-4.02,-2.01,shared
+MgCl2,-4.22,-1.41,shared
+Al2O3,-15.45,-3.09,bare (oxidised-Al residue)
+SiO2,-9.22,-3.07,poly (Si-rich)

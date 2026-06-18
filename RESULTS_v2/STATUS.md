@@ -13,7 +13,7 @@
 | T4 | Al co-deposition / alloying (periodic) | CPU | ● done | C1: adatom E_ads −0.08 eV; Al-in-Mg E_sub −4.44 eV (alloying favourable) |
 | T5 | anion interface dynamics (MD) | GPU | ○ deferred | GPU node (gmx absent here); v2 classical-MD has anion access/residence |
 | T6 | e⁻-transfer / passivation barrier | CPU | ○ todo | NEW: SiOₓ/POSS layer on Mg(0001) |
-| T7 | candidate SEI phase set + stability | CPU | ◑ partial | phases relaxed (incl. **α-quartz SiO₂ NEW, this session**); formation-energy table still to assemble |
+| T7 | candidate SEI phase set + stability | CPU | ● done | all SEI phases stable; **SiO₂ E_f −9.2 eV/fu (=exp)**; Al₂O₃ −15.4, MgO −4.0, MgCl₂ −4.2; Mg₁₇Al₁₂ artifact (use E_sub) |
 | **T8** | **SEI electronic structure (DOS/gap)** | CPU | ● **done** | **Al⁰ 0.00 eV (metal/leaky), Mg₁₇Al₁₂ ≈0 (metal); SiO₂ 8.46, Al₂O₃ 6.2, MgO 3.9, MgCl₂ 2.9 eV (insulators/passivating)** |
 | T9 | Mg²⁺ migration NEB through SEI | CPU | ○ todo | MgCl₂/MgO NEB decks exist; add SiO₂; (MgF₂ excluded — no-F) |
 | T10 | constant-µ interface AIMD (real ions) | CPU | ◐ partial | bias machinery + bias_prod_bare exist; add Al-anion + poly + replicas |

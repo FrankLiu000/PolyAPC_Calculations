@@ -1,0 +1,31 @@
+      BASIS_SET_FILE_NAME BASIS_MOLOPT
+      POTENTIAL_FILE_NAME GTH_POTENTIALS
+      &MGRID
+        CUTOFF 400
+        REL_CUTOFF 50
+      &END MGRID
+      &QS
+        EPS_DEFAULT 1.0E-12
+      &END QS
+      &SCF
+        SCF_GUESS ATOMIC
+        EPS_SCF 1.0E-6
+        MAX_SCF 300
+        &MIXING ON
+          METHOD BROYDEN_MIXING
+          ALPHA 0.3
+          NBROYDEN 8
+        &END MIXING
+      &END SCF
+      &XC
+        &XC_FUNCTIONAL PBE
+        &END XC_FUNCTIONAL
+        &VDW_POTENTIAL
+          POTENTIAL_TYPE PAIR_POTENTIAL
+          &PAIR_POTENTIAL
+            TYPE DFTD3
+            PARAMETER_FILE_NAME dftd3.dat
+            REFERENCE_FUNCTIONAL PBE
+          &END PAIR_POTENTIAL
+        &END VDW_POTENTIAL
+      &END XC
