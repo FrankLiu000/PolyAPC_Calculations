@@ -6,7 +6,7 @@
 ## Ticket tracker (T0–T15 here; T16–T17 GPU)
 | T | title | node | status | 1-line result |
 |---|---|---|---|---|
-| T0 | preflight / env / smoke | CPU | ◐ in progress | ORCA 6.1.0 + CP2K 2025.1 + G16 confirmed; offline (hand-build structures); Φ(Mg0001) & THF SMD validated in v2 |
+| T0 | preflight / env / smoke | CPU | ● done | ORCA 6.1.0 + CP2K 2025.1 + G16; offline (hand-build); Φ & THF validated in v2 |
 | T1 | APC anion speciation map | CPU | ● done | C1: Schlenk ΔG all >0 → **[AlPh₂Cl₂]⁻ dominant, AlCl₄⁻ minority** (`speciation.csv`) |
 | T2 | redox ladder vs Mg²⁺/Mg | CPU | ◑ qualitative | C1: only AlCl₄⁻ reduces at Al (+1.14); pairing 8×; **abs. potentials vs Mg = open refinement** |
 | T3 | reductive decomposition → Al⁰ | CPU | ● done | C1: [AlPh₂Cl₂]²⁻ Al–Cl cleavage −8.5 (vs Al–C +14.5) → 83% Al-spin radical → Al⁰ |
@@ -20,7 +20,7 @@
 | T11 | XPS Al 2p + Si 2p shifts | CPU | ◐ partial | Al 2p direction (Δq +0.7 e) done; **Si 2p NEW**; ΔSCF refinement flagged |
 | T12 | Raman/IR assignment | CPU | ○ todo | NEW (v2 skipped); free vs Mg-bound THF, anion, polyether, POSS |
 | T13 | nucleation / texture | CPU | ○ todo | NEW: Mg adatom binding+diffusion on clean vs Al-decorated Mg(0001) |
-| T14 | self-discharge / overcharge mechanism | desk | ○ todo | synthesis from T2/T3/T8 |
+| T14 | self-discharge / overcharge mechanism | desk | ● done | bare metallic-SEI electron-leak → parasitic redox (CE 27%, −320 mV/h); poly insulating → CE ~100% |
 | T15 | integration → REPORT_v2_master | both | ○ todo | map to ARTICLE_PLAN Part D / Fig 5 |
 
 Legend: ● done · ◐ partial/in-progress · ○ todo · deferred = other node.
