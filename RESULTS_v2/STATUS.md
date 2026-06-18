@@ -16,7 +16,7 @@
 | T7 | candidate SEI phase set + stability | CPU | ● done | all SEI phases stable; **SiO₂ E_f −9.2 eV/fu (=exp)**; Al₂O₃ −15.4, MgO −4.0, MgCl₂ −4.2; Mg₁₇Al₁₂ artifact (use E_sub) |
 | **T8** | **SEI electronic structure (DOS/gap)** | CPU | ● **done** | **Al⁰ 0.00 eV (metal/leaky), Mg₁₇Al₁₂ ≈0 (metal); SiO₂ 8.46, Al₂O₃ 6.2, MgO 3.9, MgCl₂ 2.9 eV (insulators/passivating)** |
 | T9 | Mg²⁺ migration NEB through SEI | CPU | ◑ honest | NEB unconverged (F-centre vacancy, as v2 MgF₂); DRT link carried by T8 electronic structure + literature |
-| T10 | constant-µ interface AIMD (real ions) | CPU | ◐ partial | bias machinery + bias_prod_bare exist; add Al-anion + poly + replicas |
+| T10 | constant-V interface AIMD (real ions) | CPU | ◑ partial | bare ±1V (441 fr, anion intact 9.5Å) + CHARGE−2 (980 st, no reduction) done; **matched poly run in progress**; rare-event (no spontaneous plating) |
 | T11 | XPS Al 2p + Si 2p shifts | CPU | ● done | Si 2p shift +1.28 eV reproduced (SiH₄ 98.6≈99.5); Al³⁺ poly side ≈74 reproduced; bare 70.9=metallic Al⁰ (needs metal, =T8) |
 | T12 | Raman/IR assignment | CPU | ● done | 915 THF(912)✔, CH2 stiffening free→bound, phenyl breathing→free (dissoc), Mg-Cl; = de-pairing+shell-intact, not redox |
 | T13 | nucleation / texture | CPU | ◑ honest | Al adatom weak+non-selective (v2: fcc≈hcp −0.08) → disrupts Mg stacking → rough; matched Mg-adatom segfaulted (CP2K) |

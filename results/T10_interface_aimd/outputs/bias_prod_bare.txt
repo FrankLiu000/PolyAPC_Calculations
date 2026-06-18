@@ -1,0 +1,11 @@
+# Production +-1 V biased interface AIMD — bare  (constant-V Dirichlet, idealized counter-electrode)
+# Field ~0.043 V/A (4e8 V/m). Tests whether the field drives anion desolvation/approach/reduction. 2026-06-15 13:52:59
+
+biasprod_bare frames=  441  height: mean 9.46 sd 0.08 min 9.31 | last-half mean 9.47
+                      slabMg : mean 4.92 sd 0.39 min 4.13 | last-half mean 5.24
+                      catMg+ : height mean 8.59 min 8.50 | nearest-slabMg mean 5.64 min 5.49 | last-half h 8.62
+           final-frame Al bonds (<2.6 A): Cl148 2.15; Cl149 2.24; C150 2.01; C161 2.02
+
+bare field  Al-Cl148 mean 2.24 final 2.15 max 2.29 frac>3A 0.00  (intact)
+bare field  Al-Cl149 mean 2.21 final 2.24 max 2.31 frac>3A 0.00  (intact)
+# Compare to the zero-field clean run (anion intact, ~10 A from front). Field-driven change = the test.
