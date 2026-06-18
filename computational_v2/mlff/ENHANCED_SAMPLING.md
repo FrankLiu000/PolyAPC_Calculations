@@ -177,3 +177,20 @@ system's surface barrier is higher (flips between passes). **A converged quantit
 sampling / replica-exchange / an explicit slow-mode (shell-CN) second CV — a major effort.** The defensible
 deliverable is the **qualitative gating** (standoff difference + shell retention), which corroborates the
 master report's coordination/transport mechanism. Magnitudes: report as semi-quantitative.
+
+### Stage 2c — replica-exchange umbrella sampling (REUS) — the slow mode, partly tamed (2026-06-18)
+Built a self-contained **Hamiltonian REUS** engine (`reus.py`, no PLUMED): N windows run round-robin on the
+single GPU; every `tau` fs, neighbouring windows attempt a config swap (Metropolis on the bias energies),
+letting a window stuck in one solvation-shell state migrate to where it relaxes → mixes the slow mode.
+Params: k=1, 0.2 Å spacing, 4.0–9.4 Å (28 windows; <4 Å is the DFT-handoff zone), tau=500 fs, exchange
+acceptance ~50% (good). Init from the r3 configs. **Reboot-resumable** (checkpoints each replica config to
+`window_z<z0>_chk.xyz`, appends to `.dat`) — the LYZ-ROG box rebooted mid-run (lost the live run + /tmp logs,
+but the per-cycle `.dat` survived).
+
+**Result (bare, 22 ps — interrupted by the reboot at cycle 44/50):** REUS **lowers the convergence drift to
+12.5 kJ/mol** (settled 10–22 ps window) vs plain-US's **19.2** — the exchanges *are* mixing the slow mode.
+Span settles to **~50–55 kJ/mol** (vs r3's 80; bootstrap err ±3); bare well min ~5.1 Å (consistent). **Still
+not fully converged** (<10 target): the system equilibrates over the first ~10 ps of REUS, and the residual
+~12 kJ/mol drift means even REUS needs longer (or a 2D shell-CN CV). Verdict unchanged: **qualitative gating
+robust; magnitude converging (best REUS estimate ~50 kJ/mol bare surface barrier) but with ~±12 kJ/mol
+residual.** Poly REUS (matched) running next.
