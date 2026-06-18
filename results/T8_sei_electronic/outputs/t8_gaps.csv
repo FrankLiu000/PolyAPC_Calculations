@@ -1,0 +1,8 @@
+phase,band_gap_eV,role,method,verdict
+Al_fcc,0.00,bare,k-point MP 6x6x6,METAL (electron-leaky)
+Mg17Al12,0.18,bare,k-point/Gamma (states at E_F),METAL alloy (electron-leaky)
+Mg_hcp,0.00,anode,metal (free-electron),METAL (reference)
+MgCl2,2.93,shared,Gamma,insulator (passivating)
+MgO,3.92,shared,Gamma,insulator (passivating)
+Al2O3,6.21,bare-oxide,Gamma,insulator (passivating)
+SiO2,8.46,poly,k-point MP 4x4x4,insulator (passivating)

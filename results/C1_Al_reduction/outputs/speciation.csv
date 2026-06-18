@@ -1,0 +1,11 @@
+anion,G_Ha
+AlCl4m,-2083.87493162
+AlPhCl3m,-1855.2515745199998
+AlPh2Cl2m,-1626.62105967
+AlPh3Clm,-1397.98886498
+AlPh4m,-1169.35149646
+
+schlenk_reaction,dG_kcal_mol
+2 AlPh2Cl2- <-> AlPhCl3- + AlPh3Cl-,1.1
+2 AlPhCl3-  <-> AlCl4-   + AlPh2Cl2-,4.5
+2 AlPh3Cl-  <-> AlPh2Cl2-+ AlPh4-,3.2
