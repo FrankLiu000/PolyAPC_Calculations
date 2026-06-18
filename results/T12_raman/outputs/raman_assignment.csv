@@ -1,0 +1,6 @@
+exp_band_cm-1,exp_shift,computed_cm-1,species,assignment,reading
+915,+0.3 (retained),912.0,free THF,nu(C-O-C) ring,solvent framework unchanged
+1483->1486,+3.2,1480.5(free)->1481.8(Mg-bound),THF,CH2 deformation,coordinated-THF stiffening (first shell intact)
+999->1002,+2.9 (+8%),993.6(AlPh2Cl2-)/1010.9(AlPh4-),Al-phenyl anion,phenyl ring breathing,shifts toward FREE value -> dissociation/de-pairing
+276,-30%,215-240,[Mg2Cl3]+/MgClx,Mg-Cl/Cl-bridge skeletal,fewer chloride-bridged aggregates
+181,x2,~180-230,Mg-Cl,Mg-Cl stretch,more dissociated Mg-Cl
