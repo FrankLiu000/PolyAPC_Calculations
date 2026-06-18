@@ -1,0 +1,11 @@
+{
+  "label": "poly",
+  "frames": 51,
+  "anion_median_dist_to_network_nm": 0.5130960763152594,
+  "cation_median_dist_to_network_nm": 0.5508758112387397,
+  "anion_median_dist_to_netO_nm": 0.7135500517100382,
+  "anion_frac_contact_network": 0.4752450980392157,
+  "cation_frac_contact_network": 0.24669117647058825,
+  "anion_frac_within_0p7": 0.799264705882353,
+  "cation_frac_within_0p7": 0.7915441176470588
+}

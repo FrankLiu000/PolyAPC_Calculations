@@ -11,7 +11,7 @@
 | T2 | redox ladder vs Mg²⁺/Mg | CPU | ● done | all anions reduce −1.9 to −3.4 V vs Mg (plating-concurrent); CIP bare≈poly (−1.56/−1.59); neutral Al −0.4 closest to plating |
 | T3 | reductive decomposition → Al⁰ | CPU | ● done | C1: [AlPh₂Cl₂]²⁻ Al–Cl cleavage −8.5 (vs Al–C +14.5) → 83% Al-spin radical → Al⁰ |
 | T4 | Al co-deposition / alloying (periodic) | CPU | ● done | C1: adatom E_ads −0.08 eV; Al-in-Mg E_sub −4.44 eV (alloying favourable) |
-| T5 | anion interface dynamics (MD) | GPU | → handoff | GPU node; see `computational_v2/mlff/HANDOFF_GPU_v3_T5_T16_T17.md` |
+| T5 | anion interface dynamics (MD) | GPU | ● done | **network sequesters the Al-anion**: bulk anion **2× more network-associated than cation** (47.5/24.7% within 0.5nm of NET1) + **4.2× slower**; bare interface MD → anion *does* reach the Mg(0001) electrode in free liquid (contrast). Transport NULL confirmed for the **canonical 4-POSS gel** (D ×4.4, t₊=0.50, f 0.046→0.13). Honest: kinetic (not equilibrium — standoff ~9Å both); poly atomistic interface infeasible (percolating net → bulk route). `results/T5_anion_interface/` |
 | T6 | e⁻-transfer / passivation barrier | CPU | ● done | Mg Fermi in SiO₂ gap → 3.07 eV injection barrier; tunnelling through 50–90 nm SiOₓ ≈0 → blocks Al-anion reduction (CDFT-on-metal invalid, band-align route) |
 | T7 | candidate SEI phase set + stability | CPU | ● done | all SEI phases stable; **SiO₂ E_f −9.2 eV/fu (=exp)**; Al₂O₃ −15.4, MgO −4.0, MgCl₂ −4.2; Mg₁₇Al₁₂ artifact (use E_sub) |
 | **T8** | **SEI electronic structure (DOS/gap)** | CPU | ● **done** | **Al⁰ 0.00 eV (metal/leaky), Mg₁₇Al₁₂ ≈0 (metal); SiO₂ 8.46, Al₂O₃ 6.2, MgO 3.9, MgCl₂ 2.9 eV (insulators/passivating)** |
@@ -22,8 +22,8 @@
 | T13 | nucleation / texture | CPU | ◑ honest | Al adatom weak+non-selective (v2: fcc≈hcp −0.08) → disrupts Mg stacking → rough; matched Mg-adatom segfaulted (CP2K) |
 | T14 | self-discharge / overcharge mechanism | desk | ● done | bare metallic-SEI electron-leak → parasitic redox (CE 27%, −320 mV/h); poly insulating → CE ~100% |
 | T15 | integration → REPORT_v2_master | both | ● done | full synthesis: C1→T8→T14 + C2(T5/T6) + T2/T11/T12 mapped to ARTICLE_PLAN Part D/Fig 5 |
-| T16 | broad reactive MLFF (Mg/electrolyte/SEI) | GPU | → handoff | extend v2 MACE to {Mg,Al,Cl,O,C,H,Si}; AL loop w/ CPU; `HANDOFF_GPU_v3_T5_T16_T17.md` |
-| T17 | large-scale reactive interface (SEI growth/Al co-dep) | GPU | → handoff | reproduce ToF-SIMS Al-poor/Si-rich + ~90 nm; `HANDOFF_GPU_v3_T5_T16_T17.md` |
+| T16 | broad reactive MLFF (Mg/electrolyte/SEI) | GPU | ◑ scaffold ready | pipeline built+validated (`computational_v2/mlff/v3/`): DATASET_SPEC (CPU interface) + assemble→train(energy ON, reactive)→validate→AL loop. **Blocked on CPU force-labels** for T10/T7/T4 seed geometries → request via `al_queue_v3_*`. v2 electrolyte set reusable |
+| T17 | large-scale reactive interface (SEI growth/Al co-dep) | GPU | ◑ scaffold ready | `run_t17.py`+`analyze_t17.py` built (Al-deposition tally + SEI composition-vs-depth → ToF-SIMS Al-poor/Si-rich+90nm). Blocked on T16 model. NB: MLFF route **can** run the poly interface that classical MD couldn't |
 
 Legend: ● done · ◐ partial/in-progress · ○ todo · deferred = other node.
 
