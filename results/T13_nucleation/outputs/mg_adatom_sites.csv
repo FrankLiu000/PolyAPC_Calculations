@@ -1,0 +1,5 @@
+adatom,site,cell,preference_fcc_vs_hcp_eV,E_ads_eV_vs_slabMg,method,note
+Mg,fcc,4x4x4 (65 atoms),+0.244,+0.113,GEO_OPT adatom-only relax (Gamma),fcc preferred (hcp opt not fully converged; ~0.2 eV)
+Mg,hcp,4x4x4 (65 atoms),,+0.357,GEO_OPT adatom-only relax,
+Mg,fcc-vs-hcp,2x2x4 (17 atoms),+0.145,,single-point (unrelaxed),cross-check: fcc preferred, same sign
+Al,fcc/hcp/bridge,3x3x4 (v2),~0.000 (degenerate),-0.083,v2 relaxed (al_codeposition_periodic.txt),non-selective: all hollows within 1 meV

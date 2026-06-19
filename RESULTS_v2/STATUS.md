@@ -19,7 +19,7 @@
 | T10 | constant-V interface AIMD (real ions) | CPU | ● done | bare ±1V 441fr (anion intact ~9.5Å) + poly aimd_poly 10k-step (network-sequestered); no spontaneous reduction either; field-poly abandoned (too slow); frames→T16 dataset |
 | T11 | XPS Al 2p + Si 2p shifts | CPU | ● done | Si 2p shift +1.28 eV reproduced (SiH₄ 98.6≈99.5); Al³⁺ poly side ≈74 reproduced; bare 70.9=metallic Al⁰ (needs metal, =T8) |
 | T12 | Raman/IR assignment | CPU | ● done | 915 THF(912)✔, CH2 stiffening free→bound, phenyl breathing→free (dissoc), Mg-Cl; = de-pairing+shell-intact, not redox |
-| T13 | nucleation / texture | CPU | ◑ honest | Al adatom weak+non-selective (v2: fcc≈hcp −0.08) → disrupts Mg stacking → rough; matched Mg-adatom segfaulted (CP2K) |
+| T13 | nucleation / texture | CPU | ● done | **Mg adatom fcc-selective (+0.24 eV)** vs Al non-selective (~0) → Mg templates oriented growth, Al disrupts → rough bare; segfault bypassed (fresh slab) |
 | T14 | self-discharge / overcharge mechanism | desk | ● done | bare metallic-SEI electron-leak → parasitic redox (CE 27%, −320 mV/h); poly insulating → CE ~100% |
 | T15 | integration → REPORT_v2_master | both | ● done | full synthesis: C1→T8→T14 + C2(T5/T6) + T2/T11/T12 mapped to ARTICLE_PLAN Part D/Fig 5 |
 | T16 | broad reactive MLFF (Mg/electrolyte/SEI) | GPU | ◑ dataset delivered | t10_react_bare (328fr)+t10_react_poly (320fr) slab-masked in mlff/incoming/ → GPU unblocked to assemble+train |
