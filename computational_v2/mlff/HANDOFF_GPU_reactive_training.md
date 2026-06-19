@@ -36,3 +36,17 @@ geometric strain, NOT the true barrier (the DFT reference barrier is in
 diverse reactive geometries** (correct for training), not a relaxed reaction profile.
 Next increments (same recipe): full Al-Cl dissociation, the gateway Cl-transfer, multiple
 surface sites, and relaxed NEB images once a reactive model exists to cheaply pre-relax them.
+
+---
+## UPDATE — Al-deposition frames added + k-point levels settled (`reactive_kpoint_deposition_set.xyz`)
+The **central reaction (Al deposition)** is now in the set, and the Γ/k-point level was decided by a convergence test, not assumed.
+
+**k-point test (Al-on-Mg(0001) deposition, Γ vs MP 3×3×1):** profiles agree to ≤0.02 eV for h≥2.6 Å, but differ by **0.13 eV at h=2.0 Å (Al bonded/hybridized with the metal E_F)**. So k-points matter **only in the bonded regime**.
+
+**Final 20-frame set (`reactive_kpoint_deposition_set.xyz`, `dft_level` tag per frame):**
+- **9 deposition frames** (65-atom Mg(0001)+Al, slab-masked n_slab=64): Al approach to a hollow + atop/bridge/jitter. **h≤2.6 → k-point MP 3×3×1** (the 7 bonded frames); **h≥3.0 → Γ** (the 2 far frames, ≤0.02 eV regime). These teach the **Al–Mg deposition bonding** — barrierless, −1.89 eV well (see `results/...` deposition profile).
+- **11 Cl-strip frames** (172-atom interface): **all Γ** — a direct test (cls frame 0, Γ vs k) gave **force MAE 16.8 meV/Å < 30**, because the Al stays ~4 Å from the metal (far regime). k-points unnecessary; saved ~10 h.
+
+**Mixed-level note for training:** forces are consistent across the set (the regime where they'd differ is exactly where we used k-points). There is a ~31 meV/atom Γ-vs-k *energy* offset on the 172-atom cell — absorbed by MACE per-element E0 fitting; if in doubt, weight forces > energy. The bulk T16 set stays Γ (far-field, same justification).
+
+**Use:** add to the T16 set → retrain `apc_v3_broad` → validate (hold out a bonded-deposition frame) → re-run T17 with a **cathodic drive** to see the bare anion deposit Al while poly does not.
