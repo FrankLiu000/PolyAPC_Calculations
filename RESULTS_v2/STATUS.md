@@ -23,7 +23,7 @@
 | T14 | self-discharge / overcharge mechanism | desk | ● done | bare metallic-SEI electron-leak → parasitic redox (CE 27%, −320 mV/h); poly insulating → CE ~100% |
 | T15 | integration → REPORT_v2_master | both | ● done | full synthesis: C1→T8→T14 + C2(T5/T6) + T2/T11/T12 mapped to ARTICLE_PLAN Part D/Fig 5 |
 | T16 | broad reactive MLFF (Mg/electrolyte/SEI) | GPU | ● done | trained on bare+poly T10 reactive (648 fr, energy ON); **held-out force MAE 30.7 meV/Å (≤50 = PASS)**, energy 4.8/8.0 meV/atom. `models/apc_v3_broad.model` + `v3/mlff_validation.csv`. Bare reactive interface harder (RMSE 200) → AL loop can refine |
-| T17 | large-scale reactive interface (SEI growth/Al co-dep) | GPU | ◑ scaffold ready, **unblocked** | driver `interface_mlff_md.py` staged (Al-anion approach tracking) + `run_t17.py`/`analyze_t17.py` analysis (Al-deposition tally + SEI composition-vs-depth → ToF-SIMS Al-poor/Si-rich+90nm). **T16 validated → no longer blocked**; production MD pending on GPU. NB: MLFF route **can** run the poly interface that classical MD couldn't |
+| T17 | large-scale reactive interface (SEI growth/Al co-dep) | GPU | ◑ poly interface DONE | MLFF-MD (T16 model) **runs the poly interface where classical MD cannot**: network holds the Al-anion **~2× further from the electrode (8.2 vs bare 4.5 Å)** — interface-level sequestration. Poly robust (50 ps); bare extrapolation-NaN at 6.8 ps → `al_queue_bare_t17.xyz` for AL. `results/T17_reactive/`. Full SEI-growth/ToF-SIMS reproduction next (plating drive + more AL) |
 
 Legend: ● done · ◐ partial/in-progress · ○ todo · deferred = other node.
 
