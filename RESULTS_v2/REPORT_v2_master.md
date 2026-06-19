@@ -40,9 +40,6 @@ The GPU-node interface MD (40 ns converged) + the CPU passivation analysis give 
 - **(iii) Electron-transfer passivation (poly-specific, T6):** the Si-rich SiOₓ layer puts the Mg Fermi in the SiO₂ gap → 3.07 eV injection barrier → electron transfer to any anion that does arrive is blocked over the 50–90 nm interphase.
 
 **Honest:** mechanism (i) is general; the **poly-specific** wins are (ii) starving the front of anion flux and (iii) cutting off the electron. The decisive *reactive* suppression (reduction energetics, electron-blocking) is C1/C3 + T6 + the reactive MLFF (T17) — we do not over-claim the network as an electrostatic repeller.
-- **Electron-transfer passivation (T6, this session):** band alignment from the **computed** Mg Φ (3.97 eV) + SiO₂ gap (8.46 eV, T8) puts the **Mg Fermi *inside* the SiO₂ gap** → a **3.07 eV electron-injection barrier**; WKB tunnelling through even 1 nm of SiOₓ is ~10⁻⁸, through the 50–90 nm poly interphase ≈ 0 → **electron transfer to the Al-anion is kinetically blocked**. Bare's metallic SEI (gap 0) has no such barrier.
-
-So poly excludes Al both by **keeping the anion away** (transport) and by **cutting off the electron** (passivation) — the kinetic + electronic halves of "Al-poor."
 
 ---
 
@@ -59,7 +56,7 @@ So poly excludes Al both by **keeping the anion away** (transport) and by **cutt
 | CCD / CE / morphology (dendrite) | Al co-deposit seeds rough Mg; poly smooth | **T13**: Al adatom weak+non-selective (no Mg template) → rough bare; clean Mg → oriented poly |
 
 ## Ticket completion (this v3 session)
-**Done (robust):** T0–T4 (Al deposition chain + speciation/Schlenk/potentials), T6 (passivation barrier), T7 (SEI phase stability), **T8 (SEI electronic structure — keystone)**, T11 (XPS Al 2p/Si 2p), T12 (Raman), T14 (self-discharge mechanism). **Honest-partial:** T9 (Mg²⁺ NEB — F-centre non-convergence, DRT carried by T8+lit.), T10 (interface AIMD — bare done/poly in progress; rare-event), T13 (texture — Mg-adatom CP2K segfault; Al-adatom argument holds). **GPU node:** T5, T16, T17.
+**Done (robust):** T0–T4 (Al deposition chain + speciation/Schlenk/potentials), T6 (passivation barrier), T7 (SEI phase stability), **T8 (SEI electronic structure — keystone)**, T11 (XPS Al 2p/Si 2p), T12 (Raman), T14 (self-discharge mechanism). **Honest-partial:** T9 (Mg²⁺ NEB — charged-vacancy non-convergence, DRT carried by T8+lit.), T10 (interface AIMD — bare done/poly in progress; rare-event), T13 (texture — Mg-adatom CP2K segfault; Al-adatom argument holds). **GPU node:** T5, T16, T17.
 
 ## Honest status
 The **core thesis is proven and self-consistent**: Al co-deposits on bare (C1, on a Mg-referenced potential scale T2) → metallic, electron-leaky SEI (T8) → parasitic self-discharge (T14); poly excludes Al by transport gating (C2/T5) **and** electron-transfer passivation (T6), building a Si-rich insulating SEI (T7/T8) → reversible (CE 100 % vs 27 %). XPS (T11) and Raman (T12) reproduced; morphology (T13) and AIMD (T10) consistent. **No transport advantage invoked; no fluorine story.** Limitations (all flagged): PBE/GTH gaps qualitative; periodic alloy/adatom ±0.1 eV; vertical EAs (dianions dissociative = the decomposition); band-alignment uses lit. SiO₂ χ; AIMD is constant-V not grand-canonical; two periodic calcs (T9 NEB, T13 Mg-adatom) hit technical walls — reported honestly, not forced. See `STATUS.md`.

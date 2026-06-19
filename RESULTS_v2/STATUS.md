@@ -15,7 +15,7 @@
 | T6 | e⁻-transfer / passivation barrier | CPU | ● done | Mg Fermi in SiO₂ gap → 3.07 eV injection barrier; tunnelling through 50–90 nm SiOₓ ≈0 → blocks Al-anion reduction (CDFT-on-metal invalid, band-align route) |
 | T7 | candidate SEI phase set + stability | CPU | ● done | all SEI phases stable; **SiO₂ E_f −9.2 eV/fu (=exp)**; Al₂O₃ −15.4, MgO −4.0, MgCl₂ −4.2; Mg₁₇Al₁₂ artifact (use E_sub) |
 | **T8** | **SEI electronic structure (DOS/gap)** | CPU | ● **done** | **Al⁰ 0.00 eV (metal/leaky), Mg₁₇Al₁₂ ≈0 (metal); SiO₂ 8.46, Al₂O₃ 6.2, MgO 3.9, MgCl₂ 2.9 eV (insulators/passivating)** |
-| T9 | Mg²⁺ migration NEB through SEI | CPU | ◑ honest | NEB unconverged (F-centre vacancy, as v2 MgF₂); DRT link carried by T8 electronic structure + literature |
+| T9 | Mg²⁺ migration NEB through SEI | CPU | ◑ honest | NEB unconverged (neutral→trapped-electron SCF; charged→oscillating relax); DRT carried by T8 + literature |
 | T10 | constant-V interface AIMD (real ions) | CPU | ● done | bare ±1V 441fr (anion intact ~9.5Å) + poly aimd_poly 10k-step (network-sequestered); no spontaneous reduction either; field-poly abandoned (too slow); frames→T16 dataset |
 | T11 | XPS Al 2p + Si 2p shifts | CPU | ● done | Si 2p shift +1.28 eV reproduced (SiH₄ 98.6≈99.5); Al³⁺ poly side ≈74 reproduced; bare 70.9=metallic Al⁰ (needs metal, =T8) |
 | T12 | Raman/IR assignment | CPU | ● done | 915 THF(912)✔, CH2 stiffening free→bound, phenyl breathing→free (dissoc), Mg-Cl; = de-pairing+shell-intact, not redox |
