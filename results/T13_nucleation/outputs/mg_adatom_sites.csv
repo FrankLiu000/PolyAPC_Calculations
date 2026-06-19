@@ -1,5 +1,6 @@
 adatom,quantity,value_eV,cell,method,note
 Mg,fcc-vs-hcp preference,+0.145,2x2x4 (17 atoms),single-point (both ideal geom),small fcc preference at ideal geometry
 Mg,fcc-vs-hcp preference,+0.009,4x4x4 (65 atoms),GEO_OPT minima (adatom-only),near-degenerate after relaxation; both relaxations OSCILLATE (Gamma-only metal slab) - noisy
+Mg,fcc-vs-hcp preference,-0.038,2x2x4 adatom-only (k-point MP 6x6x1),GEO_OPT minima (BOTH converged opt-done=True),near-degenerate (hcp-leaning); CONVERGED with k-points (Gamma oscillation removed); |dE| within ~0.12 eV residual wander -> not site-selective
 Mg,E_ads,~+0.1,4x4x4,GEO_OPT adatom-only vs slab-Mg,small/physical (adatom ~ surface Mg)
 Al,fcc-vs-hcp preference,~0.000,3x3x4 (v2),v2 relaxed,non-selective (fcc/hcp/bridge within ~1 meV)

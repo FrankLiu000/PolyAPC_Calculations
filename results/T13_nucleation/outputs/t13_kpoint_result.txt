@@ -1,0 +1,10 @@
+T13 Mg adatom fcc-vs-hcp — k-point converged (Monkhorst-Pack 6x6x1, SYMMETRY OFF)
+2x2x4 adatom-only relax (FIXED slab atoms 1..16); CP2K 2025.1 PBE-D3 DZVP-MOLOPT-SR.
+  fcc: E_min=-1075.74908 Ha  (43 evals, opt-done=True)
+  hcp: E_min=-1075.75047 Ha  (87 evals, opt-done=True)
+  fcc-vs-hcp preference (minima) = -0.038 eV   (hcp-leaning)
+  fcc-vs-hcp preference (last)   = -0.058 eV
+  residual energy wander near min: fcc 138.7 meV, hcp 119.1 meV
+VERDICT: both relaxations CONVERGE with k-points (Gamma-only oscillation removed);
+preference |dE|<=0.05 eV sits within ~0.12 eV residual wander => NEAR-DEGENERATE.
+Mg adatom is NOT strongly site-selective; fcc/hcp is not the texture differentiator.

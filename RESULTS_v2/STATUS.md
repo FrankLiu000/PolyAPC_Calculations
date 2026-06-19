@@ -1,7 +1,7 @@
 # RESULTS_v2 — STATUS (v3.1 interface-composition computational program)
 **Thesis (ARTICLE_PLAN_v3):** the in-situ POSS-cured poly-APC Mg-anode interphase is **Si-rich, Al-poor, surface-confined**, which **suppresses Al co-deposition** and makes Mg plating reversible (CE ~100% vs bare 27%). Transport is **not** the discriminator (GITT + MD agree). **No fluorine story.**
 **Node:** EPYC CPU (192 core) — DFT (G16/ORCA) + AIMD/periodic (CP2K 2025.1). GPU/MLFF tickets (T5,T16,T17) are the other node.
-**Started:** 2026-06-18 (this session). Branch `main`.
+**Started:** 2026-06-18 (this session). Branch `computational-v3-interface` (two-node: CPU commits + GPU pushes T5/T16/T17 here).
 
 ## Ticket tracker (T0–T15 here; T16–T17 GPU)
 | T | title | node | status | 1-line result |
@@ -19,11 +19,11 @@
 | T10 | constant-V interface AIMD (real ions) | CPU | ● done | bare ±1V 441fr (anion intact ~9.5Å) + poly aimd_poly 10k-step (network-sequestered); no spontaneous reduction either; field-poly abandoned (too slow); frames→T16 dataset |
 | T11 | XPS Al 2p + Si 2p shifts | CPU | ● done | Si 2p shift +1.28 eV reproduced (SiH₄ 98.6≈99.5); Al³⁺ poly side ≈74 reproduced; bare 70.9=metallic Al⁰ (needs metal, =T8) |
 | T12 | Raman/IR assignment | CPU | ● done | 915 THF(912)✔, CH2 stiffening free→bound, phenyl breathing→free (dissoc), Mg-Cl; = de-pairing+shell-intact, not redox |
-| T13 | nucleation / texture | CPU | ● done (honest) | segfault BYPASSED (fresh slab runs); but adatom fcc/hcp selectivity small/noisy (~0.15 eV unrelaxed, ~0 relaxed Γ-only) — NOT a clean Mg-vs-Al differentiator; texture rests on Al-as-foreign-codeposit |
+| T13 | nucleation / texture | CPU | ● done (honest) | segfault BYPASSED (fresh slab runs); Mg adatom fcc/hcp **k-point-converged to near-degeneracy (−0.04 eV, hcp-leaning; both relaxations converged, opt-done=True)** — unrelaxed +0.15 eV was a geometry artifact, Γ-only oscillated — so site-selectivity is NOT a clean Mg-vs-Al differentiator; texture rests on Al-as-foreign-codeposit |
 | T14 | self-discharge / overcharge mechanism | desk | ● done | bare metallic-SEI electron-leak → parasitic redox (CE 27%, −320 mV/h); poly insulating → CE ~100% |
 | T15 | integration → REPORT_v2_master | both | ● done | full synthesis: C1→T8→T14 + C2(T5/T6) + T2/T11/T12 mapped to ARTICLE_PLAN Part D/Fig 5 |
 | T16 | broad reactive MLFF (Mg/electrolyte/SEI) | GPU | ● done | trained on bare+poly T10 reactive (648 fr, energy ON); **held-out force MAE 30.7 meV/Å (≤50 = PASS)**, energy 4.8/8.0 meV/atom. `models/apc_v3_broad.model` + `v3/mlff_validation.csv`. Bare reactive interface harder (RMSE 200) → AL loop can refine |
-| T17 | large-scale reactive interface (SEI growth/Al co-dep) | GPU | ◑ scaffold ready | `run_t17.py`+`analyze_t17.py` built (Al-deposition tally + SEI composition-vs-depth → ToF-SIMS Al-poor/Si-rich+90nm). Blocked on T16 model. NB: MLFF route **can** run the poly interface that classical MD couldn't |
+| T17 | large-scale reactive interface (SEI growth/Al co-dep) | GPU | ◑ scaffold ready, **unblocked** | driver `interface_mlff_md.py` staged (Al-anion approach tracking) + `run_t17.py`/`analyze_t17.py` analysis (Al-deposition tally + SEI composition-vs-depth → ToF-SIMS Al-poor/Si-rich+90nm). **T16 validated → no longer blocked**; production MD pending on GPU. NB: MLFF route **can** run the poly interface that classical MD couldn't |
 
 Legend: ● done · ◐ partial/in-progress · ○ todo · deferred = other node.
 
