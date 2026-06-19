@@ -1,0 +1,13 @@
+%chk=c1_TS_AlCl3.chk
+%nprocshared=16
+%mem=24GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt=(ts,calcfc,noeigentest,maxcycles=80) freq SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+c1_TS_AlCl3 TS from scan max
+
+-1 2
+Al    -0.00000000     0.00000000    -0.22611900
+Cl     0.00000000    -0.00000000     3.12388100
+Cl     0.00000000     1.79164100    -1.47548300
+Cl    -0.00000000    -1.79164100    -1.47548300
+

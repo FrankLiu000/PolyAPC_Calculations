@@ -1,0 +1,10 @@
+class,species/step,value,unit,note
+solution-intermediate,AlPh2Cl (neutral),-1165.424705,"Ha (G, SMD-THF)",
+solution-intermediate,[AlPh2Cl].- (reduced),-1165.499356,"Ha (G, SMD-THF)",
+solution-intermediate,AlPh2. radical,-705.222497,"Ha (G, SMD-THF)",
+solution-intermediate,[AlCl3].-,-1622.894057,"Ha (G, SMD-THF)",
+solution-intermediate,AlCl2. radical,-1162.643941,"Ha (G, SMD-THF)",
+solution-TS,"TS_AlCl3 (floppy saddle, 1 imag -248cm-1, IRC done)",-1622.899554,Ha (G),
+solution-gateway,[AlPh2Cl2]- + [MgCl(THF)]+ -> AlPh2Cl + MgCl2(THF),-16.8,kcal/mol (dG_rxn),exergonic Cl-abstraction; explicit TS scan crashed (floppy ion pair)
+surface-intermediate,AlCl3* chemisorbed on Mg(0001),-1.82,eV (E_ads),"binds strongly, Al-down +2.36A"
+surface-step,AlCl3* -> AlCl2* + Cl* (surface Cl-strip),0.24,eV (E_rxn),"near-thermoneutral; Cl->surface hollow; barrier >= this, explicit NEB/scan impractical (metal-slab SCF wall)"
