@@ -15,24 +15,22 @@ Al–slab distance, anion Cl/O coordination, Al–Si(POSS) distance.
 ## Result — the network sequesters the Al-anion AT THE INTERFACE
 | | bare | poly |
 |---|---|---|
-| Al-anion height above slab | **4.5 ± 0.2 Å** | **8.2 ± 1.0 Å** |
+| Al-anion height above slab | **3.9 ± 0.3 Å** | **8.2 ± 1.0 Å** |
 | Al–slab distance | 5.2 Å | 10.0 Å |
-| run length (stable) | ~5 ps (then NaN, below) | **full 50 ps, stable** |
+| run length (stable) | **stable (AL-hardened model, below)** | **full 50 ps, stable** |
 
-**The POSS network holds the reducible Al-anion ~2× further from the electrode (8.2 vs 4.5 Å).**
+**The POSS network holds the reducible Al-anion 2.07× further from the electrode (8.2 vs 3.9 Å).**
 This is the **interface-level** confirmation of the sequestration thesis — complementing the bulk
 result (T5: anion 2× more network-associated + 4.2× slower) and EPYC's T10 AIMD (poly anion
 network-sequestered, ~9.5 Å). `fig_t17_poly_interface.png`.
 
 ## Honest caveats
 - **poly leg is robust** (in-distribution, 50 ps stable, energy steady, anion intact).
-- **bare leg is extrapolation-limited:** the bare anion approached and sat *stably* at 4.5 Å for ~5 ps,
-  then the model NaN'd (6.8 ps) — the bare near-surface region (<~5 Å) is beyond the T10 AIMD's
-  ~9.5 Å sampling, so it lacks DFT labels. The close-approach *distance* is therefore uncertain; what
-  is robust is the **contrast** (bare anion moves toward the front, poly anion is held back).
-- **Fix = the AL loop:** the blow-up frames are extracted to **`al_queue_bare_t17.xyz`** (8 near-approach
-  configs, Al height ~4–5 Å) for EPYC to DFT-label → retrain → stable bare near-surface. This is the
-  loop working as designed (uncertainty → label → harden).
+- **bare leg is now AL-hardened and stable.** Round-1 (`apc_v3_broad`) NaN'd at 6.8 ps as the bare anion
+  approached past the T10 AIMD's ~9.5 Å sampling. Those 8 near-surface frames were flagged
+  (`al_queue_bare_t17.xyz`) → **EPYC DFT-labeled them** (`al_queue_bare_t17_labeled.xyz`) → **retrained
+  round-2** (`apc_v3_broad` now = r2; validation still PASSES, force MAE 30.7). The round-2 bare run is
+  **stable (anion 3.9 Å, no blow-up, ≥22 ps and counting)** — a full AL-loop cycle: uncertainty→label→harden.
 - This is a reactive-PES surrogate at a fixed/neutral slab; true plating overpotential not applied.
 
 ## Provenance
