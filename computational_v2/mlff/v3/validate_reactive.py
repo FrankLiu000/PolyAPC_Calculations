@@ -21,7 +21,11 @@ def get_E(at):
     except Exception: return np.nan
 for at in ats:
     ct = at.info.get("config_type","unknown")
-    Fref = at.arrays.get("forces"); Eref = get_E(at)
+    Fref = at.arrays.get("forces")
+    if Fref is None:
+        try: Fref = at.get_forces()
+        except Exception: Fref = None
+    Eref = get_E(at)
     at2 = at.copy(); at2.calc = calc
     Eml = at2.get_potential_energy(); Fml = at2.get_forces()
     r = rows.setdefault(ct, dict(fe=[], ee=[], n=0)); r["n"]+=1

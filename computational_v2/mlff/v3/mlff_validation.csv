@@ -1,0 +1,5 @@
+metric,bare,poly,global,unit,note
+force_MAE,27.6,32.5,30.7,meV/A,held-out DFT (32+32 frames); target<=50 -> PASS
+force_RMSE,199.8,146.5,,meV/A,RMSE inflated by few high-force outlier atoms
+energy_MAE,4.8,8.0,,meV/atom,excellent energy accuracy
+model,t16_broad_v1,,,,MACE-MP medium finetune; bare+poly T10 reactive (648 fr); energy ON; E0s=average; r_max 6; float32
