@@ -4,6 +4,44 @@
 
 > **Honest spine (do not violate):** bulk Mg²⁺ transport is NOT the discriminator (MD + GITT agree); the win is interfacial-compositional. This ticket asks a *kinetic* question about the **anion**: can it reach the anode to be reduced (→ Al co-deposition), and does the network impede that? It does **not** claim a transport advantage.
 
+---
+## ★ v3 UPDATE (2026-06-22) — Matched MLFF-MD interface: the standoff is REAL (updates R4's "null")
+
+The reactive MLFF (T16/T17, model **r6**) finally enabled the **matched bare-vs-poly atomistic electrode
+interface** that classical MD could not build (R4): MACE is geometry-based (no molecule unwrap), so the
+percolating POSS network runs. **Matched r6 @ 0.5 fs + ForceCap60, 500 ps each, primary metric
+`Al_slabMin` = 3D distance from the reducible Al to the nearest electrode Mg:**
+
+| system | **Al–electrode min dist** | Al z-height | nCl | min | n |
+|--------|--------------------------|-------------|-----|-----|---|
+| **bare** | **4.58 ± 0.19 Å** | 4.18 Å | 2.00 | 3.90 Å | 16159 |
+| **poly** | **7.57 ± 0.79 Å** | 3.67 Å | 2.00 | 5.52 Å | 16159 |
+
+**→ ~1.65× standoff (gap 3.0 Å)** — the network holds the reducible anion ~3 Å further from the metal. (r5
+`poly_ns` 486 ps cross-check: poly 10.3 Å ≈ 2.2×.) **This UPDATES R4 below** — the earlier "≈9 Å in both, null"
+came from tiny single-ion cells; the matched interface shows a real standoff. *(Metric note: z-height is ~4 Å
+in BOTH — misleading; the standoff is only visible in the 3D `slabMin`, the poly anion sits at similar height
+but laterally/structurally offset.)*
+
+- **Bare anion poised-but-UNreacted:** intact across the full stable 500 ps (nCl = 2 always, min 3.90 Å,
+  **0 % of frames < 3.5 Å**, force-cap fired 0×). MLFF is conservative — it cannot do the Al³⁺→Al⁰ electron
+  transfer; the reaction only appeared as the **pre-cap blow-ups at ~3.2 Å** (reactive onset beyond MLFF).
+  Dynamic reduction requested as EPYC cathodic charged-slab AIMD (`AL_REQUEST_bare_codeposition_aimd.md`, pending).
+- **Independent EPYC biased-DFT cross (potential-driven EDL, `incoming/biased_RESPONSE.md`):** the force on the
+  reducible Al responds to ±1 e bias **0.42 (bare) vs 0.27 eV/Å (poly) = 1.6× stronger in bare** — same bare/poly
+  asymmetry as the structural standoff, independent line of evidence.
+- **Honest convergence:** bare tight (σ 0.19 Å); **poly slow-mode-limited** (s1 ~8.6 / resumed seg2 ~7.0 Å;
+  10–90 pct 6.5–8.6; range ~1.4–2.2× across model/window) — a slow oscillation, not a runaway. Headline ~1.65×;
+  a pinned number needs multi-ns / enhanced sampling. The cheap external-`q·E` biased MD was **validated vs
+  EPYC's 34 charged frames and FAILED** (captures only 10–30 %, blind to the bare/poly asymmetry) → any biased
+  MLFF-MD must be **charge-aware**, not `q·E`.
+- **Stability fix:** r6 = MACE-MP-0 FT + ZBL `pair_repulsion` + Agnesi (MAE 29 meV/Å); stable interface MD needs
+  **0.5 fs** (reactive-front overshoot) **+ ForceCap60** (rare bulk spikes); cap ≈ 0 in production → physical.
+- Figure `fig_matched_standoff.png`; code `mlff/v3/t17/final_analysis.py`, `mlff/v3/validate_qE.py`,
+  `mlff/v3/build_charges.py`, driver `mlff/v3/interface_mlff_md.py` (argv6=dt, argv7=fcap, argv8=Efield).
+
+---
+
 ## TL;DR
 1. **Transport NULL confirmed for the canonical poly model** (4-POSS gel, never cleanly tested before — Story A.1 only did the swollen-8 artifact): D(cation) ×4.5 slower, D(anion) ×4.2 slower, **t₊ = 0.50 in both**, de-pairing f 0.046→0.13. Matches GITT (D≈equal) → kills the rate hypothesis.
 2. **The cured network preferentially sequesters the Al-anion (bulk):** the anion is **~2× more network-associated than the Mg-cation** (47.5 % vs 24.7 % within 0.5 nm of the network; 80 % of anions within 0.7 nm) **and 4.2× slower**. The reducible anion is matrix-held and retarded.
