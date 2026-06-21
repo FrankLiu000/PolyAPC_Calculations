@@ -46,6 +46,36 @@ but laterally/structurally offset.)*
 
 ---
 
+---
+## ★★ Reaction-level capstone — EPYC co-deposition AIMD (2026-06-22, `incoming/bare_codep_aimd_RESPONSE.md`)
+
+The dynamic Al³⁺→Al⁰ reduction MLFF cannot do — cathodic (q=−2) BOMD on the bare t17 cell (CP2K PBE-D3, ~350 K),
+from a ~3.4 Å close approach. **The bare reduction is contact-gated, not spontaneous:**
+- **Distance threshold ≈ 2.6 Å.** Al Mulliken qAl fluctuates ~0.4 with no net reduction down to ~2.6 Å, then
+  drops monotonically once driven below it (0.45 → **0.23** by 2.3 Å). The reductive ET needs the **inner-contact
+  zone (~2.5 Å)**.
+- **Not spontaneous:** the free/unbiased control does NOT reduce — the Al **retreats to ~3.7 Å, sits intact**
+  (qAl ~0.45, nCl 2) even with full quantum ET available, and the forced reduced state **relaxes back** on
+  release. **This reproduces the MLFF "poised-but-unreacted" ceiling at the DFT level** — reduction is activated/rare.
+- **Mechanism:** direct **ET first** (qAl halves) with **both Al–Cl bonds elongating concomitantly** (Cl-weakening)
+  — *not* Cl-strip-first, *not* phenyl-loss-first, *not* concerted cleavage; phenyls stay bound. Al spin 0.00→0.00
+  → the reduced Al is **closed-shell, incorporating into the metallic Mg** = the **metallic co-deposition**
+  signature, not an Al⁰ radical.
+- **Distance, not charge, is the master variable** (charge×distance scan): far + q=−2 barely touches Al
+  (0.47→0.45); **contact + q=0 already reduces** (qAl 0.29, chemisorption); the cathodic charge is a *secondary,
+  contact-gated* boost. → **the bias's role is TRANSPORT** (deliver the anion to ~2.5 Å); the reduction is
+  contact/chemisorption-dominated. **Independently validates the GPU `validate_qE` result** (external `q·E`
+  captures only 10–30 % — the remainder is contact chemistry, not a field force).
+
+**→ The discriminator, closed:** Al co-deposits only by reaching the **~2.5 Å contact zone**. The **bare** anion
+is poised at **4.58 Å** (slabMin) — close enough to be driven into contact (→ slow Al⁰ in the bare SEI, ToF-SIMS).
+The **poly** network holds it at **7.57 Å — ~3× the reduction threshold** — so it never reaches the contact zone:
+**co-deposition suppression is mechanistically explained.** Full chain: structural standoff (1.65×) →
+contact-gated reduction (~2.5 Å) → Si-rich/Al-poor SEI (ToF-SIMS/XPS). Data: `bare_codep_reduction_curve.csv`,
+`bare_codep_charge_distance_scan.csv`, `bare_codep_steered_traj.xyz`.
+
+---
+
 ## TL;DR
 1. **Transport NULL confirmed for the canonical poly model** (4-POSS gel, never cleanly tested before — Story A.1 only did the swollen-8 artifact): D(cation) ×4.5 slower, D(anion) ×4.2 slower, **t₊ = 0.50 in both**, de-pairing f 0.046→0.13. Matches GITT (D≈equal) → kills the rate hypothesis.
 2. **The cured network preferentially sequesters the Al-anion (bulk):** the anion is **~2× more network-associated than the Mg-cation** (47.5 % vs 24.7 % within 0.5 nm of the network; 80 % of anions within 0.7 nm) **and 4.2× slower**. The reducible anion is matrix-held and retarded.
