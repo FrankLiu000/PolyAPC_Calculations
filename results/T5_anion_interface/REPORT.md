@@ -26,7 +26,11 @@ but laterally/structurally offset.)*
 - **Bare anion poised-but-UNreacted:** intact across the full stable 500 ps (nCl = 2 always, min 3.90 Å,
   **0 % of frames < 3.5 Å**, force-cap fired 0×). MLFF is conservative — it cannot do the Al³⁺→Al⁰ electron
   transfer; the reaction only appeared as the **pre-cap blow-ups at ~3.2 Å** (reactive onset beyond MLFF).
-  Dynamic reduction requested as EPYC cathodic charged-slab AIMD (`AL_REQUEST_bare_codeposition_aimd.md`, pending).
+  **Reaction-level cross-check (EPYC AIMD, now in `RESULTS_v2/REPORT_v2_master.md`):** the reductive electron
+  transfer is **contact-gated at ~2.5 Å — bare reaches that contact, poly is held ~3 Å beyond it** — and the ET
+  itself is **rare-event** (no spontaneous reduction in the AIMD window). Independently confirms the MLFF picture
+  (bare reaches the front / poly excluded) and locates the gate. A cathodic-DRIVEN AIMD to force the rare event
+  is still requested (`AL_REQUEST_bare_codeposition_aimd.md`).
 - **Independent EPYC biased-DFT cross (potential-driven EDL, `incoming/biased_RESPONSE.md`):** the force on the
   reducible Al responds to ±1 e bias **0.42 (bare) vs 0.27 eV/Å (poly) = 1.6× stronger in bare** — same bare/poly
   asymmetry as the structural standoff, independent line of evidence.
