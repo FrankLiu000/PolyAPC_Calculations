@@ -11,11 +11,34 @@ from ase.md.langevin import Langevin
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 from ase.constraints import FixAtoms
 from mace.calculators import MACECalculator
+from ase.calculators.calculator import Calculator, all_changes
+
+class ForceCap(Calculator):
+    """Clip per-atom |F| to fmax so a spurious model force-spike can't run the
+    integrator away (training |F_el| tops out ~14 eV/Å; cap=60 is 4x real, so it
+    is inert in normal dynamics and only fires on unphysical blow-up spikes).
+    Counts cap/NaN events so we can verify the trajectory stayed physical."""
+    implemented_properties = ["energy","forces","free_energy"]
+    def __init__(self, base, fmax=60.0):
+        Calculator.__init__(self); self.base=base; self.fmax=fmax; self.ncap=0; self.nnan=0
+    def calculate(self, atoms=None, properties=("energy","forces"), system_changes=all_changes):
+        Calculator.calculate(self, atoms, properties, system_changes)
+        a=atoms.copy(); a.calc=self.base
+        e=a.get_potential_energy(); f=np.array(a.get_forces(),dtype=float)
+        if not np.isfinite(f).all(): self.nnan+=1; f=np.nan_to_num(f,nan=0.0,posinf=self.fmax,neginf=-self.fmax)
+        n=np.linalg.norm(f,axis=1); m=n>self.fmax
+        if m.any(): self.ncap+=1; f[m]*=(self.fmax/n[m])[:,None]
+        if not np.isfinite(e): e=0.0
+        self.results={"energy":float(e),"forces":f,"free_energy":float(e)}
+
 model,start,label = sys.argv[1:4]
-nsteps = int(sys.argv[4]) if len(sys.argv)>4 else 50000   # 50 ps @ 1 fs
+nsteps = int(sys.argv[4]) if len(sys.argv)>4 else 50000   # step count (time = nsteps*DT)
 T_K    = float(sys.argv[5]) if len(sys.argv)>5 else 300.0
-NSLAB, DT = 64, 1.0
-at = read(start); at.calc = MACECalculator(model_paths=[model], device="cuda", default_dtype="float32")
+DT     = float(sys.argv[6]) if len(sys.argv)>6 else 1.0    # fs; 0.5 stabilizes reactive close-approach
+FCAP   = float(sys.argv[7]) if len(sys.argv)>7 else 60.0   # eV/Å per-atom force cap (anti-blowup)
+NSLAB  = 64
+at = read(start)
+at.calc = ForceCap(MACECalculator(model_paths=[model], device="cuda", default_dtype="float32"), fmax=FCAP)
 sym = np.array(at.get_chemical_symbols())
 slab = np.arange(NSLAB); slab_top0 = at.get_positions()[slab,2].max()
 at.set_constraint(FixAtoms(indices=slab.tolist()))   # rigid electrode (forces were DFT-masked)
@@ -41,5 +64,5 @@ for step in range(1,nsteps+1):
     if step%50==0: log(step)
     if step%200==0: frames.append(at.copy())
     if step%5000==0:
-        h,d=log(step); print(f"  t={step*DT/1000:.0f}ps Al_height={h:.2f} Al-slab={d:.2f} A"); write(f"{label}_traj.xyz",frames)
-write(f"{label}_traj.xyz",frames); cv.close(); print(f"# DONE {label}: {len(frames)} frames")
+        h,d=log(step); print(f"  t={step*DT/1000:.0f}ps Al_height={h:.2f} Al-slab={d:.2f} A cap={at.calc.ncap} nan={at.calc.nnan}",flush=True); write(f"{label}_traj.xyz",frames)
+write(f"{label}_traj.xyz",frames); cv.close(); print(f"# DONE {label}: {len(frames)} frames cap={at.calc.ncap} nan={at.calc.nnan}")
