@@ -19,8 +19,9 @@ class ForceCap(Calculator):
     is inert in normal dynamics and only fires on unphysical blow-up spikes).
     Counts cap/NaN events so we can verify the trajectory stayed physical."""
     implemented_properties = ["energy","forces","free_energy"]
-    def __init__(self, base, fmax=60.0):
+    def __init__(self, base, fmax=60.0, charges=None, efield=0.0):
         Calculator.__init__(self); self.base=base; self.fmax=fmax; self.ncap=0; self.nnan=0
+        self.q=charges; self.E=efield   # external z-field: F_z += q[e]*E[V/A] (= eV/A); cathodic E<0
     def calculate(self, atoms=None, properties=("energy","forces"), system_changes=all_changes):
         Calculator.calculate(self, atoms, properties, system_changes)
         a=atoms.copy(); a.calc=self.base
@@ -28,6 +29,7 @@ class ForceCap(Calculator):
         if not np.isfinite(f).all(): self.nnan+=1; f=np.nan_to_num(f,nan=0.0,posinf=self.fmax,neginf=-self.fmax)
         n=np.linalg.norm(f,axis=1); m=n>self.fmax
         if m.any(): self.ncap+=1; f[m]*=(self.fmax/n[m])[:,None]
+        if self.E and self.q is not None: f[:,2]+=self.q*self.E   # external applied field on z
         if not np.isfinite(e): e=0.0
         self.results={"energy":float(e),"forces":f,"free_energy":float(e)}
 
@@ -36,15 +38,20 @@ nsteps = int(sys.argv[4]) if len(sys.argv)>4 else 50000   # step count (time = n
 T_K    = float(sys.argv[5]) if len(sys.argv)>5 else 300.0
 DT     = float(sys.argv[6]) if len(sys.argv)>6 else 1.0    # fs; 0.5 stabilizes reactive close-approach
 FCAP   = float(sys.argv[7]) if len(sys.argv)>7 else 60.0   # eV/Å per-atom force cap (anti-blowup)
+EFIELD = float(sys.argv[8]) if len(sys.argv)>8 else 0.0    # V/Å external z-field (0=off; cathodic<0)
+QFILE  = sys.argv[9] if len(sys.argv)>9 else None          # per-atom charge .npy (required if EFIELD!=0)
 NSLAB  = 64
 at = read(start)
-at.calc = ForceCap(MACECalculator(model_paths=[model], device="cuda", default_dtype="float32"), fmax=FCAP)
+_charges = np.load(QFILE) if (EFIELD and QFILE) else None
+at.calc = ForceCap(MACECalculator(model_paths=[model], device="cuda", default_dtype="float32"),
+                   fmax=FCAP, charges=_charges, efield=EFIELD)
 sym = np.array(at.get_chemical_symbols())
 slab = np.arange(NSLAB); slab_top0 = at.get_positions()[slab,2].max()
 at.set_constraint(FixAtoms(indices=slab.tolist()))   # rigid electrode (forces were DFT-masked)
 Al = np.where(sym=="Al")[0]; Cl = np.where(sym=="Cl")[0]
 O  = np.where(sym=="O")[0];  Si = np.where(sym=="Si")[0]
-print(f"[{label}] {len(at)} atoms; slab(fixed)={NSLAB} Mg; Al={len(Al)} Cl={len(Cl)} O={len(O)} Si={len(Si)}")
+print(f"[{label}] {len(at)} atoms; slab(fixed)={NSLAB} Mg; Al={len(Al)} Cl={len(Cl)} O={len(O)} Si={len(Si)}; "
+      f"Efield={EFIELD} V/A (charges={'on,sum%.2f'%float(_charges.sum()) if _charges is not None else 'off'})")
 MaxwellBoltzmannDistribution(at, temperature_K=T_K)
 dyn = Langevin(at, DT*units.fs, temperature_K=T_K, friction=0.02)
 cv = open(f"{label}_cv.csv","w")
