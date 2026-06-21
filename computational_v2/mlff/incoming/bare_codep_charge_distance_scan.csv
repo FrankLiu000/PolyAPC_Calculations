@@ -1,0 +1,6 @@
+geometry,Al_Mg_A,cell_charge_e,qAl_mulliken,note
+far,3.7,0,0.4707,excess e- stay on metal
+far,3.7,-2,0.4529,charge alone (no contact) does not reduce
+contact,2.3,0,0.2858,chemisorption: contact reduces even at q=0
+contact,2.3,-1,0.2642,
+contact,2.3,-2,0.2304,cathodic charge = secondary contact-gated boost
