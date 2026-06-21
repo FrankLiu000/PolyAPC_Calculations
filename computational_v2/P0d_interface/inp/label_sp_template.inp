@@ -28,7 +28,7 @@
     &SCF
       SCF_GUESS ATOMIC
       EPS_SCF 1.0E-5
-      MAX_SCF 200
+      MAX_SCF 300
       ADDED_MOS 300
       &SMEAR ON
         METHOD FERMI_DIRAC
@@ -38,9 +38,13 @@
         ALGORITHM STANDARD
       &END DIAGONALIZATION
       &MIXING
+        ! gentle damping + deep history: the charged ANODIC poly cell (q=+1) charge-sloshes
+        ! at ALPHA 0.3/NBROYDEN 8 (residual oscillates 0.004<->1.4, never reaches EPS_SCF).
+        ! ALPHA 0.10/NBROYDEN 14 converges it; mixing only sets the PATH, so the converged
+        ! density/forces (and label consistency vs the bare frames) are unchanged. 2026-06-21.
         METHOD BROYDEN_MIXING
-        ALPHA 0.3
-        NBROYDEN 8
+        ALPHA 0.10
+        NBROYDEN 14
       &END MIXING
     &END SCF
     &XC

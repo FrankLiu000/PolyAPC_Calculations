@@ -50,16 +50,20 @@ def frames(fn):
 
 
 def parse(outf):
-    """energy[eV], forces[eV/Ang]. Forces printed as 'FORCES| <idx> fx fy fz |f|' (Ha/Bohr)."""
-    E, F = None, []
+    """energy[eV], forces[eV/Ang], scf_converged[bool]. Forces 'FORCES| <idx> fx fy fz |f|' (Ha/Bohr).
+    Convergence is recorded so an unconverged SCF (e.g. charge-sloshing on the anodic poly cell)
+    is never silently written as a training label - it is tagged scf_converged=F and gated downstream."""
+    E, F, conv = None, [], False
     for L in open(outf):
         if "ENERGY| Total FORCE_EVAL" in L:
             E = float(L.split()[-1]) * HA
+        elif "SCF run converged" in L:
+            conv = True
         elif L.lstrip().startswith("FORCES|"):
             p = L.split()
             if len(p) >= 6 and p[1].isdigit():
                 F.append([float(p[2]) * HA_B, float(p[3]) * HA_B, float(p[4]) * HA_B])
-    return E, F
+    return E, F, conv
 
 
 fo = open(out, "a")
@@ -84,10 +88,14 @@ for n, com, at in frames(scaffold):
     inp = tmpl.replace("__PROJ__", proj).replace("__CHARGE__", charge).replace("__COORD__", f"{proj}.coord.inc")
     open(f"{work}/{proj}.inp", "w").write(inp)
     subprocess.run(f"mpirun -np {NP} {CP2K} -i {proj}.inp -o {proj}.out", shell=True, cwd=work)
-    E, F = parse(f"{work}/{proj}.out")
+    E, F, conv = parse(f"{work}/{proj}.out")
     if E is None or len(F) != n:
         sys.stderr.write(f"[label] frame {idx}: PARSE FAIL (E={E}, nF={len(F)}/{n}) - keeping .out\n")
         idx += 1; continue
+    if not conv:
+        # alignment-safe: still write (resume counts frames), but tag scf_converged=F so the
+        # combine/gate step excludes it. Never ship an unconverged force as a label.
+        sys.stderr.write(f"[label] frame {idx}: SCF NOT CONVERGED to EPS_SCF - tagged scf_converged=F (gated downstream)\n")
     # MASK the fixed slab: the bottom slab is held fixed in the source AIMD (& in production
     # MLFF-MD); its UNCONSTRAINED single-point forces are a large +z asymmetric-slab dipole
     # artifact (~92 eV/A net, momentum-violating, unfittable - GPU-node finding 2026-06-16).
@@ -101,7 +109,7 @@ for n, com, at in frames(scaffold):
         sys.stderr.write(f"[label] frame {idx}: WARN free-atom ||sumF||={free_net:.2f} eV/A (>8)\n")
     fo.write(f"{n}\n")
     fo.write(f'Lattice="{" ".join(lat)}" Properties=species:S:1:pos:R:3:forces:R:3 '
-             f'energy={E:.6f} charge={charge} pbc="T T T"\n')
+             f'energy={E:.6f} charge={charge} scf_converged={"T" if conv else "F"} pbc="T T T"\n')
     for L, f in zip(at, F):
         p = L.split()
         fo.write(f"{p[0]:<2} {p[1]} {p[2]} {p[3]} {f[0]:.6f} {f[1]:.6f} {f[2]:.6f}\n")
