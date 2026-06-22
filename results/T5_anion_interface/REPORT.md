@@ -99,6 +99,38 @@ dynamic MD would have been confirmatory; its infeasibility does not weaken the c
 
 ---
 
+---
+## ★★★ Dynamic biased MD — RESOLVED via charge-conditioned MACELES (2026-06-23)
+
+The dynamic biased MD that both naive routes failed (section above) was completed with a **charge-conditioned
+model** (EPYC's recipe + Q-ladder). **MACELES** (MACE + Latent Ewald Summation — native charge-conditioning with
+the total charge Q as an input, the physical image-charge/screening `q·E` misses) warm-started from r6 (needed a
+2-line guard in `finetuning_utils.py` so the non-LES r6 foundation transfers), trained on q∈{−1,0,+1}.
+- **Transferability gate PASSED (decisive):** held-out **q=−2 force MAE 60.6 meV/Å = the single-charge MAE** — the
+  model learned the **Q-response** (∂F/∂Q), not a memorised charge state (exactly what the per-charge fine-tune,
+  with its 178 Å runaway, could not do).
+- **MD stable:** cathodic q=−2 interface MD (bare + poly, 100 ps each) ran with **cap = 0 over both full runs** —
+  no runaway, fully physical (vs r6_qm1's cap saturated at ~85 % of steps).
+
+**Result — the network MODULATES the field response (dynamic EDL modulation):**
+
+| system | neutral slabMin | cathodic q=−2 | **field shift** |
+|--------|-----------------|---------------|------------------|
+| bare | 4.58 Å | 5.53 ± 0.19 Å | **+0.95 Å** |
+| poly | 7.57 Å | 9.21 ± 0.58 Å | **+1.64 Å** |
+
+**Under cathodic (plating) bias the network amplifies the anion's exclusion ~1.7×** (poly +1.64 vs bare +0.95 Å) —
+it doesn't just hold a fixed standoff, it makes the reducible anion *more* responsive to the field driving it away.
+This **dynamic** ratio (1.7×) lands on EPYC's **static** biased-DFT force-response asymmetry (1.6×): two independent
+methods, the same number. Figure `fig_biased_standoff.png`. Honest: trained {−1,0,+1}→transfers to q=−2 (held-out
+gate); poly carries its usual slow-mode spread (σ 0.58); single bias magnitude. Code: `build_charges.py`,
+`les_args.json`, MACELES via `les` (github.com/ChengUCB/les), driver `argv[10]=QTOT`.
+
+→ **EDL modulation now answered by THREE independent lines:** structural standoff (1.65×, neutral MLFF) +
+biased-DFT force-response (1.6×, static) + **dynamic field-modulated standoff (1.7×, charge-conditioned MD)**.
+
+---
+
 ## TL;DR
 1. **Transport NULL confirmed for the canonical poly model** (4-POSS gel, never cleanly tested before — Story A.1 only did the swollen-8 artifact): D(cation) ×4.5 slower, D(anion) ×4.2 slower, **t₊ = 0.50 in both**, de-pairing f 0.046→0.13. Matches GITT (D≈equal) → kills the rate hypothesis.
 2. **The cured network preferentially sequesters the Al-anion (bulk):** the anion is **~2× more network-associated than the Mg-cation** (47.5 % vs 24.7 % within 0.5 nm of the network; 80 % of anions within 0.7 nm) **and 4.2× slower**. The reducible anion is matrix-held and retarded.
