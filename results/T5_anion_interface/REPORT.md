@@ -76,6 +76,29 @@ contact-gated reduction (~2.5 Å) → Si-rich/Al-poor SEI (ToF-SIMS/XPS). Data: 
 
 ---
 
+---
+## Dynamic biased MD — attempted, both routes exhausted (EDL rests on static DFT + AIMD)
+
+To test the *dynamic* field-modulated standoff, two charge-aware MLFF-MD routes were tried on EPYC's 150
+charged frames (q=±1, `incoming/biased*_labeled.xyz`); **both failed, for instructive reasons:**
+1. **External `q·E` (cheap):** validated against the ±1 DFT pairs (`validate_qE.py`) and **rejected** — captures
+   only **10–30 %** of the bias response, blind to the bare/poly asymmetry (the electrode response a point-charge
+   force cannot represent).
+2. **Per-charge fine-tune (r6 → r6_qm1 on the 72 q=−1 frames):** fits the *static* charged frames well (held-out
+   force MAE **61.9 meV/Å ≈ 2.5 %** of the ~2.5 eV/Å charged forces) **but is dynamically UNSTABLE** — the cathodic
+   bare MD launched the anion out of the box (slabMin → 178 Å, Epot → +2.8×10⁷ eV, force-cap saturated ~85 % of
+   steps). A *localized* per-charge fine-tune builds runaway force gradients away from the training data; MACE
+   without explicit charge-conditioning cannot represent the charged system for dynamics.
+
+**A proper dynamic biased MD needs a charge-conditioned architecture (4G/LES-type MACE) — out of current scope.**
+This is itself **consistent with the AIMD finding** that the bias response is **contact-chemistry, not a field
+force** (distance is the master variable) — exactly why neither a field term nor a localized fine-tune captures it.
+**The EDL-modulation question is already answered, robustly, by the static routes** — the biased-DFT force-response
+(**1.6× stronger in bare**) and the co-deposition AIMD (**contact-gated at ~2.5 Å, field = transport**). The
+dynamic MD would have been confirmatory; its infeasibility does not weaken the conclusion.
+
+---
+
 ## TL;DR
 1. **Transport NULL confirmed for the canonical poly model** (4-POSS gel, never cleanly tested before — Story A.1 only did the swollen-8 artifact): D(cation) ×4.5 slower, D(anion) ×4.2 slower, **t₊ = 0.50 in both**, de-pairing f 0.046→0.13. Matches GITT (D≈equal) → kills the rate hypothesis.
 2. **The cured network preferentially sequesters the Al-anion (bulk):** the anion is **~2× more network-associated than the Mg-cation** (47.5 % vs 24.7 % within 0.5 nm of the network; 80 % of anions within 0.7 nm) **and 4.2× slower**. The reducible anion is matrix-held and retarded.
