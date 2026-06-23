@@ -1,0 +1,15 @@
+%chk=AlCl4.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+AlCl4
+
+-1 1
+Al 0.0 0.0 0.0
+Cl 1.23 1.23 1.23
+Cl -1.23 -1.23 1.23
+Cl 1.23 -1.23 -1.23
+Cl -1.23 1.23 -1.23
+
+

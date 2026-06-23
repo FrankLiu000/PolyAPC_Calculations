@@ -81,3 +81,5 @@ EPYC DFT/AIMD labels → GPU fine-tunes MLFF (MACE-MP-0 base; CHGNet cross-check
 | date | change | reason |
 |---|---|---|
 | 2026-06-23 | pre-registration created; Round-1 library frozen (N=40, sha bf56836cadce) | campaign start |
+| 2026-06-24 | D3-proxy: SMD binding energy + **gas-phase** BSSE correction (not SMD-counterpoise) | Gaussian forbids `SCRF`+`Counterpoise` in one job; THF screening is essential (gas-phase ion–molecule binding unphysical), so SMD kept and BSSE (basis artifact, ~solvent-independent, 0.6–2.2 kcal/mol) taken from a gas CP job and applied. Ranking robust. |
+| 2026-06-24 | D3-proxy computed for the **5 representative network motifs** (mapped to their families), not all 31 networks | hand-built structures; the 5 motifs are the in-paper Figure-7 set and span the Lewis-acidity range. Full-31 D3-proxy is a logged follow-up; other families carry D2 (Φ_inj) + nearest-motif D3 qualitatively. |

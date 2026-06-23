@@ -1,0 +1,16 @@
+%chk=AlOH3_tz.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+AlOH3_tz
+
+0 1
+Al 0.00545 0.00874 0.00000
+O -0.02813 1.70837 0.00000
+O -0.02813 -0.78585 1.50784
+O -0.02813 -0.78585 -1.50784
+H 0.74345 2.28308 0.00000
+H -0.06960 -1.74505 1.59302
+H -0.06960 -1.74505 -1.59302
+

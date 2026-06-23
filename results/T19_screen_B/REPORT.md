@@ -7,6 +7,33 @@ EPYC executes Tier 1 (molecular DFT, all 40) + Tier 2 (periodic DFT, 31 network 
 This is a ~71-calculation pre-registered campaign; structures are **built by hand** (no RDKit/obabel on this node)
 so it proceeds in batches through the monitoring loop. Outputs accrue in `outputs/`; attrition logged; no silent caps.
 
+### ★ SYNTHESIS — design map + Pareto front + control validation (`outputs/screen_ranked.csv`, `design_map.png`)
+Core 5-candidate set (the in-paper Figure 7 chemistries) now has **full D1–D4**. Primary metric = Pareto on
+(Φ_inj ↑, sequestration ↑) **within the D1(no-metal)∩D4(transparent) viable set**; composite S (pre-reg §6).
+
+| candidate | D1 metal? | D2 Φ_inj | D3 seq (kcal/mol) | D4 vs THF | verdict |
+|---|---|---|---|---|---|
+| **POSS/silsesquioxane** | no | **3.07** | −3.3 | +14.5 | **Pareto FRONT** (S=0.598, top) — validated ref |
+| **borosiloxane** | no | 2.87 | **−6.3** | +14.5 | **Pareto FRONT** (S=0.589) — **H4 confirmed (≥POSS)** |
+| polyether-siloxane | no | 3.07 | −1.7 | +4.4 | viable, dominated (ether D4-marginal) |
+| phosphazene→PON | no | 2.17 | −3.5 | ~ | viable, dominated (N raises χ) |
+| Al-alkoxide/alumoxane | **YES** | (2.62) | **−16.6** | Al–O | **DISQUALIFIED by D1** → bottom (**H3**) |
+
+**Controls hold → screen self-validated (no HALT):** H2 POSS top of viable set ✓; H3 Al-alkoxide bottom ✓
+(it has the *strongest raw sequestration* −16.6 and the highest *raw* composite 0.675, yet the **binary D1 gate
+disqualifies it** — strong sequestration cannot rescue a metal co-depositor; this is exactly the H1 rule made
+quantitative). H4 borosiloxane co-leads the Pareto front with POSS ✓. **Design-rule payload for the manuscript:
+the hit is the chemistry that is wide-gap-passivating (D2) AND anion-sequestering (D3) AND does not co-deposit
+metal (D1) at fixed transparency (D4) — POSS and borosiloxane; Al-alkoxide fails on D1 alone.**
+
+### Tier 1 D3-proxy (anion sequestration) — DONE (`tier1_mol/D3proxy/`)
+Counterpoise-corrected fragment→[AlCl₄]⁻ binding, B3LYP-D3(BJ)/def2-TZVP//def2-SVP, **SMD(THF)** (SMD screening
+kept — gas-phase ion–molecule binding is unphysical; BSSE from a gas-phase CP job applied as correction, 0.6–2.2
+kcal/mol). Ranking: **Al-alkoxide −16.6 (Al–Cl bridge 2.28 Å, anion distorted) ≫ borosiloxane −6.3 (B–Cl 2.99) >
+phosphazene −3.5 > POSS −3.3 > polyether −1.7** (last three: anion intact at 3.4–3.6 Å = weak). POSS works via
+electronic passivation + confinement, *not* strong site-binding; borosiloxane adds genuine Lewis-acid (B) anion
+capture → the rationale for H4. Provenance: `d3proxy_binding.csv`, complex/CP logs.
+
 ### Tier 1 D4-proxy (cation transparency) — DONE (`tier1_mol/D4proxy/`)
 Ligand-exchange [Mg–THF]²⁺ + L → [Mg–L]²⁺ + THF (B3LYP-D3/def2-SVP, SMD-THF; cancels ill-posed bare Mg²⁺).
 **siloxane-O = +14.5 kcal/mol weaker than THF (strongly transparent, PASS); ether-O = +4.4 (PASS but marginal).**

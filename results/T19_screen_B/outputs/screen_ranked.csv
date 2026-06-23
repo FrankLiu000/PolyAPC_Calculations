@@ -1,0 +1,6 @@
+candidate,family,D1_codeposits_metal,Phi_inj_eV,D3_seq_kcal,D4_vsTHF_kcal,viable_D1D4,pareto,composite_S_raw,note
+POSS/silsesquioxane,siloxane,no,3.07,-3.3,14.5,YES,FRONT,0.598,validated reference
+borosiloxane,B-O-Si,no,2.87,-6.3,14.5,YES,FRONT,0.589,H4: matches/exceeds POSS
+polyether-siloxane,C-O-C/Si-O,no,3.07,-1.7,4.4,YES,dominated,0.55,D4 marginal (ether risk)
+phosphazene->PON,P=N/P-O-N,no,2.17,-3.5,,YES,dominated,0.154,weaker D2 (N raises chi)
+Al-alkoxide/alumoxane,Al-O,YES,2.62,-16.6,,NO(disqualified),disqualified(D1),0.675,D1-FAIL: Al0 co-deposit

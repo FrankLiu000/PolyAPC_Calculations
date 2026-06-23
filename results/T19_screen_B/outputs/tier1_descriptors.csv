@@ -1,22 +1,22 @@
 cand_id,cls,family,variant,D1_metal_center,D1_pathway,D1_codeposits_conductive_metal,D3proxy_kcal,D4proxy_vs_THF,tier1_PASS,source
-B001,network,silsesquioxane,H,TODO,TODO,TODO,TODO,+14.5 (siloxane-O; PASS transparent),TODO,build+run
-B002,network,silsesquioxane,methyl,TODO,TODO,TODO,TODO,+14.5 (siloxane-O; PASS transparent),TODO,build+run
-B003,network,silsesquioxane,vinyl,TODO,TODO,TODO,TODO,+14.5 (siloxane-O; PASS transparent),TODO,build+run
-B004,network,silsesquioxane,phenyl,TODO,TODO,TODO,TODO,+14.5 (siloxane-O; PASS transparent),TODO,build+run
-B005,network,silsesquioxane,aminopropyl,TODO,TODO,TODO,TODO,+14.5 (siloxane-O; PASS transparent),TODO,build+run
-B006,network,silsesquioxane,glycidoxy,TODO,TODO,TODO,TODO,+14.5 (siloxane-O; PASS transparent),TODO,build+run
-B007,network,silsesquioxane,mercaptopropyl,TODO,TODO,TODO,TODO,+14.5 (siloxane-O; PASS transparent),TODO,build+run
-B008,network,silsesquioxane,trifluoropropyl,TODO,TODO,TODO,TODO,+14.5 (siloxane-O; PASS transparent),TODO,build+run
-B009,network,borosiloxane,B:Si=1:3,TODO,TODO,TODO,TODO,TODO,TODO,build+run
-B010,network,borosiloxane,B:Si=1:1,TODO,TODO,TODO,TODO,TODO,TODO,build+run
-B011,network,borosiloxane,B:Si=3:1,TODO,TODO,TODO,TODO,TODO,TODO,build+run
-B012,network,phosphazene,chloro,TODO,TODO,TODO,TODO,TODO,TODO,build+run
-B013,network,phosphazene,phenoxy,TODO,TODO,TODO,TODO,TODO,TODO,build+run
-B014,network,phosphazene,trifluoroethoxy,TODO,TODO,TODO,TODO,TODO,TODO,build+run
-B015,network,phosphazene,dimethylamino,TODO,TODO,TODO,TODO,TODO,TODO,build+run
-B016,network,polyether-siloxane,EO2,TODO,TODO,TODO,TODO,+4.4 (ether-O; PASS but marginal),TODO,build+run
-B017,network,polyether-siloxane,EO4,TODO,TODO,TODO,TODO,+4.4 (ether-O; PASS but marginal),TODO,build+run
-B018,network,polyether-siloxane,EO8,TODO,TODO,TODO,TODO,+4.4 (ether-O; PASS but marginal),TODO,build+run
+B001,network,silsesquioxane,H,TODO,TODO,TODO,-3.3,+14.5 (siloxane-O; PASS transparent),TODO,build+run
+B002,network,silsesquioxane,methyl,TODO,TODO,TODO,-3.3,+14.5 (siloxane-O; PASS transparent),TODO,build+run
+B003,network,silsesquioxane,vinyl,TODO,TODO,TODO,-3.3,+14.5 (siloxane-O; PASS transparent),TODO,build+run
+B004,network,silsesquioxane,phenyl,TODO,TODO,TODO,-3.3,+14.5 (siloxane-O; PASS transparent),TODO,build+run
+B005,network,silsesquioxane,aminopropyl,TODO,TODO,TODO,-3.3,+14.5 (siloxane-O; PASS transparent),TODO,build+run
+B006,network,silsesquioxane,glycidoxy,TODO,TODO,TODO,-3.3,+14.5 (siloxane-O; PASS transparent),TODO,build+run
+B007,network,silsesquioxane,mercaptopropyl,TODO,TODO,TODO,-3.3,+14.5 (siloxane-O; PASS transparent),TODO,build+run
+B008,network,silsesquioxane,trifluoropropyl,TODO,TODO,TODO,-3.3,+14.5 (siloxane-O; PASS transparent),TODO,build+run
+B009,network,borosiloxane,B:Si=1:3,TODO,TODO,TODO,-6.3,TODO,TODO,build+run
+B010,network,borosiloxane,B:Si=1:1,TODO,TODO,TODO,-6.3,TODO,TODO,build+run
+B011,network,borosiloxane,B:Si=3:1,TODO,TODO,TODO,-6.3,TODO,TODO,build+run
+B012,network,phosphazene,chloro,TODO,TODO,TODO,-3.5,TODO,TODO,build+run
+B013,network,phosphazene,phenoxy,TODO,TODO,TODO,-3.5,TODO,TODO,build+run
+B014,network,phosphazene,trifluoroethoxy,TODO,TODO,TODO,-3.5,TODO,TODO,build+run
+B015,network,phosphazene,dimethylamino,TODO,TODO,TODO,-3.5,TODO,TODO,build+run
+B016,network,polyether-siloxane,EO2,TODO,TODO,TODO,-1.7,+4.4 (ether-O; PASS but marginal),TODO,build+run
+B017,network,polyether-siloxane,EO4,TODO,TODO,TODO,-1.7,+4.4 (ether-O; PASS but marginal),TODO,build+run
+B018,network,polyether-siloxane,EO8,TODO,TODO,TODO,-1.7,+4.4 (ether-O; PASS but marginal),TODO,build+run
 B019,network,carbosilane,methylene,TODO,TODO,TODO,TODO,TODO,TODO,build+run
 B020,network,carbosilane,ethylene,TODO,TODO,TODO,TODO,TODO,TODO,build+run
 B021,network,carbosilane,phenylene,TODO,TODO,TODO,TODO,TODO,TODO,build+run
@@ -27,9 +27,9 @@ B025,network,zirconosiloxane,Zr:Si=1:1,TODO,TODO,TODO,TODO,TODO,TODO,build+run
 B026,network,phosphosilicate,P:Si=1:4,TODO,TODO,TODO,TODO,TODO,TODO,build+run
 B027,network,phosphosilicate,P:Si=1:1,TODO,TODO,TODO,TODO,TODO,TODO,build+run
 B028,network,germania network,amorphous,TODO,TODO,TODO,TODO,TODO,TODO,build+run
-B029,network,aluminosiloxane / alumoxane,Al:Si=1:4,TODO,TODO,TODO,TODO,TODO,TODO,build+run
-B030,network,aluminosiloxane / alumoxane,Al:Si=1:1,TODO,TODO,TODO,TODO,TODO,TODO,build+run
-B031,network,aluminosiloxane / alumoxane,pure Al-O,TODO,TODO,TODO,TODO,TODO,TODO,build+run
+B029,network,aluminosiloxane / alumoxane,Al:Si=1:4,TODO,TODO,TODO,-16.6,TODO,TODO,build+run
+B030,network,aluminosiloxane / alumoxane,Al:Si=1:1,TODO,TODO,TODO,-16.6,TODO,TODO,build+run
+B031,network,aluminosiloxane / alumoxane,pure Al-O,TODO,TODO,TODO,-16.6,TODO,TODO,build+run
 B032,anion,APC dominant aluminate,[AlPh2Cl2]-,Al,reductive decomp: Al-Cl cleavage dG -8.5, 83% Al-spin radical -> Al0,YES,TODO,TODO,TODO,C1(reuse)
 B033,anion,APC aluminate,[AlPhCl3]-,Al,Al-centred reduction (Cl-rich) -> Al0 precursor,YES,TODO,TODO,TODO,C1(reuse)
 B034,anion,APC aluminate,[AlPh3Cl]-,Al,phenyl-localized (spin~0.07); Al-Cl minor,weak,TODO,TODO,TODO,C1(reuse)

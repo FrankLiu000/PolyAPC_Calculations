@@ -1,0 +1,19 @@
+%chk=disiloxane.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+disiloxane
+
+0 1
+Si 0.0 0.0 0.0
+O 1.20 0.0 1.10
+Si 2.40 0.0 0.0
+H -0.6 0.95 -0.55
+H -0.6 -0.95 -0.55
+H 0.0 0.0 -1.48
+H 3.0 0.95 -0.55
+H 3.0 -0.95 -0.55
+H 2.40 0.0 -1.48
+
+

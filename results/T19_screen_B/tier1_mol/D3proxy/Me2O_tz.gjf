@@ -1,0 +1,18 @@
+%chk=Me2O_tz.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+Me2O_tz
+
+0 1
+O 0.00000 -0.00000 0.58528
+C -0.00000 1.16814 -0.19092
+C -0.00000 -1.16814 -0.19092
+H 0.89550 1.23679 -0.84313
+H -0.89550 1.23679 -0.84313
+H -0.00000 2.03282 0.49064
+H -0.00000 -2.03282 0.49064
+H 0.89550 -1.23679 -0.84313
+H -0.89550 -1.23679 -0.84313
+
