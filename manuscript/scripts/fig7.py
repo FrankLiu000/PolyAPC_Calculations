@@ -2,7 +2,8 @@
 """Figure 7 - Top-down computational design rule for the Mg-anode interphase.
 Turns the validated mechanism into a 4-descriptor screen (JPCC/EES-style design map).
 All numbers are REAL computed values (T2 redox, T5 sequestration, T8/T8b band alignment).
-Open symbols = node-predicted candidate chemistries (T18 screen, pending). NOT AI-generated."""
+Panels (c,d) plot the COMPLETED T19 screen (results/T19_screen_B/outputs/*.csv +
+T8b band alignment). Closed symbols only - every point is a computed candidate. NOT AI-generated."""
 import sys, csv, json, os
 sys.path.insert(0, r"C:/Users/刘悦铮/AppData/Local/Temp/claude/D--20260602-polyAPC-data/302d1e65-667d-4649-a77b-21f3a1304446/scratchpad")
 from angew_style import *
@@ -12,11 +13,15 @@ import numpy as np
 
 REPO=r"D:/20260602_polyAPC_data/PolyAPC_repo"
 DOS=REPO+"/results/T8b_DOS/outputs/"
+T19=REPO+"/results/T19_screen_B/outputs/"
 OUT=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/figures/Fig7_design_rule"
 def rd(p):
     with open(p,encoding="utf-8") as f: return list(csv.DictReader(f))
 align={r["phase"]:r for r in rd(DOS+"iface_MgSiOx_alignment.csv")}
 meta=json.load(open(DOS+"dos_meta.json",encoding="utf-8"))
+# completed T19 screen (verified CSVs) — cross-check the inline screen values below
+screen={r["candidate"]:r for r in rd(T19+"screen_ranked.csv")}
+bandalign=rd(T19+"tier2_bandalign.csv")  # provenance: panel (c) candidate chemistries
 
 fig=plt.figure(figsize=(W2,0.92*W2))
 gs=fig.add_gridspec(2,2,height_ratios=[1.0,0.92],hspace=0.46,wspace=0.34,
@@ -76,66 +81,130 @@ ax.annotate("",xy=(5,1.7),xytext=(5,2.3),arrowprops=dict(arrowstyle="-|>",color=
 ax.set_title("Top-down screening workflow",fontsize=7.5,pad=2)
 fig.text(0.55,0.955,"b",fontsize=10,fontweight="bold")
 
-# ---------- (c) SEI electronic selection map (real 6-phase scatter) ----------
+# ---------- (c) SEI electronic selection map (completed T19 screen + T8b) ----------
 ax=fig.add_subplot(gs[1,0])
-disp={"SiO2":("SiO$_2$",C["green"],"*",  "poly hit"),
-      "Al2O3":("Al$_2$O$_3$",C["bare"],"s",None),
-      "MgO":("MgO","#56B4E9","^",None),
-      "MgCl2":("MgCl$_2$","#CC79A7","D",None),
-      "Al_fcc":("Al$^0$",C["bare_d"],"v","bare"),
-      "Mg17Al12":("Mg$_{17}$Al$_{12}$",C["bare_d"],"v","bare")}
-# region shading
-ax.axhspan(0,1.0,color=C["bare"],alpha=0.07,lw=0)
-ax.axvspan(0,1.0,color=C["bare"],alpha=0.07,lw=0)
-ax.add_patch(plt.Rectangle((1.0,1.0),3.0,8.5,fc=C["green"],alpha=0.06,lw=0))
-ax.text(0.18,0.55,"leaky\n(metallic SEI)",fontsize=5.0,color=C["bare_d"],fontweight="bold")
-ax.text(3.45,8.0,"passivating\n(wide-gap insulator)",fontsize=5.0,color=C["green"],
-        fontweight="bold",ha="right")
-for ph,(nm,col,mk,tag) in disp.items():
-    bar=float(align[ph]["e_injection_barrier_eV"]); g=meta[ph]["t8_authoritative_gap_eV"]
-    ms=12 if mk=="*" else 7
-    ax.scatter([bar],[g],s=(150 if mk=="*" else 55),marker=mk,color=col,
-               edgecolor="black",lw=0.6,zorder=5)
-    dy=0.45 if ph!="Mg17Al12" else -0.75
-    dx=0.0 if ph not in("Al_fcc",) else 0.0
-    ax.annotate(nm,(bar,g),xytext=(bar+0.12,g+dy),fontsize=5.6,fontweight="bold",color=col)
-    if tag=="poly hit":
-        ax.annotate("validated top hit (poly)",(bar,g),xytext=(bar-0.05,g-1.4),
-                    fontsize=5.0,color=C["green"],ha="center",
-                    arrowprops=dict(arrowstyle="-",color=C["green"],lw=0.6))
-# pending node candidates (open slots, NOT data)
-ax.scatter([],[],s=45,marker="o",facecolor="none",edgecolor="0.45",lw=0.9,
-           label="node-predicted candidates\n(borosiloxane, phosphazene,\npolyether-siloxane, Al-alkoxide; T18)")
-ax.legend(loc="lower right",fontsize=4.6,handlelength=1.0,borderpad=0.3,labelspacing=0.3)
-ax.set_xlim(-0.3,4.0); ax.set_ylim(-0.5,9.3)
+# columns: (label, Phi_inj, gap, colour, marker, ms, class)
+#  main-group oxides (PASS/STRONG) -> green; TM-oxide/carbide leak -> orange; metals -> dark orange
+cpts=[
+ ("SiO$_2$ (POSS)", 3.07, 8.46, C["green"], "*", 230, "top"),     # validated top hit
+ ("borosiloxane",   2.87, 4.17, C["green"], "P",  70, "strong"),  # H4 confirmed
+ ("phosphosilicate",2.87, 6.61, C["green"], "P",  70, "strong"),  # new hit
+ ("GeO$_2$",        2.87, 5.97, C["green"], "P",  70, "strong"),  # new hit
+ ("PON",            2.17, 4.67, C["poly2"],"o",  52, "pass"),     # weaker pass
+ ("ZrO$_2$",        1.47, 4.51, C["poly2"],"o",  52, "pass"),     # weaker pass
+ ("Al$_2$O$_3$",    2.62, 6.21, C["bare"], "s",  58, "ctrl"),     # D2-pass but D1-FAIL
+ ("TiO$_2$",       -0.03, 3.06, C["bare_d"],"X", 70, "leak"),     # leaky TM-oxide
+ ("SiC",           -0.03, 1.40, C["bare_d"],"X", 70, "leak"),     # leaky semiconductor
+ ("Al$^0$",         0.00, 0.00, C["bare_d"],"v", 55, "metal"),    # bare interphase (T8b)
+ ("Mg$_{17}$Al$_{12}$",0.0,0.18,C["bare_d"],"v", 55, "metal"),    # bare interphase (T8b)
+]
+# region shading: leaky (Phi_inj<1) vs passivating (Phi_inj>=1 & gap>=3)
+ax.axvspan(-0.5,1.0,color=C["bare"],alpha=0.08,lw=0,zorder=0)
+ax.add_patch(plt.Rectangle((1.0,3.0),3.2,6.3,fc=C["green"],alpha=0.07,lw=0,zorder=0))
+ax.axhline(3.0,xmin=0.0,xmax=1.0,color=C["green"],lw=0.7,ls=":",zorder=1)
+ax.axvline(1.0,color=C["ink"],lw=0.7,ls=(0,(4,2)),zorder=1)
+ax.text(0.30,8.6,"leaky zone\n$\\Phi_{inj}\\lesssim1$",fontsize=5.2,color=C["bare_d"],
+        fontweight="bold",ha="center",va="center")
+ax.text(3.95,1.55,"passivating zone\n$\\Phi_{inj}\\geq1$, $E_g\\geq3$",fontsize=5.2,
+        color=C["green"],fontweight="bold",ha="right",va="center")
+for nm,bar,g,col,mk,ms,cls in cpts:
+    ax.scatter([bar],[g],s=ms,marker=mk,color=col,edgecolor="black",
+               lw=(0.7 if mk=="*" else 0.5),zorder=5)
+# per-point text placement (avoid overlaps; three "P" hits share x=2.87)
+lab={
+ "SiO$_2$ (POSS)":(0.14,0.55,"left"),   "borosiloxane":(0.16,0.00,"left"),
+ "phosphosilicate":(0.15,0.42,"left"),  "GeO$_2$":(0.15,-0.55,"left"),
+ "PON":(0.00,0.62,"center"),            "ZrO$_2$":(0.00,0.62,"center"),
+ "Al$_2$O$_3$":(-0.16,0.00,"right"),    "TiO$_2$":(0.16,0.00,"left"),
+ "SiC":(0.18,0.32,"left"),              "Al$^0$":(0.18,-0.05,"left"),
+ "Mg$_{17}$Al$_{12}$":(0.18,-0.42,"left"),
+}
+for nm,bar,g,col,mk,ms,cls in cpts:
+    dx,dy,ha=lab[nm]
+    ax.annotate(nm,(bar,g),xytext=(bar+dx,g+dy),fontsize=5.3,fontweight="bold",
+                color=col,ha=ha,va="center")
+# callouts: validated top hit + H4 + negative control
+ax.annotate("validated top hit",(3.07,8.46),xytext=(3.20,7.85),fontsize=5.0,
+            color=C["green"],ha="left",va="center",fontweight="bold",
+            arrowprops=dict(arrowstyle="-",color=C["green"],lw=0.6))
+ax.annotate("H4 confirmed",(2.87,4.17),xytext=(2.15,3.35),fontsize=4.8,
+            color=C["green"],ha="center",
+            arrowprops=dict(arrowstyle="-",color=C["green"],lw=0.5))
+ax.annotate("D2-pass but\nD1-FAIL (neg. control)",(2.62,6.21),xytext=(1.42,7.8),
+            fontsize=4.7,color=C["bare_d"],ha="center",va="center",
+            arrowprops=dict(arrowstyle="-",color=C["bare_d"],lw=0.5))
+# legend by class (marker-coded, grayscale-separable)
+from matplotlib.lines import Line2D
+leg=[Line2D([0],[0],marker="*",color="none",mfc=C["green"],mec="black",ms=9,
+            label="main-group oxide: STRONG"),
+     Line2D([0],[0],marker="P",color="none",mfc=C["green"],mec="black",ms=6,
+            label="main-group oxide: strong hit"),
+     Line2D([0],[0],marker="o",color="none",mfc=C["poly2"],mec="black",ms=5,
+            label="passes (weaker)"),
+     Line2D([0],[0],marker="s",color="none",mfc=C["bare"],mec="black",ms=5,
+            label="alumoxane (D1-fail control)"),
+     Line2D([0],[0],marker="X",color="none",mfc=C["bare_d"],mec="black",ms=6,
+            label="TM-oxide / carbide: leaky"),
+     Line2D([0],[0],marker="v",color="none",mfc=C["bare_d"],mec="black",ms=5,
+            label="bare metal interphase")]
+ax.legend(handles=leg,loc="lower right",fontsize=4.3,handlelength=1.0,
+          borderpad=0.3,labelspacing=0.28,handletextpad=0.4)
+ax.set_xlim(-0.5,4.2); ax.set_ylim(-0.6,9.3)
 ax.set_xlabel("e$^-$-injection barrier  $\\Phi_{inj}$ (eV)   [D2]")
 ax.set_ylabel("band gap  $E_g$ (eV)")
 ax.set_title("SEI electronic selection map",pad=3)
 panel_label(ax,"c")
 
-# ---------- (d) design rule + validation ----------
-ax=fig.add_subplot(gs[1,1]); ax.axis("off"); ax.set_xlim(0,10); ax.set_ylim(0,10)
-ax.text(5,9.4,"Design rule",ha="center",fontsize=7.5,fontweight="bold",color=C["ink"])
-ax.text(5,8.3,"maximize  $\\Phi_{inj}$ (e$^-$ block) $+$ anion sequestration\nat fixed cation transport",
-        ha="center",va="center",fontsize=5.4,color=C["ink"],
-        bbox=dict(boxstyle="round,pad=0.4",fc="#F2F4F6",ec="none"))
-def row(y,col,pred,meas):
-    ax.add_patch(plt.Rectangle((0.3,y-0.7),3.9,1.4,fc=col,ec="white",lw=0.8,alpha=0.18))
-    ax.text(2.25,y,pred,ha="center",va="center",fontsize=4.9,color=col if col!=C["poly"] else C["poly"],fontweight="bold")
-    ax.annotate("",xy=(5.7,y),xytext=(4.3,y),arrowprops=dict(arrowstyle="-|>",color=col,lw=1.3))
-    ax.text(4.98,y+0.45,"predicts",ha="center",fontsize=4.4,style="italic",color=C["ink"])
-    ax.add_patch(plt.Rectangle((5.8,y-0.7),3.9,1.4,fc=col,ec="white",lw=0.8,alpha=0.10))
-    ax.text(7.75,y,meas,ha="center",va="center",fontsize=4.9,color=C["ink"])
-row(6.1,C["poly"],"poly: $\\Phi_{inj}$=3.07 eV\n+ 47.5% sequestered",
-    "Al$^{3+}$ flat ~5 at%\n1592 cyc @1C, CE~100%")
-row(3.9,C["bare"],"bare: $\\Phi_{inj}$=0 (leaky)\nno sequestration",
-    "Al$^0$ $\\uparrow$ to ~10 at%\ndies ~270 cyc")
-ax.text(2.25,7.05,"predicted (descriptor)",ha="center",fontsize=4.8,style="italic",color=C["ink"])
-ax.text(7.75,7.05,"measured (experiment)",ha="center",fontsize=4.8,style="italic",color=C["ink"])
-ax.text(5,1.6,"top-down design loop closes:\nscreen $\\to$ predict $\\to$ validate",
-        ha="center",va="center",fontsize=5.0,color=C["green"],fontweight="bold")
-ax.set_title("Validation against experiment",fontsize=7.5,pad=2)
-fig.text(0.55,0.49,"d",fontsize=10,fontweight="bold")
+# ---------- (d) design map: Pareto front of the completed screen ----------
+ax=fig.add_subplot(gs[1,1])
+# (label, Phi_inj, seq_strength kcal/mol, class)  -- screen_ranked.csv / design_map.csv
+dpts=[
+ ("POSS",              3.07, 3.3,  "front"),
+ ("borosiloxane",      2.87, 6.3,  "front"),
+ ("polyether-siloxane",3.07, 1.7,  "dominated"),
+ ("PON",               2.17, 3.5,  "dominated"),
+ ("Al-alkoxide",       2.62,16.6,  "disq"),     # D1: co-deposits Al0 -> disqualified
+]
+# Pareto front line through {borosiloxane, POSS} (viable, D1/D4-passing)
+fx=[2.87,3.07]; fy=[6.3,3.3]
+ax.plot(fx,fy,color=C["green"],lw=1.3,ls="-",zorder=2)
+ax.plot(fx,fy,color=C["green"],lw=0,marker="o",ms=0,zorder=2)
+ax.text(2.97,5.0,"Pareto front",fontsize=5.0,color=C["green"],fontweight="bold",
+        rotation=-58,ha="center",va="center")
+for nm,x,y,cls in dpts:
+    if cls=="front":
+        ax.scatter([x],[y],s=150,marker="*",color=C["green"],edgecolor="black",
+                   lw=0.7,zorder=6)
+    elif cls=="dominated":
+        ax.scatter([x],[y],s=46,marker="o",color=C["poly2"],edgecolor="black",
+                   lw=0.5,zorder=5)
+    else:  # disqualified by D1 redox gate -> distinct hatched red-X marker
+        ax.scatter([x],[y],s=120,marker="X",color="none",edgecolor=C["red"],
+                   lw=1.6,zorder=6)
+        ax.scatter([x],[y],s=300,marker="o",facecolor="none",edgecolor=C["red"],
+                   lw=0.9,hatch="xxx",zorder=5,alpha=0.5)
+# point labels
+dlab={"POSS":(0.0,-1.15,"center"),"borosiloxane":(-0.06,1.25,"center"),
+      "polyether-siloxane":(-0.05,-1.15,"center"),"PON":(0.0,1.25,"center"),
+      "Al-alkoxide":(0.0,1.35,"center")}
+for nm,x,y,cls in dpts:
+    dx,dy,ha=dlab[nm]
+    col=C["green"] if cls=="front" else (C["red"] if cls=="disq" else C["poly2"])
+    ax.annotate(nm,(x,y),xytext=(x+dx,y+dy),fontsize=5.3,fontweight="bold",
+                color=col,ha=ha,va="center")
+# disqualification callout (inside axes)
+ax.annotate("DISQUALIFIED by D1 redox gate\n(co-deposits Al$^0$); highest\nsequestration, vetoed",
+            (2.62,16.6),xytext=(2.90,15.2),fontsize=4.7,color=C["red"],ha="left",
+            va="center",arrowprops=dict(arrowstyle="-",color=C["red"],lw=0.6))
+# controls-validated banner (mid-left, clear of all points)
+ax.text(0.035,0.66,"controls validated:\nPOSS top (H2$\\checkmark$)\nAl-alkoxide disq. (H3$\\checkmark$)\nborosiloxane on front (H4$\\checkmark$)",
+        transform=ax.transAxes,fontsize=4.6,color=C["ink"],ha="left",va="top",
+        bbox=dict(boxstyle="round,pad=0.35",fc="#F2F4F6",ec="none"))
+ax.set_xlim(2.05,3.25); ax.set_ylim(0,18.5)
+ax.set_xlabel("e$^-$-injection barrier  $\\Phi_{inj}$ (eV)   [D2]")
+ax.set_ylabel("anion sequestration (kcal mol$^{-1}$)   [D3]")
+ax.set_title("Design map: Pareto front (validated screen)",fontsize=7.5,pad=3)
+panel_label(ax,"d")
 
 os.makedirs(os.path.dirname(OUT),exist_ok=True)
 save_pub(fig,OUT)

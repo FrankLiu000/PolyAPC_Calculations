@@ -15,6 +15,8 @@ OUTMD=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/DRAFT_v3_polyAPC_An
 
 # ---------------- verified reference pool (key -> Angew-style citation) ----------------
 REFPOOL={
+"liu2022strip":'X. Liu, A. Du, Z. Guo, C. Wang, X. Zhou, J. Zhao, F. Sun, S. Dong, G. Cui, “Uneven Stripping Behavior, an Unheeded Killer of Mg Anodes,” Adv. Mater. 2022, 34, 2201886.',
+"liu2023plate":'X. Liu, G. Wang, Z. Lv, A. Du, S. Dong, G. Cui, “A Perspective on Uniform Plating Behavior of Mg Metal Anode: Diffusion Limited Theory versus Nucleation Theory,” Adv. Mater. 2024, 36, 2306395.',
 "sendek2017":'A. D. Sendek, Q. Yang, E. D. Cubuk, K.-A. N. Duerloo, Y. Cui, E. J. Reed, “Holistic computational structure screening of more than 12 000 candidates for solid lithium-ion conductor materials,” Energy Environ. Sci. 2017, 10, 306–320.',
 "curtarolo2013":'S. Curtarolo, G. L. W. Hart, M. B. Nardelli, N. Mingo, S. Sanvito, O. Levy, “The high-throughput highway to computational materials design,” Nat. Mater. 2013, 12, 191–201.',
 "fan2021":'X. Fan, C. Wang, “High-voltage liquid electrolytes for Li batteries: progress and perspectives,” Chem. Soc. Rev. 2021, 50, 5933–5964.',
@@ -105,7 +107,16 @@ INTRO=[
 "that actually governs whether plating is clean and reversible—has been comparatively underexplored for "
 "magnesium. This is in sharp contrast to lithium, where the solid electrolyte interphase (SEI) has been studied "
 "intensively since it was first conceptualized.{peled1979,xu2004}",
-"A defining and underappreciated feature of APC is that its charge-carrying species are not innocent. Structural "
+"Recent work has clarified the morphological side of magnesium-anode failure and supplies the framework on which "
+"the present study builds. In APC, magnesium plating is dense and uniform across a wide range of current "
+"densities; the unheeded failure mode is instead an uneven, self-accelerating stripping that pits the anode and "
+"is governed by the local transport and accumulation of the chlorine-containing complex ions at the "
+"interface.{liu2022strip} Plating uniformity, in turn, follows the competition between ion diffusion and crystal "
+"nucleation, with the strong association of the chloro-bridged cation and the chloroaluminate anion holding the "
+"system in a kinetically controlled, dendrite-free regime.{liu2023plate} In this account the controlling "
+"variables are interfacial ion transport and morphology, and the interphase is treated as compositionally "
+"secondary. What it leaves open is the chemistry of the very anion it places at the interface.",
+"Those charge-carrying species are not innocent. Structural "
 "analyses establish that the cation is the chloro-bridged dimer [Mg2(μ-Cl)3(THF)6]+, while the anion is a "
 "family of chloro-organo-aluminates, [AlPhxCl4-x]-.{pour2011} This aluminate anion is electroactive. Prior work "
 "treated it almost exclusively as an oxidation liability that sets the anodic limit, and the magnesium-anode "
@@ -214,7 +225,10 @@ S2=[
 "slightly exceeded poly-APC in apparent CE, but such short plating–stripping tests are known to overstate "
 "reversibility and those cells fail by soft-shorting;{ceattias2022} "
 "the reversibility difference emerges only under the sustained full-cell and symmetric-cell conditions above. "
-"Having ruled out transport, we now ask what the two interphases are made of.",
+"This parity is expected rather than surprising. In APC the strong cation-anion association already secures a "
+"kinetically controlled, dendrite-free plating regime, so bulk transport is not a lever the cured network can "
+"pull, and the measurements confirm that it does not.{liu2023plate} Having ruled out transport, we now ask what "
+"the two interphases are made of.",
 "These electrochemical signatures form a coherent set. The lower, stable corrosion current of poly-APC—a "
 "1.7-fold smaller corrosion current and a 4.2-fold larger polarization resistance—implies a slower parasitic "
 "reaction at open circuit, consistent with the higher capacity retention. The bare-APC cathodic branch, by "
@@ -275,11 +289,15 @@ S4=[
 "exactly the form detected by XPS and ToF-SIMS rather than by bulk diffraction, and it shows that the texture "
 "difference reflects how magnesium nucleates and grows rather than a second bulk phase.",
 "Scanning electron microscopy showed dense, consolidated magnesium grains for poly-APC and a finer, more porous "
-"particulate for bare-APC (Figure 4c,d); the latter morphology is the one generally associated with low plating "
-"efficiency and short-circuit risk.{davidson2019} Energy-dispersive X-ray spectroscopy (EDS) of the deposits "
+"particulate for bare-APC (Figure 4b); the latter morphology is the one generally associated with low plating "
+"efficiency and short-circuit risk.{davidson2019} The contrast was starker in cross-section after extended "
+"cycling: the bare-APC deposit was porous and swollen, roughly twice the thickness expected for dense magnesium, "
+"whereas the poly-APC deposit stayed compact (Figure 4c). This is the morphological fingerprint of the uneven, "
+"self-accelerating stripping that limits liquid-APC anodes, and it is the failure mode the cured network "
+"suppresses.{liu2022strip} Energy-dispersive X-ray spectroscopy (EDS) of the deposits "
 "corroborated the interphase chemistry at micrometer depth: relative to magnesium, bare-APC contained roughly "
 "7-fold more aluminum and 23-fold more chloride, and substantially more oxygen and carbon, whereas the poly-APC "
-"deposit was magnesium-dense and clean (Figure 4b). These ratios are robust because they are internal to each "
+"deposit was magnesium-dense and clean (Figure 4d). These ratios are robust because they are internal to each "
 "spectrum and therefore independent of surface coverage.",
 "One control deserves explicit statement. In EDS the silicon signal maps onto the glass-fiber (borosilicate) "
 "separator filaments rather than the deposit, so EDS cannot test the POSS hypothesis and indeed shows no silicon "
@@ -370,6 +388,16 @@ S6=[
 "anion, which is exactly the combination of higher-but-stable impedance and suppressed parasitic chemistry that "
 "we observe.{son2018} The operative mechanism is therefore electronic gating of a specific reductive reaction, "
 "not generic film resistance.",
+"This mechanism connects directly to the morphological picture of magnesium-anode failure. The chlorine-containing "
+"anion whose interfacial accumulation drives self-accelerating, uneven stripping in liquid APC is the same "
+"species the cured network sequesters from the plating front,{liu2022strip} so the network homogenizes the "
+"interfacial anion distribution structurally, achieving by design what stirring or current control achieve only "
+"operationally in the liquid. Its second action, the silicon-rich insulating layer, addresses what the "
+"morphological framework set aside: earlier work treated the interphase as non-determining for interfacial ion "
+"transport and plating uniformity,{liu2023plate} yet the interphase proves decisive for reversibility, because "
+"the reaction it must gate is electron transfer to the aluminate anion rather than Mg2+ diffusion. The "
+"transport-and-morphology axis and the redox-and-composition axis are therefore complementary, and poly-APC acts "
+"on the second.",
 ]
 
 SUB7="A Transferable Computational Design Rule"
@@ -393,10 +421,15 @@ S7=[
 "and electrolyte chemical space,{curtarolo2013,sendek2017,fan2021} applied here to the cured-network chemistry "
 "that templates the magnesium interphase rather than to the bulk electrolyte.",
 "The rule that emerges—maximize the electron-injection barrier and anion sequestration at fixed cation "
-"transport—is predictive and falsifiable. It identifies poly-APC as the validated top hit, and it makes "
-"testable predictions for untested chemistries: an aluminum-alkoxide network is expected to fail, because it "
-"would supply an aluminum-rich, electronically leaky interphase, whereas a boron-doped siloxane (borosiloxane) "
-"network is predicted to match or exceed POSS by combining a wide gap with Lewis-acidic anion binding. The "
+"transport—is predictive and falsifiable. A periodic-DFT screen of candidate cured-network chemistries bears it out (Figure 7c). POSS-derived silica is "
+"recovered as a top hit, and the aluminum-alkoxide network fails as predicted, but for an instructive reason: "
+"its alumina product is itself a wide-gap insulator, yet its precursor reduces to metallic aluminum, so it fails "
+"the co-deposition descriptor rather than the electronic one. The screen further returns new positive candidates "
+"among main-group oxide formers, including a boron-doped siloxane that matches POSS, and phosphosilicate and "
+"germania networks that also block electron injection, whereas transition-metal-oxide and carbide formers "
+"(titania, silicon carbide) leak because their high electron affinity places empty states at the magnesium Fermi "
+"level. The operative descriptor is thus a low-electron-affinity, main-group oxide that forms no conductive "
+"reduction product. The "
 "validated descriptors already reproduce the measured outcome (Figure 7d): the electron-blocking, "
 "anion-sequestering poly-APC interphase yields a flat, fully oxidized ~5 at% Al3+ signature and more than 1500 "
 "stable cycles, whereas the leaky bare-APC interphase accumulates metallic Al0 and fails within roughly 270 "
@@ -419,7 +452,7 @@ CONCL=[
 "The broader implication is a design rule for reactive multivalent electrolytes. Where the charge-carrying anion "
 "is itself electroactive, as it is in APC and in many magnesium and aluminum electrolytes,{muldoon2014,attias2019}"
 " immobilizing or sequestering that anion and templating a benign, cation-derived passivating interphase can be "
-"more decisive than tuning ion transport. The present evidence bounds this claim to APC-based magnesium anodes "
+"more decisive than tuning ion transport, and it complements rather than competes with the transport-and-morphology view of magnesium-anode failure.{liu2022strip,liu2023plate} The present evidence bounds this claim to APC-based magnesium anodes "
 "and to the cells and timescales tested here; extending it will require reducible-anion electrolytes of other "
 "chemistries—including halogen-free and non-nucleophilic systems{kim2011,tutusaus2015}—and longer-duration, "
 "higher-rate full cells, together with operando probes of the buried interphase. Within that scope, interphase "
@@ -440,10 +473,10 @@ FIGCAPS={
 "Fig1_electrolyte_redox":"Figure 1. Electrolyte design and aluminate redox landscape. (a) [Mg2(μ-Cl)3(THF)6]+ cation and dominant [AlPh2Cl2]- anion (DFT). (b) Schlenk redistribution free energies (all >0, so [AlPh2Cl2]- dominates). (c) Reduction potentials of APC species versus Mg2+/Mg; the aluminate anions and neutral aluminum species are reducible within or near the plating window.",
 "Fig2_performance":"Figure 2. Reversible plating without a transport advantage (bare-APC versus poly-APC). (a,b) Mg||Mo6S8 discharge capacity and Coulombic efficiency per cycle at 0.5C and 1C. (c) poly-APC charge–discharge voltage profiles at selected cycles. (d) Mg||Mg symmetric-cell voltage versus time.",
 "Fig3_interphase":"Figure 3. A silicon-rich, aluminum-poor interphase. (a) ToF-SIMS poly/bare intensity ratios. (b) ToF-SIMS depth profiles. (c) Three-dimensional ion maps (top, poly-APC; bottom, bare-APC). (d,e) XPS Al 2p at 0/10/20 nm for bare-APC and poly-APC (raw data, Shirley background, fitted Al0 and Al3+ components). (f) Aluminum and metallic-Al0 content versus depth.",
-"Fig4_deposit":"Figure 4. Composition dictates morphology. (a) XRD of plated magnesium. (b) EDS atomic ratios in the deposit. (c,d) Scanning electron micrographs of poly-APC and bare-APC deposits (scale bars as marked).",
+"Fig4_deposit":"Figure 4. Deposit morphology and composition (bare-APC versus poly-APC). (a) X-ray diffraction of plated magnesium; both are hexagonal Mg with no crystalline aluminum, and poly-APC is more strongly textured (A002/A101 = 0.83 versus 0.39). (b) Matched-magnification top-view scanning electron microscopy: bare-APC is rough and granular, poly-APC dense and conformal. (c) Cross-sections after 30 cycles: the bare-APC deposit is porous and swollen, the poly-APC deposit compact. (d) EDS composition (atomic %), with bare/poly enrichment folds of approximately 23-fold for Cl/Mg and 7-fold for Al/Mg; the silicon signal is a glass-fibre (borosilicate separator) artifact, not the POSS layer, and the silicon-rich-interphase result derives from ToF-SIMS (Figure 3). (e) EDS elemental maps (Mg, Cl, Al).",
 "Fig5_solvation":"Figure 5. Solvation, ion pairing, and desolvation (MD and DFT). (a) Mg2+ first-shell structure. (b) Mg2+ radial distribution functions. (c) SSIP/CIP/AGG populations. (d) Mg-cluster interaction-energy decomposition. (e) Last-THF desolvation free-energy routes. (f) First-shell coordination numbers.",
 "Fig6_interface_mechanism":"Figure 6. Reductive co-deposition and the electronics of passivation. (a) Interface model. (b) Aluminum substitution in Mg(0001). (c) Reductive Al–Cl scission energetics. (d) Density of states of candidate interphase phases. (e) Mg|interphase band alignment and electron-injection barriers. (f) Network sequestration of the aluminate anion.",
-"Fig7_design_rule":"Figure 7. A transferable computational design rule. (a) Design-descriptor scorecard for bare-APC and poly-APC across four axes—interphase redox stability (D1), electron-injection barrier (D2), anion sequestration (D3), and cation transport (D4); the poly-APC advantage is confined to D1–D3, with D4 tied (t+ = 0.50 in both). (b) Top-down screening workflow: a library of candidate curing/passivator chemistries filtered by tiered molecular DFT, periodic-DFT band alignment, and reactive machine-learning molecular dynamics. (c) Electronic selection map of interphase phases (electron-injection barrier versus band gap; computed values), separating leaky metallic components from wide-gap passivating insulators; the silicon-rich SiO2 templated by POSS is the validated top hit, and open symbols denote node-predicted candidate chemistries (pending). (d) The validated descriptors reproduce the measured contrast between poly-APC and bare-APC.",
+"Fig7_design_rule":"Figure 7. A transferable computational design rule. (a) Design-descriptor scorecard for bare-APC and poly-APC across four axes—interphase redox stability (D1), electron-injection barrier (D2), anion sequestration (D3), and cation transport (D4); the poly-APC advantage is confined to D1–D3, with D4 tied (t+ = 0.50 in both). (b) Top-down screening workflow: a library of candidate curing/passivator chemistries filtered by tiered molecular DFT, periodic-DFT band alignment, and reactive machine-learning molecular dynamics. (c) Electronic selection map of interphase phases (electron-injection barrier versus band gap; computed values), separating leaky metallic components from wide-gap passivating insulators; low-electron-affinity main-group oxides (silica from POSS, borosiloxane, phosphosilicate, germania) passivate, whereas transition-metal-oxide and carbide formers (titania, silicon carbide) and metallic phases leak, and alumina passes the electronic test but its precursor fails the co-deposition descriptor. (d) Design map and Pareto front in the electron-injection-barrier versus anion-sequestration plane: POSS and borosiloxane are non-dominated, and the aluminum-alkoxide network is disqualified by the co-deposition gate despite the strongest sequestration, validating the positive (POSS), negative (alumoxane), and predictive (borosiloxane) controls of the pre-registered screen.",
 }
 
 # ---------------- Supporting Information content ----------------
