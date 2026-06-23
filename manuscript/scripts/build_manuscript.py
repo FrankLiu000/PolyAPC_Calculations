@@ -15,6 +15,9 @@ OUTMD=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/DRAFT_v3_polyAPC_An
 
 # ---------------- verified reference pool (key -> Angew-style citation) ----------------
 REFPOOL={
+"sendek2017":'A. D. Sendek, Q. Yang, E. D. Cubuk, K.-A. N. Duerloo, Y. Cui, E. J. Reed, “Holistic computational structure screening of more than 12 000 candidates for solid lithium-ion conductor materials,” Energy Environ. Sci. 2017, 10, 306–320.',
+"curtarolo2013":'S. Curtarolo, G. L. W. Hart, M. B. Nardelli, N. Mingo, S. Sanvito, O. Levy, “The high-throughput highway to computational materials design,” Nat. Mater. 2013, 12, 191–201.',
+"fan2021":'X. Fan, C. Wang, “High-voltage liquid electrolytes for Li batteries: progress and perspectives,” Chem. Soc. Rev. 2021, 50, 5933–5964.',
 "aurbach2000":'D. Aurbach, Z. Lu, A. Schechter, Y. Gofer, H. Gizbar, R. Turgeman, Y. Cohen, M. Moshkovich, E. Levi, “Prototype systems for rechargeable magnesium batteries,” Nature 2000, 407, 724–727.',
 "gregory1990":'T. D. Gregory, R. J. Hoffman, R. C. Winterton, “Nonaqueous Electrochemistry of Magnesium: Applications to Energy Storage,” J. Electrochem. Soc. 1990, 137, 775–780.',
 "yoo2013":'H. D. Yoo, I. Shterenberg, Y. Gofer, G. Gershinsky, N. Pour, D. Aurbach, “Mg rechargeable batteries: an on-going challenge,” Energy Environ. Sci. 2013, 6, 2265–2279.',
@@ -369,6 +372,39 @@ S6=[
 "not generic film resistance.",
 ]
 
+SUB7="A Transferable Computational Design Rule"
+S7=[
+"The mechanism established above is not only an explanation; each step is a computable descriptor, so the same "
+"first-principles machinery can be inverted into a top-down design rule (Figure 7). We define four descriptors "
+"that an ideal in-situ-cured magnesium-anode interphase should satisfy: a reduction chemistry that does not "
+"co-deposit a conductive metal (D1); a large electron-injection barrier across the magnesium|interphase contact, "
+"so that the buried interface is electronically passivated (D2); strong sequestration of the reducible anion by "
+"the cured network (D3); and negligible perturbation of Mg2+ transport (D4). Scoring bare-APC and poly-APC on "
+"these axes (Figure 7a) localizes the entire poly-APC advantage in the interfacial-chemistry descriptors "
+"(D1–D3); the transport descriptor (D4) is identical for the two electrolytes (t+ = 0.50 in both), which "
+"restates the central result—reversibility is engineered at the interface, not in the bulk.",
+"Casting the descriptors as a tiered screen (Figure 7b)—inexpensive molecular DFT for the redox and binding "
+"terms, periodic-DFT band alignment for the injection barrier, and reactive machine-learning molecular dynamics "
+"to validate sequestration—places the candidate interphase phases on an electronic selection map (Figure 7c). "
+"The map cleanly separates leaky, metallic interphase components (Al0 and the Mg17Al12 alloy, with "
+"electron-injection barriers near zero) from wide-gap passivating insulators (barriers above 2.6 eV), and the "
+"silicon-rich silica (SiO2) templated by the POSS network sits at the insulating extreme (band gap 8.46 eV). "
+"This is the same descriptor-based logic that high-throughput computation has used to navigate solid-conductor "
+"and electrolyte chemical space,{curtarolo2013,sendek2017,fan2021} applied here to the cured-network chemistry "
+"that templates the magnesium interphase rather than to the bulk electrolyte.",
+"The rule that emerges—maximize the electron-injection barrier and anion sequestration at fixed cation "
+"transport—is predictive and falsifiable. It identifies poly-APC as the validated top hit, and it makes "
+"testable predictions for untested chemistries: an aluminum-alkoxide network is expected to fail, because it "
+"would supply an aluminum-rich, electronically leaky interphase, whereas a boron-doped siloxane (borosiloxane) "
+"network is predicted to match or exceed POSS by combining a wide gap with Lewis-acidic anion binding. The "
+"validated descriptors already reproduce the measured outcome (Figure 7d): the electron-blocking, "
+"anion-sequestering poly-APC interphase yields a flat, fully oxidized ~5 at% Al3+ signature and more than 1500 "
+"stable cycles, whereas the leaky bare-APC interphase accumulates metallic Al0 and fails within roughly 270 "
+"cycles. Treating the interphase as a designed material with a target composition, and ranking candidate "
+"chemistries by these four descriptors, thus offers a route to reversible anodes that should transfer to other "
+"reactive multivalent electrolytes.{canepa2017}",
+]
+
 CONCL=[
 "We have shown that curing the benchmark APC electrolyte in situ with a POSS network makes magnesium plating "
 "reversible by re-programming the anode interphase, not by changing ion transport. Depth-resolved ToF-SIMS and "
@@ -407,6 +443,7 @@ FIGCAPS={
 "Fig4_deposit":"Figure 4. Composition dictates morphology. (a) XRD of plated magnesium. (b) EDS atomic ratios in the deposit. (c,d) Scanning electron micrographs of poly-APC and bare-APC deposits (scale bars as marked).",
 "Fig5_solvation":"Figure 5. Solvation, ion pairing, and desolvation (MD and DFT). (a) Mg2+ first-shell structure. (b) Mg2+ radial distribution functions. (c) SSIP/CIP/AGG populations. (d) Mg-cluster interaction-energy decomposition. (e) Last-THF desolvation free-energy routes. (f) First-shell coordination numbers.",
 "Fig6_interface_mechanism":"Figure 6. Reductive co-deposition and the electronics of passivation. (a) Interface model. (b) Aluminum substitution in Mg(0001). (c) Reductive Al–Cl scission energetics. (d) Density of states of candidate interphase phases. (e) Mg|interphase band alignment and electron-injection barriers. (f) Network sequestration of the aluminate anion.",
+"Fig7_design_rule":"Figure 7. A transferable computational design rule. (a) Design-descriptor scorecard for bare-APC and poly-APC across four axes—interphase redox stability (D1), electron-injection barrier (D2), anion sequestration (D3), and cation transport (D4); the poly-APC advantage is confined to D1–D3, with D4 tied (t+ = 0.50 in both). (b) Top-down screening workflow: a library of candidate curing/passivator chemistries filtered by tiered molecular DFT, periodic-DFT band alignment, and reactive machine-learning molecular dynamics. (c) Electronic selection map of interphase phases (electron-injection barrier versus band gap; computed values), separating leaky metallic components from wide-gap passivating insulators; the silicon-rich SiO2 templated by POSS is the validated top hit, and open symbols denote node-predicted candidate chemistries (pending). (d) The validated descriptors reproduce the measured contrast between poly-APC and bare-APC.",
 }
 
 # ---------------- Supporting Information content ----------------
@@ -490,7 +527,7 @@ def keys_in(blocks):
             for k in m.group(1).split(','):
                 if k not in ks: ks.append(k)
     return ks
-MAIN_SEQ=INTRO+S1+S2+S3+S4+S5+S6+CONCL
+MAIN_SEQ=INTRO+S1+S2+S3+S4+S5+S6+S7+CONCL
 SI_TEXT=[it[1] for it in SI_ITEMS if it[0]=="P"]
 order=keys_in(MAIN_SEQ); mainset=set(order)
 for k in keys_in(SI_TEXT):
@@ -547,7 +584,8 @@ for para in INTRO: t=cite(para); add('p',t); md+=[t,'']
 add('h1','Results and Discussion'); md+=['## Results and Discussion','']
 for sub,paras,fk in [(SUB1,S1,"Fig1_electrolyte_redox"),(SUB2,S2,"Fig2_performance"),
                      (SUB3,S3,"Fig3_interphase"),(SUB4,S4,"Fig4_deposit"),
-                     (SUB5,S5,"Fig5_solvation"),(SUB6,S6,"Fig6_interface_mechanism")]:
+                     (SUB5,S5,"Fig5_solvation"),(SUB6,S6,"Fig6_interface_mechanism"),
+                     (SUB7,S7,"Fig7_design_rule")]:
     add('sub',sub); md+=['### '+sub,'']
     for para in paras: t=cite(para); add('p',t); md+=[t,'']
     fp=os.path.join(FIGDIR,fk+'.png')
@@ -594,7 +632,7 @@ for n,r in SI_REFS:
 si.save(OUTSI); open(OUTSIMD,'w',encoding='utf-8').write('\n'.join(simd))
 
 total=len(order)
-mainchars=sum(len(cite(p)) for blk in (INTRO,S1,S2,S3,S4,S5,S6,CONCL) for p in blk)
+mainchars=sum(len(cite(p)) for blk in (INTRO,S1,S2,S3,S4,S5,S6,S7,CONCL) for p in blk)
 print(f'total refs: {total} | main refs: {len(MAIN_REFS)} | SI refs: {len(SI_REFS)} | main chars ~{mainchars}')
 print('saved manuscript:',OUTDOCX)
 print('saved SI         :',OUTSI)
