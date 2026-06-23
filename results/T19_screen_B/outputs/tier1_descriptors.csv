@@ -34,7 +34,7 @@ B032,anion,APC dominant aluminate,[AlPh2Cl2]-,Al,reductive decomp: Al-Cl cleavag
 B033,anion,APC aluminate,[AlPhCl3]-,Al,Al-centred reduction (Cl-rich) -> Al0 precursor,YES,TODO,TODO,TODO,C1(reuse)
 B034,anion,APC aluminate,[AlPh3Cl]-,Al,phenyl-localized (spin~0.07); Al-Cl minor,weak,TODO,TODO,TODO,C1(reuse)
 B035,anion,inorganic Mg-Al chloride,[AlCl4]-,Al,only anion reducing AT Al (spin +1.14) -> Al0,YES,TODO,TODO,TODO,C1(reuse)
-B036,anion,borohydride (non-Al),[BH4]-,TODO,TODO,TODO,TODO,TODO,TODO,build+run
+B036,anion,borohydride (non-Al),[BH4]-,B (non-plating),reduced dianion BH4(2-) unbound -> not reducible (high-lying LUMO),no,TODO,TODO,PASS(D1),T19-run(g16)
 B037,anion,fluorinated borate,[B(OCH(CF3)2)4]-,TODO,TODO,TODO,TODO,TODO,TODO,build+run
 B038,anion,carborane (weakly coordinating),[CB11H12]-,TODO,TODO,TODO,TODO,TODO,TODO,build+run
 B039,anion,bis(trifluoromethanesulfonyl)imide,[TFSI]-,TODO,TODO,TODO,TODO,TODO,TODO,build+run

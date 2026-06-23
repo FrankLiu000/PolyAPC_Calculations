@@ -20,10 +20,10 @@ B018,polyether-siloxane,SiO2 + ether,TODO,TODO,TODO,TODO,build+run,build
 B019,carbosilane,SiOC/SiC,TODO,TODO,TODO,TODO,build+run,build
 B020,carbosilane,SiOC/SiC,TODO,TODO,TODO,TODO,build+run,build
 B021,carbosilane,SiOC/SiC,TODO,TODO,TODO,TODO,build+run,build
-B022,titanosiloxane,TiO2.SiO2,TODO,TODO,TODO,TODO,build+run,build
-B023,titanosiloxane,TiO2.SiO2,TODO,TODO,TODO,TODO,build+run,build
-B024,zirconosiloxane,ZrO2.SiO2,TODO,TODO,TODO,TODO,build+run,build
-B025,zirconosiloxane,ZrO2.SiO2,TODO,TODO,TODO,TODO,build+run,build
+B022,titanosiloxane,TiO2 (component),3.06,4.0(lit),-4.00,-0.03,FAIL-D2 (Phi_inj~0; high-chi TM-oxide CBM near Mg Ef = leaky),T19(CP2K)
+B023,titanosiloxane,TiO2 (component),3.06,4.0(lit),-4.00,-0.03,FAIL-D2 (Phi_inj~0; leaky),T19(CP2K)
+B024,zirconosiloxane,ZrO2 (component),4.51,2.5(lit),-2.50,1.47,"PASS (blocks, weaker than POSS 3.07)",T19(CP2K)
+B025,zirconosiloxane,ZrO2 (component),4.51,2.5(lit),-2.50,1.47,"PASS (blocks, weaker than POSS)",T19(CP2K)
 B026,phosphosilicate,P2O5.SiO2,TODO,TODO,TODO,TODO,build+run,build
 B027,phosphosilicate,P2O5.SiO2,TODO,TODO,TODO,TODO,build+run,build
 B028,germania network,GeO2,TODO,TODO,TODO,TODO,build+run,build
