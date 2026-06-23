@@ -27,6 +27,6 @@ B025,zirconosiloxane,ZrO2 (component),4.51,2.5(lit),-2.50,1.47,"PASS (blocks, we
 B026,phosphosilicate,P2O5.SiO2,TODO,TODO,TODO,TODO,build+run,build
 B027,phosphosilicate,P2O5.SiO2,TODO,TODO,TODO,TODO,build+run,build
 B028,germania network,GeO2,5.97,1.1(lit),-1.10,2.87,"BLOCKS (strong, new positive prediction)",T19(CP2K)
-B029,aluminosiloxane / alumoxane,Al2O3.SiO2 / Al2O3,TODO,TODO,TODO,TODO,build+run,build
-B030,aluminosiloxane / alumoxane,Al2O3.SiO2 / Al2O3,TODO,TODO,TODO,TODO,build+run,build
-B031,aluminosiloxane / alumoxane,Al2O3.SiO2 / Al2O3,TODO,TODO,TODO,TODO,build+run,build
+B029,aluminosiloxane / alumoxane,Al2O3 (component),6.21,1.35,-1.35,2.62,"D2-pass BUT FAILS via D1 (Al0 co-deposit, =alumoxane control)",Al2O3-reuse
+B030,aluminosiloxane / alumoxane,Al2O3 (component),6.21,1.35,-1.35,2.62,"D2-pass BUT FAILS via D1 (Al0 co-deposit, =alumoxane control)",Al2O3-reuse
+B031,aluminosiloxane / alumoxane,Al2O3,6.21,1.35,-1.35,2.62,D2-pass BUT FAILS via D1 (pure alumoxane = negative control),Al2O3-reuse
