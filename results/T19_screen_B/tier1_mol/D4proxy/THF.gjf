@@ -1,0 +1,22 @@
+%chk=THF.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+THF
+
+0 1
+O 0.0 0.0 0.0
+C 1.18 0.0 0.74
+C 0.74 0.0 2.13
+C -0.74 0.0 2.13
+C -1.18 0.0 0.74
+H 1.78 0.89 0.5
+H 1.78 -0.89 0.5
+H 1.2 0.89 2.7
+H 1.2 -0.89 2.7
+H -1.2 0.89 2.7
+H -1.2 -0.89 2.7
+H -1.78 0.89 0.5
+H -1.78 -0.89 0.5
+
