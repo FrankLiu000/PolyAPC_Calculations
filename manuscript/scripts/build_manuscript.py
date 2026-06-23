@@ -10,8 +10,8 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 TPL=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/Angewandte Research Articles.dotx"
 FIGDIR=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/figures"
-OUTDOCX=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/Manuscript_v2_polyAPC_Angew.docx"
-OUTMD=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/DRAFT_v2_polyAPC_Angew.md"
+OUTDOCX=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/Manuscript_v3_polyAPC_Angew.docx"
+OUTMD=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/DRAFT_v3_polyAPC_Angew.md"
 
 # ---------------- verified reference pool (key -> Angew-style citation) ----------------
 REFPOOL={
@@ -39,6 +39,29 @@ REFPOOL={
 "weigend2005":'F. Weigend, R. Ahlrichs, “Balanced basis sets of split valence, triple zeta valence and quadruple zeta valence quality for H to Rn: Design and assessment of accuracy,” Phys. Chem. Chem. Phys. 2005, 7, 3297–3305.',
 "marenich2009":'A. V. Marenich, C. J. Cramer, D. G. Truhlar, “Universal Solvation Model Based on Solute Electron Density and on a Continuum Model of the Solvent Defined by the Bulk Dielectric Constant and Atomic Surface Tensions,” J. Phys. Chem. B 2009, 113, 6378–6396.',
 "kuhne2020":'T. D. Kühne, M. Iannuzzi, M. Del Ben, V. V. Rybkin, P. Seewald, F. Stein, et al., “CP2K: An electronic structure and molecular dynamics software package – Quickstep: Efficient and accurate electronic structure calculations,” J. Chem. Phys. 2020, 152, 194103.',
+"mohtadi2014":'R. Mohtadi, F. Mizuno, “Magnesium batteries: Current state of the art, issues and future perspectives,” Beilstein J. Nanotechnol. 2014, 5, 1291–1311.',
+"doe2014":'R. E. Doe, R. Han, J. Hwang, A. J. Gmitter, I. Shterenberg, H. D. Yoo, N. Pour, D. Aurbach, “Novel, electrolyte solutions comprising fully inorganic salts with high anodic stability for rechargeable magnesium batteries,” Chem. Commun. 2014, 50, 243–245.',
+"barile2014":'C. J. Barile, E. C. Barile, K. R. Zavadil, R. G. Nuzzo, A. A. Gewirth, “Electrolytic Conditioning of a Magnesium Aluminum Chloride Complex for Reversible Magnesium Deposition,” J. Phys. Chem. C 2014, 118, 27623–27630.',
+"aurbach2007":'D. Aurbach, G. S. Suresh, E. Levi, A. Mitelman, O. Mizrahi, O. Chusid, M. Brunelli, “Progress in Rechargeable Magnesium Battery Technology,” Adv. Mater. 2007, 19, 4260–4267.',
+"ceattias2022":'R. Attias, B. Dlugatch, O. Blumen, K. Shwartsman, M. Salama, N. Shpigel, D. Sharon, “Determination of Average Coulombic Efficiency for Rechargeable Magnesium Metal Anodes in Prospective Electrolyte Solutions,” ACS Appl. Mater. Interfaces 2022, 14, 30952–30961.',
+"mggpe2024":'“Advancing Reversible Magnesium–Sulfur Batteries with a Self-Standing Gel Polymer Electrolyte,” ACS Appl. Energy Mater. 2024, 7, 5857–5868 [author list to be confirmed].',
+"pbe1996":'J. P. Perdew, K. Burke, M. Ernzerhof, “Generalized Gradient Approximation Made Simple,” Phys. Rev. Lett. 1996, 77, 3865–3868.',
+"shirley1972":'D. A. Shirley, “High-Resolution X-Ray Photoemission Spectrum of the Valence Bands of Gold,” Phys. Rev. B 1972, 5, 4709–4714.',
+"henkelman2000":'G. Henkelman, B. P. Uberuaga, H. Jónsson, “A climbing image nudged elastic band method for finding saddle points and minimum energy paths,” J. Chem. Phys. 2000, 113, 9901–9904.',
+"vesta2011":'K. Momma, F. Izumi, “VESTA 3 for three-dimensional visualization of crystal, volumetric and morphology data,” J. Appl. Crystallogr. 2011, 44, 1272–1276.',
+"multiwfn2012":'T. Lu, F. Chen, “Multiwfn: A multifunctional wavefunction analyzer,” J. Comput. Chem. 2012, 33, 580–592.',
+"gth1996":'S. Goedecker, M. Teter, J. Hutter, “Separable dual-space Gaussian pseudopotentials,” Phys. Rev. B 1996, 54, 1703–1710.',
+"molopt2007":'J. VandeVondele, J. Hutter, “Gaussian basis sets for accurate calculations on molecular systems in gas and condensed phases,” J. Chem. Phys. 2007, 127, 114105.',
+"m062x2008":'Y. Zhao, D. G. Truhlar, “The M06 suite of density functionals for main-group thermochemistry, kinetics, noncovalent interactions, excited states, and transition elements,” Theor. Chem. Acc. 2008, 120, 215–241.',
+"wb97xd2008":'J.-D. Chai, M. Head-Gordon, “Long-range corrected hybrid density functionals with damped atom–atom dispersion corrections,” Phys. Chem. Chem. Phys. 2008, 10, 6615–6620.',
+"gromacs2015":'M. J. Abraham, T. Murtola, R. Schulz, S. Páll, J. C. Smith, B. Hess, E. Lindahl, “GROMACS: High performance molecular simulations through multi-level parallelism from laptops to supercomputers,” SoftwareX 2015, 1–2, 19–25.',
+"opls1996":'W. L. Jorgensen, D. S. Maxwell, J. Tirado-Rives, “Development and Testing of the OPLS All-Atom Force Field on Conformational Energetics and Properties of Organic Liquids,” J. Am. Chem. Soc. 1996, 118, 11225–11236.',
+"pme1995":'U. Essmann, L. Perera, M. L. Berkowitz, T. Darden, H. Lee, L. G. Pedersen, “A smooth particle mesh Ewald method,” J. Chem. Phys. 1995, 103, 8577–8593.',
+"nose1984":'S. Nosé, “A unified formulation of the constant temperature molecular dynamics methods,” J. Chem. Phys. 1984, 81, 511–519.',
+"hoover1985":'W. G. Hoover, “Canonical dynamics: Equilibrium phase-space distributions,” Phys. Rev. A 1985, 31, 1695–1697.',
+"mace2024":'I. Batatia, et al., “A foundation model for atomistic materials chemistry,” arXiv:2401.00096, 2024.',
+"chgnet2023":'B. Deng, P. Zhong, K. Jun, J. Riebesell, K. Han, C. J. Bartel, G. Ceder, “CHGNet as a pretrained universal neural network potential for charge-informed atomistic modelling,” Nat. Mach. Intell. 2023, 5, 1031–1041.',
+"wan2015":'T. H. Wan, M. Saccoccio, C. Chen, F. Ciucci, “Influence of the Discretization Methods on the Distribution of Relaxation Times Deconvolution: Implementing Radial Basis Functions with DRTtools,” Electrochim. Acta 2015, 184, 483–499.',
 }
 
 TITLE=("A Silicon-Rich, Aluminum-Poor Interphase Templated by an In Situ "
@@ -66,7 +89,8 @@ INTRO=[
 "low-cost, it provides a high volumetric capacity of 3833 mAh cm-3 by virtue of its divalent, dense metal, and it "
 "was long thought to electrodeposit smoothly rather than as dendrites.{aurbach2000,yoo2013} These features made "
 "the Mg metal anode a long-standing target for safe, high-energy storage, and they continue to motivate the "
-"broader search for multivalent battery chemistries.{canepa2017,muldoon2014} In practice, however, a reversible "
+"broader search for multivalent battery chemistries.{canepa2017,muldoon2014,mohtadi2014} In practice, however, a "
+"reversible "
 "Mg metal anode has proven difficult to realize. Magnesium passivates readily in most polar aprotic solvents, "
 "forming blocking surface films that stop interfacial Mg2+ transfer, so that only a narrow set of specially "
 "designed electrolytes supports reversible plating and stripping.{lu1999,gregory1990}",
@@ -97,9 +121,10 @@ INTRO=[
 "connecting its composition to the underlying solution chemistry, which is the combination of experiment and "
 "theory we apply here.",
 "The conventional lever for improving a metal-anode electrolyte is to modify ion transport, for example by "
-"gelation or by adding coordinating polymers assumed to accelerate cation motion.{yoo2013} A parallel strategy "
+"gelation or by adding coordinating polymers assumed to accelerate cation motion.{yoo2013,mggpe2024} A parallel strategy "
 "has been to redesign the salt itself, for instance with non-nucleophilic or halogen-free anions that widen the "
-"window or improve compatibility with sulfur cathodes.{kim2011,tutusaus2015} Both strategies treat the "
+"window or improve compatibility with sulfur cathodes, or with fully inorganic chloroaluminate complexes whose "
+"reversibility is set by electrolytic conditioning.{kim2011,tutusaus2015,doe2014} Both strategies treat the "
 "electrolyte bulk. We instead ask a compositional, interfacial question: can a cured, chemically inert network "
 "change what the magnesium interphase is made of, rather than how fast ions move through it, and thereby "
 "emulate the protective role played by an engineered artificial interphase?{son2018} Silsesquioxane (POSS) cages "
@@ -136,7 +161,8 @@ S1=[
 "redistribution equilibrium is uphill in free energy (ΔG = +1.1 to +4.5 kcal mol-1), so the symmetric "
 "chloro-organo-aluminate [AlPh2Cl2]- dominates the population, with the fully chlorinated AlCl4- a minority "
 "species (Figure 1b). This computed speciation agrees with the species identified by Raman, multinuclear NMR, and "
-"single-crystal diffraction for APC-type solutions.{mizrahi2008,pour2011}",
+"single-crystal diffraction for APC-type solutions, and with conditioning studies of the related magnesium "
+"aluminum chloride complex in which speciation governs reversibility.{mizrahi2008,pour2011,barile2014}",
 "Placing each species on a common potential scale referenced to Mg2+/Mg reveals why this anion matters at the "
 "negative electrode (Figure 1c). The chloro-organo-aluminate anions are reduced between -1.9 and -2.0 V, AlCl4- "
 "near -3.4 V, and the neutral aluminum species and contact ion pairs sit closest to the plating potential, "
@@ -157,7 +183,8 @@ S1=[
 SUB2="Reversible Magnesium Plating without a Transport Advantage"
 S2=[
 "poly-APC outperforms bare-APC in every test that stresses interfacial stability over time. In Mg||Mo6S8 "
-"(Chevrel phase) full cells, the configuration used to demonstrate the first prototype Mg battery,{aurbach2000} "
+"(Chevrel phase) full cells, the configuration used to demonstrate the first prototype Mg battery and refined in "
+"later Chevrel cathodes,{aurbach2000,aurbach2007} "
 "poly-APC retained more than 80% of its reversible capacity over the entire 842-cycle run at 0.5C and for ~1592 "
 "cycles at 1C, with a per-cycle Coulombic efficiency (CE) close to 100% (Figure 2a,b). bare-APC, by contrast, "
 "fell below 80% retention by ~270 cycles and decayed to near-zero capacity within ~700 cycles. Galvanostatic "
@@ -181,7 +208,8 @@ S2=[
 "interfaces;{evans1987} MD further finds the gel ~4.4-fold slower in Mg2+ self-diffusion (Supporting "
 "Information). Gelation therefore does not raise the Mg2+ current fraction; it only adds stable interfacial "
 "impedance. For completeness, on an inert copper substrate in short plating–stripping tests bare-APC matched or "
-"slightly exceeded poly-APC in apparent CE, but those cells fail by soft-shorting and do not probe durability; "
+"slightly exceeded poly-APC in apparent CE, but such short plating–stripping tests are known to overstate "
+"reversibility and those cells fail by soft-shorting;{ceattias2022} "
 "the reversibility difference emerges only under the sustained full-cell and symmetric-cell conditions above. "
 "Having ruled out transport, we now ask what the two interphases are made of.",
 "These electrochemical signatures form a coherent set. The lower, stable corrosion current of poly-APC—a "
@@ -381,22 +409,99 @@ FIGCAPS={
 "Fig6_interface_mechanism":"Figure 6. Reductive co-deposition and the electronics of passivation. (a) Interface model. (b) Aluminum substitution in Mg(0001). (c) Reductive Al–Cl scission energetics. (d) Density of states of candidate interphase phases. (e) Mg|interphase band alignment and electron-injection barriers. (f) Network sequestration of the aluminate anion.",
 }
 
-# ---------------- citation auto-numbering (first appearance order) ----------------
-SEQ=[ABSTRACT]+INTRO+S1+S2+S3+S4+S5+S6+CONCL
-order=[]
-for blk in SEQ:
-    for m in re.finditer(r'\{([a-z0-9_,]+)\}', blk):
-        for k in m.group(1).split(','):
-            if k not in order: order.append(k)
+# ---------------- Supporting Information content ----------------
+SI_ITEMS=[
+("H1","Experimental Section"),
+("H2","Materials and Electrolyte Preparation"),
+("P","The all-phenyl complex (APC) electrolyte was prepared by reacting AlCl3 with PhMgCl in tetrahydrofuran "
+ "(THF) following established procedures.{mizrahi2008,pour2011} poly-APC was obtained by adding the octa-functional "
+ "polyhedral oligomeric silsesquioxane (POSS) monomer to APC and curing it in situ to form a self-standing "
+ "gel.{mggpe2024} All preparation and handling were carried out under an inert atmosphere. [Exact compositions, "
+ "monomer identity, curing agent, and curing conditions to be supplied by the authors.]"),
+("H2","Cell Assembly"),
+("P","Mg||Mo6S8 full cells, Mg||Mg symmetric cells, and Mg||Cu cells were assembled in coin cells with magnesium "
+ "foil electrodes and glass-fiber (GF/D) separators. Chevrel-phase Mo6S8 cathodes were prepared as described "
+ "previously.{aurbach2000,aurbach2007} [Electrode loadings, areal capacities, and cell formats to be supplied.]"),
+("H2","Electrochemical Measurements"),
+("P","Mg||Mo6S8 cells were cycled galvanostatically at 0.5C and 1C; capacity retention is reported relative to the "
+ "stabilized reversible capacity at cycle 5, with cycles 1–4 treated as formation. Symmetric Mg||Mg cells were "
+ "cycled at 0.5 mA cm-2 and 0.5 mAh cm-2. Multi-rate cyclic voltammetry, potentiodynamic (Tafel) polarization, and "
+ "critical-current-density tests were performed as described in the main text. Average Coulombic efficiency on Cu "
+ "was evaluated with the Aurbach reservoir (macrocycling) protocol.{ceattias2022} Mg2+ transference numbers were "
+ "determined by the Bruce–Vincent steady-state method, combining potentiostatic polarization with impedance "
+ "before and after polarization.{evans1987} In situ electrochemical impedance spectra were acquired after each "
+ "plating step and analyzed by the distribution of relaxation times.{wan2015}"),
+("H2","Materials Characterization"),
+("P","Time-of-flight secondary-ion mass spectrometry (ToF-SIMS) was performed in negative-ion mode with Cs+ "
+ "sputter depth profiling; intensities were corrected for the borosilicate-separator baseline, and only the "
+ "poly-APC excess above that baseline was assigned to the POSS layer. X-ray photoelectron spectroscopy (XPS) used "
+ "Al Kα radiation with Ar+ sputter depth profiling (0/10/20 nm); spectra were charge-referenced to adventitious "
+ "C 1s at 284.8 eV, background-subtracted with a Shirley function,{shirley1972} and fitted with Gaussian–Lorentzian "
+ "GL(30) line shapes. Raman spectroscopy, X-ray diffraction (for Mg texture), and scanning electron microscopy "
+ "with energy-dispersive X-ray spectroscopy (SEM/EDS) were performed on cycled electrodes. The EDS silicon signal "
+ "localizes on the glass-fiber separator and is an artifact, so the silicon-enrichment result rests on ToF-SIMS."),
+("H1","Computational Methods"),
+("H2","Molecular DFT"),
+("P","Molecular calculations used the B3LYP functional{becke1993,lyp1988} with the D3(BJ) dispersion "
+ "correction{grimme2010} and def2-TZVP//def2-SVP basis sets,{weigend2005} together with the SMD continuum "
+ "solvation model for THF.{marenich2009} APC anion and cation structures were optimized and frequency-verified, "
+ "and relative free energies at 298 K defined the Schlenk speciation. Vertical and adiabatic ionization potentials "
+ "and electron affinities were converted to potentials versus Mg2+/Mg, and stepwise reductive-decomposition "
+ "pathways were mapped. Electron affinities were cross-checked with the ωB97X-D{wb97xd2008} and "
+ "M06-2X{m062x2008} functionals, and wavefunction and electrostatic-potential analysis used Multiwfn.{multiwfn2012}"),
+("H2","Periodic DFT and Ab Initio Molecular Dynamics"),
+("P","Periodic calculations used CP2K{kuhne2020} with the PBE functional{pbe1996} and D3 dispersion,{grimme2010} "
+ "GTH pseudopotentials,{gth1996} and MOLOPT basis sets.{molopt2007} A Mg(0001) slab, with its work function "
+ "validated against experiment, was used to compute Al adatom adsorption, Al substitution and Mg–Al alloying "
+ "energetics, candidate-SEI formation energies, densities of states and Mg|SEI band alignment, and Mg2+ migration "
+ "barriers by the climbing-image nudged elastic band method.{henkelman2000} Interface ab initio molecular dynamics "
+ "containing the real cation and aluminate anion were run under constant-potential conditions; the band gaps "
+ "quoted in the main text are k-point values. Periodic structures were rendered with VESTA.{vesta2011}"),
+("H2","Classical Molecular Dynamics"),
+("P","Classical MD used GROMACS{gromacs2015} with an OPLS all-atom force field,{opls1996} particle-mesh Ewald "
+ "electrostatics,{pme1995} and a Nosé–Hoover thermostat,{nose1984,hoover1985} over 3×100 ns trajectories at 298 K "
+ "for bare-APC and the cured gel. Radial distribution functions, first-shell coordination numbers, SSIP/CIP/AGG "
+ "speciation, cation–anion–solvent–network interaction-energy decomposition, self-diffusion coefficients, and "
+ "Mg2+ transference numbers were extracted from the equilibrated trajectories."),
+("H2","Machine-Learning Force Field"),
+("P","For reactive, large-cell, long-time interface simulation, a foundation machine-learning force field "
+ "(MACE-MP-0,{mace2024} with CHGNet{chgnet2023} as a cross-check) was fine-tuned on DFT and AIMD reference labels "
+ "for the {Mg, Al, Cl, O, C, H, Si} system, using an active-learning loop that returned high-uncertainty "
+ "configurations to DFT. The model was validated against held-out DFT (energy and force mean absolute errors "
+ "reported in the main text) before production runs of the Mg(0001)|electrolyte interface."),
+("H1","Supplementary Figures and Tables"),
+("P","Figure S1 (below) shows the depth-resolved multi-element XPS used in the main-text Figure 3. Additional "
+ "supplementary items, to be assembled from the analysis outputs, include: Tafel polarization curves and fits; in "
+ "situ DRT spectra and trends; Aurbach and Mg||Cu Coulombic-efficiency data; Bruce–Vincent transference data and "
+ "Nyquist fits; the classical-MD transport table (self-diffusion coefficients and transference numbers); DFT "
+ "speciation and redox-ladder tables; candidate-SEI formation energies and band gaps; and MLFF validation "
+ "(force/energy mean absolute errors and learning curve)."),
+("FIG","Fig3b_XPS_multielement","Figure S1. Depth-resolved XPS core levels (Al 2p, Si 2p, Cl 2p, Mg 1s, O 1s, C 1s) "
+ "for bare-APC and poly-APC at etch depths of 0, 10, and 20 nm. Open circles: raw data; grey line: Shirley "
+ "background; shaded peaks: fitted Gaussian–Lorentzian components; black line: envelope."),
+("H1","Supplementary References"),
+]
+
+# ---------------- citation auto-numbering (main first, then SI) ----------------
+def keys_in(blocks):
+    ks=[]
+    for blk in blocks:
+        for m in re.finditer(r'\{([a-z0-9_,]+)\}', blk):
+            for k in m.group(1).split(','):
+                if k not in ks: ks.append(k)
+    return ks
+MAIN_SEQ=INTRO+S1+S2+S3+S4+S5+S6+CONCL
+SI_TEXT=[it[1] for it in SI_ITEMS if it[0]=="P"]
+order=keys_in(MAIN_SEQ); mainset=set(order)
+for k in keys_in(SI_TEXT):
+    if k not in order: order.append(k)
 NUM={k:i+1 for i,k in enumerate(order)}
 def cite(text):
     def repl(m):
-        ks=m.group(1).split(',');
-        nums=sorted(int(NUM[k]) for k in ks)
-        # compress consecutive? keep simple comma list
-        return '['+','.join(str(n) for n in nums)+']'
+        return '['+','.join(str(NUM[k]) for k in sorted(m.group(1).split(','), key=lambda x:NUM[x]))+']'
     return re.sub(r'\{([a-z0-9_,]+)\}', repl, text)
-REFLIST=[(NUM[k],REFPOOL[k]) for k in order]
+MAIN_REFS=[(NUM[k],REFPOOL[k]) for k in order if k in mainset]
+SI_REFS=[(NUM[k],REFPOOL[k]) for k in order if k not in mainset]
 
 # ---------------- build docx from template ----------------
 def dotx_to_docx(dotx,out):
@@ -455,9 +560,41 @@ add('h1','Conclusion'); md+=['## Conclusion','']
 for para in CONCL: t=cite(para); add('p',t); md+=[t,'']
 add('keywords',KEYWORDS,bold_lead='Keywords: '); md+=['**Keywords:** '+KEYWORDS,'']
 add('refhead','References'); md+=['## References','']
-for n,r in REFLIST: add('ref',f'[{n}] {r}'); md+=[f'[{n}] {r}','']
-
+for n,r in MAIN_REFS: add('ref',f'[{n}] {r}'); md+=[f'[{n}] {r}','']
 doc.save(OUTDOCX); open(OUTMD,'w',encoding='utf-8').write('\n'.join(md))
-mainwords=sum(len(cite(p).split()) for blk in (INTRO,S1,S2,S3,S4,S5,S6,CONCL) for p in blk)
-print('refs:',len(REFLIST),'| main-text words ~',mainwords)
-print('saved:',OUTDOCX)
+
+# ---------------- build Supporting Information (separate doc) ----------------
+OUTSI=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/Supporting_Information_polyAPC_Angew.docx"
+OUTSIMD=r"D:/20260602_polyAPC_data/Angewandte_Research_Article/SI_polyAPC_Angew.md"
+si=Document(); si.styles['Normal'].font.name='Arial'; si.styles['Normal'].font.size=Pt(10)
+def sef(run,ea='宋体'):
+    rf=run._element.get_or_add_rPr().get_or_add_rFonts(); rf.set(qn('w:eastAsia'),ea)
+simd=[]
+def si_h1(t): p=si.add_paragraph(); r=p.add_run(t); r.bold=True; r.font.size=Pt(13); sef(r); simd.append('## '+t); simd.append('')
+def si_h2(t): p=si.add_paragraph(); r=p.add_run(t); r.bold=True; r.font.size=Pt(11); sef(r); simd.append('### '+t); simd.append('')
+def si_p(t):
+    tt=cite(t); p=si.add_paragraph(tt); p.paragraph_format.line_spacing=1.3; simd.append(tt); simd.append('')
+# header
+ph=si.add_paragraph(); rh=ph.add_run('Supporting Information'); rh.bold=True; rh.font.size=Pt(15)
+pt=si.add_paragraph(); rt=pt.add_run(TITLE); rt.italic=True
+si.add_paragraph(AUTHORS)
+simd+=['# Supporting Information','','*'+TITLE+'*','',AUTHORS,'']
+for it in SI_ITEMS:
+    if it[0]=="H1": si_h1(it[1])
+    elif it[0]=="H2": si_h2(it[1])
+    elif it[0]=="P": si_p(it[1])
+    elif it[0]=="FIG":
+        fp=os.path.join(FIGDIR,it[1]+'.png')
+        pic=si.add_paragraph(); pic.alignment=WD_ALIGN_PARAGRAPH.CENTER
+        if os.path.exists(fp): pic.add_run().add_picture(fp,width=Cm(16.0))
+        c=si.add_paragraph(); rc=c.add_run(it[2]); rc.font.size=Pt(8.5)
+        simd+=[f'![{it[1]}](figures/{it[1]}.png)','*'+it[2]+'*','']
+for n,r in SI_REFS:
+    p=si.add_paragraph(f'[{n}] {r}'); p.paragraph_format.line_spacing=1.2; simd+=[f'[{n}] {r}','']
+si.save(OUTSI); open(OUTSIMD,'w',encoding='utf-8').write('\n'.join(simd))
+
+total=len(order)
+mainchars=sum(len(cite(p)) for blk in (INTRO,S1,S2,S3,S4,S5,S6,CONCL) for p in blk)
+print(f'total refs: {total} | main refs: {len(MAIN_REFS)} | SI refs: {len(SI_REFS)} | main chars ~{mainchars}')
+print('saved manuscript:',OUTDOCX)
+print('saved SI         :',OUTSI)
