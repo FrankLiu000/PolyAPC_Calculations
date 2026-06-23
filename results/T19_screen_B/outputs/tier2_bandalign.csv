@@ -10,10 +10,10 @@ B008,silsesquioxane,SiO2,8.46,0.9,-0.9,3.07,STRONG (Phi_inj>2.5),T8b(reuse)
 B009,borosiloxane,"B-SiOx model (1B/2Si/6O/H, unrelaxed -> gap lower bound)",4.17,1.1(lit),-1.10,2.87,STRONG -> H4 CONFIRMED (~POSS),T19(CP2K)
 B010,borosiloxane,"B-SiOx model (1B/2Si/6O/H, unrelaxed -> gap lower bound)",4.17,1.1(lit),-1.10,2.87,STRONG -> H4 CONFIRMED (~POSS),T19(CP2K)
 B011,borosiloxane,"B-SiOx model (1B/2Si/6O/H, unrelaxed -> gap lower bound)",4.17,1.1(lit),-1.10,2.87,STRONG -> H4 CONFIRMED (~POSS),T19(CP2K)
-B012,phosphazene,phosphorus oxynitride (PON/P3N5),TODO,TODO,TODO,TODO,build+run,build
-B013,phosphazene,phosphorus oxynitride (PON/P3N5),TODO,TODO,TODO,TODO,build+run,build
-B014,phosphazene,phosphorus oxynitride (PON/P3N5),TODO,TODO,TODO,TODO,build+run,build
-B015,phosphazene,phosphorus oxynitride (PON/P3N5),TODO,TODO,TODO,TODO,build+run,build
+B012,phosphazene,"phosphorus oxynitride (PON; P3N3O3, Gamma-relaxed)",4.67,1.8(lit-est),-1.80,2.17,PASS (blocks; weaker than POSS - N raises chi/EA),T19(CP2K)
+B013,phosphazene,"phosphorus oxynitride (PON; P3N3O3, Gamma-relaxed)",4.67,1.8(lit-est),-1.80,2.17,PASS (blocks; weaker than POSS - N raises chi/EA),T19(CP2K)
+B014,phosphazene,"phosphorus oxynitride (PON; P3N3O3, Gamma-relaxed)",4.67,1.8(lit-est),-1.80,2.17,PASS (blocks; weaker than POSS - N raises chi/EA),T19(CP2K)
+B015,phosphazene,"phosphorus oxynitride (PON; P3N3O3, Gamma-relaxed)",4.67,1.8(lit-est),-1.80,2.17,PASS (blocks; weaker than POSS - N raises chi/EA),T19(CP2K)
 B016,polyether-siloxane,SiO2 (network O dominant; ether->D4 not D2),8.46,0.90,-0.90,3.07,STRONG (D2~SiO2; ether risk is D4),SiO2-reuse
 B017,polyether-siloxane,SiO2 (network O dominant; ether->D4 not D2),8.46,0.90,-0.90,3.07,STRONG (D2~SiO2; ether risk is D4),SiO2-reuse
 B018,polyether-siloxane,SiO2 (network O dominant; ether->D4 not D2),8.46,0.90,-0.90,3.07,STRONG (D2~SiO2; ether risk is D4),SiO2-reuse
@@ -24,8 +24,8 @@ B022,titanosiloxane,TiO2 (component),3.06,4.0(lit),-4.00,-0.03,FAIL-D2 (Phi_inj~
 B023,titanosiloxane,TiO2 (component),3.06,4.0(lit),-4.00,-0.03,FAIL-D2 (Phi_inj~0; leaky),T19(CP2K)
 B024,zirconosiloxane,ZrO2 (component),4.51,2.5(lit),-2.50,1.47,"PASS (blocks, weaker than POSS 3.07)",T19(CP2K)
 B025,zirconosiloxane,ZrO2 (component),4.51,2.5(lit),-2.50,1.47,"PASS (blocks, weaker than POSS)",T19(CP2K)
-B026,phosphosilicate,P2O5.SiO2,TODO,TODO,TODO,TODO,build+run,build
-B027,phosphosilicate,P2O5.SiO2,TODO,TODO,TODO,TODO,build+run,build
+B026,phosphosilicate,"phosphosilicate (P2O5.SiO2; Si2PO7H, Gamma-relaxed)",6.61,1.1(lit),-1.10,2.87,STRONG (new positive prediction; main-group oxide),T19(CP2K)
+B027,phosphosilicate,"phosphosilicate (P2O5.SiO2; Si2PO7H, Gamma-relaxed)",6.61,1.1(lit),-1.10,2.87,STRONG (new positive prediction; main-group oxide),T19(CP2K)
 B028,germania network,GeO2,5.97,1.1(lit),-1.10,2.87,"BLOCKS (strong, new positive prediction)",T19(CP2K)
 B029,aluminosiloxane / alumoxane,Al2O3 (component),6.21,1.35,-1.35,2.62,"D2-pass BUT FAILS via D1 (Al0 co-deposit, =alumoxane control)",Al2O3-reuse
 B030,aluminosiloxane / alumoxane,Al2O3 (component),6.21,1.35,-1.35,2.62,"D2-pass BUT FAILS via D1 (Al0 co-deposit, =alumoxane control)",Al2O3-reuse
