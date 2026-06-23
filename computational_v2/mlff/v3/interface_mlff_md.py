@@ -40,8 +40,10 @@ DT     = float(sys.argv[6]) if len(sys.argv)>6 else 1.0    # fs; 0.5 stabilizes 
 FCAP   = float(sys.argv[7]) if len(sys.argv)>7 else 60.0   # eV/Å per-atom force cap (anti-blowup)
 EFIELD = float(sys.argv[8]) if len(sys.argv)>8 else 0.0    # V/Å external z-field (0=off; cathodic<0)
 QFILE  = sys.argv[9] if len(sys.argv)>9 else None          # per-atom charge .npy (required if EFIELD!=0)
+QTOT   = float(sys.argv[10]) if len(sys.argv)>10 else 0.0   # total system charge -> charge-conditioned models (MACELES)
 NSLAB  = 64
 at = read(start)
+at.info["charge"] = QTOT   # MACELES reads total_charge from info['charge']; inert for plain MACE (r6)
 _charges = np.load(QFILE) if (EFIELD and QFILE) else None
 at.calc = ForceCap(MACECalculator(model_paths=[model], device="cuda", default_dtype="float32"),
                    fmax=FCAP, charges=_charges, efield=EFIELD)
