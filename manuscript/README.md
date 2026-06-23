@@ -17,10 +17,12 @@ scripted plot of measured/computed data; molecular structures are ball-and-stick
 | Fig3_interphase | XPS at% stacked bar, ToF-SIMS log-depth, **3D ion maps**, XPS Al 2p scatter+fits, at%/metallic | Li Angew Fig 3 |
 | Fig3b_XPS_multielement | Al/Si/Cl/Mg/O/C core levels × bare/poly × 3 depths (scatter + GL fits) | battery-SEI XPS |
 | Fig4_deposit | XRD texture, EDS ratios, SEM, EDS Al-Kα maps *(+cross-section TONIGHT, cryo-EM MON)* | Li Angew Fig 4 |
-| Fig5_computation | interface MD box, Al-in-Mg slab, reduction ΔG, **SEI DOS**, network sequestration, XPS/Raman validation | JPCC (structures+DOS) |
+| Fig5_solvation | Mg²⁺ solvation structure, RDF, SSIP/CIP/AGG pies, interaction-E decomposition, desolvation ladder, coordination # | JPCC (MD: structure+RDF+force+solvation) |
+| Fig6_interface_mechanism | interface MD box, Al-in-Mg slab, reduction ΔG, **SEI DOS**, network sequestration, XPS/Raman validation | JPCC (structures+DOS) |
 
-> **Fig 5d upgrade pending:** band-gap bars → real **DOS/PDOS curves** once `results/T8b_DOS/` lands from EPYC
-> (see `results/T8b_DOS/REQUEST_EPYC.md`).
+> **Fig 6 DOS upgrade pending:** band-gap bars → real **DOS/PDOS curves** once `results/T8b_DOS/` lands from EPYC
+> (see `results/T8b_DOS/REQUEST_EPYC.md`). Fig 5 (solvation/transport) is built entirely from existing
+> classical-MD RDF/CN/speciation/interaction-energy + DFT desolvation-ladder data.
 
 ## scripts/  (provenance; absolute data paths → run on the Windows analysis box)
 `angew_style.py` (shared style + CMYK export), `mol_render.py` (xyz ball-and-stick, no ASE),

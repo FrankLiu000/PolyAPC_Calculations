@@ -146,4 +146,4 @@ for a,b in rows:
     ax.text(0.08,yy-0.085,b,fontsize=5.0,color=C["ink"],transform=ax.transAxes,va="center")
     yy-=0.205
 panel_label(ax,"f",x=-0.02)
-save_pub(fig,FOUT+"/Fig5_computation"); print("Fig5 done")
+save_pub(fig,FOUT+"/Fig6_interface_mechanism"); print("Fig6 interface-mechanism done")

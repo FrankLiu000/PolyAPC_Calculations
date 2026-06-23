@@ -17,8 +17,20 @@ def read_xyz(path):
         p=ln.split(); els.append(p[0]); xyz.append([float(p[1]),float(p[2]),float(p[3])])
     return els,np.array(xyz)
 
+def read_pdb(path):
+    els=[]; xyz=[]
+    for ln in open(path,encoding="utf-8"):
+        if ln[:6] in ("ATOM  ","HETATM"):
+            el=ln[76:78].strip() or ln[12:14].strip()
+            el=el[0].upper()+el[1:].lower() if len(el)>1 else el.upper()
+            xyz.append([float(ln[30:38]),float(ln[38:46]),float(ln[46:54])]); els.append(el)
+    return els,np.array(xyz)
+
+def read_struct(path):
+    return read_pdb(path) if path.lower().endswith(".pdb") else read_xyz(path)
+
 def render(ax, path, view=(18,-70), no_metal_bonds=True, scale=1.0, zoom=1.0, shadow=True):
-    els,X=read_xyz(path); X=X-X.mean(0)
+    els,X=read_struct(path); X=X-X.mean(0)
     # bonds
     bonds=[]
     n=len(els)
