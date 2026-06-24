@@ -72,4 +72,10 @@ Reactive MLFF-MD (D3 sequestration + D4 CN) + active-learning loop — **on PI m
 
 **Method:** z-histogram of anion/cation centroid over equilibrated frames, both legs in parallel, block-average uncertainty. Reuse existing trajectories; only run a short extension if sampling is insufficient. **Distinct from the gated T19 Tier 3** (this is light trajectory post-processing, not the reactive screen).
 
-**Status:** ▶ GPU **DISPATCHED** 2026-06-24.
+**Status:** ✅ **DONE** 2026-06-24 (GPU) → `results/T20_iface_profile/` (REPORT + CSVs + `Cz_profile.png`).
+Headline: reducible anion near-front occupancy (≤5 Å) **bare 98.8 % → poly 2.2 % (~44×)**; ion ordering
+**inverts** (bare: anion 4.6 < cation 5.8 leads; poly: cation 5.2 < anion 6.8 → anion excluded); neither
+reaches reductive contact (<2.5 Å) field-free = Liu-2022 homogenization achieved structurally.
+⚠️ Surfaced: **poly neutral standoff is not cleanly equilibrated** (runs settle 6.8–10.3 Å, still drifting;
+bare is tight at 4.6) — sign-robust, magnitude needs a PMF/multi-start. See `T5.../fig_equilibration.png`.
+Also: the `fig_mechanism` ion-pair-separation numbers (7.8/9.9 Å) need re-derivation (bare cation Mg dissociates).

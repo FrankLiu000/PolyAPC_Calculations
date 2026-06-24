@@ -1,0 +1,3 @@
+system,anion_cen_mean_z,al_reduc_mean_z,al_mean_3dmin,al_sd_3dmin,al_min_3dmin,cation_lead_mean_z,cation_lead_3dmin,cation_maxdrift,anion_nearfront_frac,reduct_contact_frac
+bare,5.409,4.184,4.581,0.1907,4.012,1.931,5.78,34.78,0.9883,0
+poly,5.619,5.369,6.811,1.274,4.581,2.844,5.202,10.63,0.0223,0
