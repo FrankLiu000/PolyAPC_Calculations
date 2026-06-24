@@ -124,7 +124,7 @@ for r in rows_ce:
     if r["this_work"].strip()=="1": continue
     cyc=float(r["cycle"]); ce=float(r["CE_pct"]); rate=float(r["rate_C"]); conf=r["confidence"].strip()
     fc=CONF_FC.get(conf,"none")
-    axb.plot(cyc,ce,marker="o",ls="none",ms=msz(rate),mfc=fc,mec=C["ink"],mew=0.7,zorder=3)
+    axb.plot(cyc,ce,marker="o",ls="none",ms=4.6,mfc=fc,mec=C["ink"],mew=0.7,zorder=3)
 # --- Pareto frontier (non-dominated: maximise BOTH cycle and CE) over the plotted CE rows ---
 pts=sorted([(float(r["cycle"]),float(r["CE_pct"])) for r in rows_ce])
 front=[]
@@ -141,16 +141,17 @@ axb.step(fx_d,fy_d,where="pre",color=C["green"],lw=1.2,ls=(0,(4,1.8)),zorder=2,a
 # --- anchor labels (first_author + year) + rate; offsets hand-tuned to avoid overlap ---
 ANCH={"Aurbach 2000":(8,3,"left"),"MLCC 2023":(2,-13,"center"),"Pan 2016":(-7,-6,"right"),
       "Yoo 2017":(-7,-3,"right"),"Nguyen 2020":(-7,1,"right")}
-RLAB={"Aurbach 2000":"0.05C","MLCC 2023":"50C","Pan 2016":"1C","Yoo 2017":"1C","Nguyen 2020":"0.1C"}
+RLAB={"Aurbach 2000":"~C/20","MLCC 2023":"50C"}  # rate only on the frontier points (practical-rate story)
 for r in rows_ce:
     lab=r["label"].strip()
     if lab in ANCH and r["this_work"].strip()!="1":
         cyc=float(r["cycle"]); ce=float(r["CE_pct"]); dx,dy,ha=ANCH[lab]
         axb.annotate(f"{r['first_author']} {r['year']}",xy=(cyc,ce),xytext=(dx,dy),
                      textcoords="offset points",fontsize=5.0,color=C["ink"],ha=ha,va="center",zorder=7)
-        dyr=dy+(6 if dy>=0 else -5)
-        axb.annotate(RLAB[lab],xy=(cyc,ce),xytext=(dx,dyr),textcoords="offset points",
-                     fontsize=4.5,color="#666666",ha=ha,va="center",zorder=7)
+        if lab in RLAB:
+            dyr=dy+(6 if dy>=0 else -5)
+            axb.annotate(RLAB[lab],xy=(cyc,ce),xytext=(dx,dyr),textcoords="offset points",
+                         fontsize=4.5,style="italic",color="#888888",ha=ha,va="center",zorder=7)
 # --- this-work stars (dominant): drawn last so they sit on top; labels splayed apart ---
 tw=sorted([r for r in rows_ce if r["this_work"].strip()=="1"],key=lambda r:float(r["cycle"]))
 # Stars are self-evidently "this work" (blue, large, in legend); keep only compact rate
@@ -178,7 +179,7 @@ conf_handles=[_L2D([0],[0],marker="*",ls="none",ms=10,mfc=C["poly"],mec="white",
               _L2D([0],[0],color=C["green"],lw=1.0,ls=(0,(5,2)),label="Pareto front")]
 axb.legend(handles=conf_handles,loc="lower left",fontsize=4.7,handlelength=1.3,
            labelspacing=0.22,handletextpad=0.4,borderpad=0.3,framealpha=0.0,bbox_to_anchor=(-0.012,-0.012))
-axb.text(0.985,0.25,"non-aqueous Mg-metal\nfull cells; values as\nreported (Table Sx);\nopen = not indep. confirmed",
+axb.text(0.985,0.25,"non-aqueous Mg-metal\nfull cells; values as\nreported (Table S1);\nopen = not indep. confirmed",
          transform=axb.transAxes,fontsize=3.9,color="#666666",ha="right",va="top",linespacing=1.2)
 panel_label(axb,"e",x=-0.165)
 

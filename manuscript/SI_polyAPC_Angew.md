@@ -69,9 +69,6 @@ Table S1 compiles the reported non-aqueous magnesium-metal full cells used for t
 | Qu 2025 | CuSe | Mg(TFSI)2-MgCl2 | 400 | NA | 91 | 0.4 | 2025 | 10.1038/s41467-025-56556-9 | high |
 | Abouzari 2021 | Cu-porphyrin | APC | 500 | NA | NA | 1.0 | 2021 | 10.1002/cssc.202100340 | high |
 | Liang 2011 | MoS2 | Mg(AlCl3Bu)2 | 50 | NA | 95 | 0.1 | 2011 | 10.1002/adma.201003560 | high |
-| Gu 2026 | Mo6S8 | Mg(OTf)2 + InBr3/BHFP | 1700 | NA | 83.7 | 1.0 | 2026 | 10.1002/aenm.70844 | low |
-| Zhang 2026 | Mo6S8 | boron dual-anion (YBTFC) | 4500 | NA | NA | 3.0 | 2026 | 10.1002/adfm.202520292 | low |
-| Xiang 2026 | Mo6S8 | (nanoconfined Mg) | 3000 | NA | NA | 1.0 | 2026 | 10.1002/adma.202520754 | low |
 
 *Table S1. Reported non-aqueous Mg-metal full cells (electrolyte, cathode, cycle life, Coulombic efficiency, capacity retention, rate) underlying the Figure 2e Pareto benchmark.*
 
