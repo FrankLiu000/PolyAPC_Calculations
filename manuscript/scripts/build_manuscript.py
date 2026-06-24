@@ -203,7 +203,7 @@ S2=[
 "cycles at 1C, with a per-cycle Coulombic efficiency (CE) close to 100% (Figure 2a,b). bare-APC, by contrast, "
 "fell below 80% retention by ~270 cycles and decayed to near-zero capacity within ~700 cycles. Galvanostatic "
 "charge–discharge profiles for poly-APC overlapped from cycle 5 to 1500 with minimal polarization growth "
-"(Figure 2c), the signature of a stable rather than a continuously reconstructing interphase.",
+"(Figure 2c), the signature of a stable rather than a continuously reconstructing interphase. Benchmarked against the published literature on non-aqueous Mg-metal full cells, this performance places poly-APC on the cycle-life versus Coulombic-efficiency Pareto front (Figure 2e): it provides the highest Coulombic efficiency among Mg full cells that exceed roughly 1500 cycles, and it does so at a practical 1C rate, whereas the few reports of still-longer cycle life rely either on ultrahigh rates or on non-magnesium-metal chemistries.{aurbach2000}",
 "Symmetric Mg||Mg cells told the same story over long times (Figure 2d). poly-APC plated and stripped for 1011 "
 "cycles (2022 h) with no short-circuit events and a flat polarization, whereas bare-APC developed soft shorts "
 "from cycle 262 and failed by a hard short at cycle 420 (839 h), a 2.4-fold shorter lifetime. This contrast is "
@@ -479,7 +479,7 @@ KEYWORDS=("magnesium batteries • solid electrolyte interphase • aluminum co-
 
 FIGCAPS={
 "Fig1_electrolyte_redox":"Figure 1. Electrolyte design and aluminate redox landscape. (a) [Mg2(μ-Cl)3(THF)6]+ cation and dominant [AlPh2Cl2]- anion (DFT). (b) Schlenk redistribution free energies (all >0, so [AlPh2Cl2]- dominates). (c) Reduction potentials of APC species versus Mg2+/Mg; the aluminate anions and neutral aluminum species are reducible within or near the plating window.",
-"Fig2_performance":"Figure 2. Reversible plating without a transport advantage (bare-APC versus poly-APC). (a,b) Mg||Mo6S8 discharge capacity and Coulombic efficiency per cycle at 0.5C and 1C. (c) poly-APC charge–discharge voltage profiles at selected cycles. (d) Mg||Mg symmetric-cell voltage versus time.",
+"Fig2_performance":"Figure 2. Reversible plating without a transport advantage (bare-APC versus poly-APC). (a,b) Mg||Mo6S8 discharge capacity and Coulombic efficiency per cycle at 0.5C and 1C. (c) poly-APC charge–discharge voltage profiles at selected cycles. (d) Mg||Mg symmetric-cell voltage versus time. (e) Cycle-life versus Coulombic-efficiency benchmark of non-aqueous Mg-metal full cells from the literature (values as reported; tabulated with sources and confidence in the Supporting Information; open symbols are reports not independently confirmed here): poly-APC lies on the cycle-life/efficiency Pareto front, with the highest Coulombic efficiency among Mg full cells that exceed about 1500 cycles, at a practical 1C rate.",
 "Fig3_interphase":"Figure 3. A silicon-rich, aluminum-poor interphase. (a) ToF-SIMS poly/bare intensity ratios. (b) ToF-SIMS depth profiles. (c) Three-dimensional ion maps (top, poly-APC; bottom, bare-APC). (d,e) XPS Al 2p at 0/10/20 nm for bare-APC and poly-APC (raw data, Shirley background, fitted Al0 and Al3+ components). (f) Aluminum and metallic-Al0 content versus depth.",
 "Fig4_deposit":"Figure 4. Deposit morphology and composition (bare-APC versus poly-APC). (a) X-ray diffraction of plated magnesium; both are hexagonal Mg with no crystalline aluminum, and poly-APC is more strongly textured (A002/A101 = 0.83 versus 0.39). (b) Matched-magnification top-view scanning electron microscopy: bare-APC is rough and granular, poly-APC dense and conformal. (c) Cross-sections after 30 cycles: the bare-APC deposit is porous and swollen, the poly-APC deposit compact. (d) EDS composition (atomic %), with bare/poly enrichment folds of approximately 23-fold for Cl/Mg and 7-fold for Al/Mg; the silicon signal is a glass-fibre (borosilicate separator) artifact, not the POSS layer, and the silicon-rich-interphase result derives from ToF-SIMS (Figure 3). (e) EDS elemental maps (Mg, Cl, Al).",
 "Fig5_solvation":"Figure 5. Solvation, ion pairing, and desolvation (MD and DFT). (a) Mg2+ first-shell structure. (b) Mg2+ radial distribution functions. (c) SSIP/CIP/AGG populations. (d) Mg-cluster interaction-energy decomposition. (e) Last-THF desolvation free-energy routes. (f) First-shell coordination numbers.",
@@ -557,6 +557,17 @@ SI_ITEMS=[
 ("FIG","Fig3b_XPS_multielement","Figure S1. Depth-resolved XPS core levels (Al 2p, Si 2p, Cl 2p, Mg 1s, O 1s, C 1s) "
  "for bare-APC and poly-APC at etch depths of 0, 10, and 20 nm. Open circles: raw data; grey line: Shirley "
  "background; shaded peaks: fitted Gaussian–Lorentzian components; black line: envelope."),
+("H2","Mg Full-Cell Performance Benchmark (Literature)"),
+("P","Table S1 compiles the reported non-aqueous magnesium-metal full cells used for the cycle-life versus "
+ "Coulombic-efficiency benchmark in Figure 2e. Values are reproduced as stated in the cited sources. The "
+ "confidence column records how directly each number could be verified (high: confirmed from the abstract or "
+ "publisher text; med: consistent across secondary sources with the primary PDF inaccessible; low: single "
+ "secondary source or a 2026 report); low-confidence and 2026 entries are listed for completeness but were not "
+ "independently confirmed here and should be checked against the primary source before publication. This work is "
+ "included for reference."),
+("TABLE","D:/20260602_polyAPC_data/PolyAPC_repo/results/lit_benchmark/mg_fullcell_benchmark.csv","Table S1. "
+ "Reported non-aqueous Mg-metal full cells (electrolyte, cathode, cycle life, Coulombic efficiency, capacity "
+ "retention, rate) underlying the Figure 2e Pareto benchmark."),
 ("H1","Supplementary References"),
 ]
 
@@ -653,6 +664,35 @@ def si_h1(t): p=si.add_paragraph(); r=p.add_run(t); r.bold=True; r.font.size=Pt(
 def si_h2(t): p=si.add_paragraph(); r=p.add_run(t); r.bold=True; r.font.size=Pt(11); sef(r); simd.append('### '+t); simd.append('')
 def si_p(t):
     tt=cite(t); p=si.add_paragraph(tt); p.paragraph_format.line_spacing=1.3; simd.append(tt); simd.append('')
+def si_table(csv_path, caption):
+    import csv as _csv
+    try:
+        with open(csv_path, encoding="utf-8") as f: raw=[r for r in _csv.reader(f) if r]
+    except Exception:
+        si_p("[Table source not found: "+csv_path+"]"); return
+    header=raw[0]; ncol=len(header); rows=[]
+    for r in raw[1:]:
+        if len(r)>ncol:  # unquoted comma inside a field -> merge extras back into col 1
+            k=len(r)-ncol; r=[r[0], ",".join(r[1:2+k])]+r[2+k:]
+        rows.append(r)
+    show=[("label","System"),("cathode","Cathode"),("electrolyte","Electrolyte"),("cycle","Cycles"),
+          ("CE_pct","CE %"),("retention_pct","Ret. %"),("rate_C","Rate (C)"),("year","Year"),
+          ("doi","DOI"),("confidence","Conf.")]
+    idx={h:i for i,h in enumerate(header)}; cols=[(idx[k],lab) for k,lab in show if k in idx]
+    tbl=si.add_table(rows=1,cols=len(cols))
+    try: tbl.style="Table Grid"
+    except Exception: pass
+    for c,(ci,lab) in enumerate(cols):
+        run=tbl.rows[0].cells[c].paragraphs[0].add_run(lab); run.bold=True; run.font.size=Pt(6.5); sef(run)
+    for r in rows:
+        cells=tbl.add_row().cells
+        for c,(ci,lab) in enumerate(cols):
+            run=cells[c].paragraphs[0].add_run(r[ci] if ci<len(r) else ""); run.font.size=Pt(6); sef(run)
+    cp=si.add_paragraph(); rc=cp.add_run(caption); rc.font.size=Pt(8.5)
+    simd.append("| "+" | ".join(lab for _,lab in cols)+" |")
+    simd.append("|"+"|".join("---" for _ in cols)+"|")
+    for r in rows: simd.append("| "+" | ".join((r[ci] if ci<len(r) else "") for ci,_ in cols)+" |")
+    simd.extend(['','*'+caption+'*',''])
 # header
 ph=si.add_paragraph(); rh=ph.add_run('Supporting Information'); rh.bold=True; rh.font.size=Pt(15)
 pt=si.add_paragraph(); rt=pt.add_run(TITLE); rt.italic=True
@@ -662,6 +702,7 @@ for it in SI_ITEMS:
     if it[0]=="H1": si_h1(it[1])
     elif it[0]=="H2": si_h2(it[1])
     elif it[0]=="P": si_p(it[1])
+    elif it[0]=="TABLE": si_table(it[1],it[2])
     elif it[0]=="FIG":
         fp=os.path.join(FIGDIR,it[1]+'.png')
         pic=si.add_paragraph(); pic.alignment=WD_ALIGN_PARAGRAPH.CENTER

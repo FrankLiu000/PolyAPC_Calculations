@@ -1,0 +1,20 @@
+label,cathode,electrolyte,cycle,CE_pct,retention_pct,rate_C,year,first_author,journal,doi,confidence,this_work,note
+this work 1C,Mo6S8,poly-APC gel,1592,99.9,80,1.0,2026,this work,,,,1,>80% retention at 1C; CE~100%
+this work 0.5C,Mo6S8,poly-APC gel,842,99.9,80,0.5,2026,this work,,,,1,>80% retention at 0.5C; CE~100%
+Aurbach 2000,Mo6S8,DCC (Grignard),2000,99.5,85,0.05,2000,Aurbach,Nature,10.1038/35037553,high,0,prototype; very low rate; <15% fade
+Mohtadi 2012,Mo6S8,Mg(BH4)2-LiBH4,40,94,NA,1.0,2012,Mohtadi,Angew. Chem. Int. Ed.,10.1002/anie.201204913,med,0,halide-free borohydride
+Kim 2011,Mo6S8,HMDS-AlCl3,300,98.5,NA,0.2,2011,Kim,Nat. Commun.,10.1038/ncomms1435,med,0,non-nucleophilic chloroaluminate
+Pan 2016,1,4-PAQ (organic),Mg(HMDS)2-4MgCl2,1000,99.2,90.4,1.0,2016,Pan,Adv. Energy Mater.,10.1002/aenm.201600140,high,0,polyanthraquinone organic
+Yoo 2017,exp-TiS2,MgCl2-AlCl3 (MMC),400,99.0,80,1.0,2017,Yoo,Nat. Commun.,10.1038/s41467-017-00431-9,high,0,interlayer-expanded TiS2
+Nguyen 2020,Mo6S8,Mg(OTf)2-MgCl2,100,99.4,90.8,0.1,2020,Nguyen,Cell Rep. Phys. Sci.,10.1016/j.xcrp.2020.100265,high,0,full-cell 100 cyc; CE from 1000-cyc plate/strip
+PTB gel 2023,Mo6S8,PTB gel-polymer (APC-derived),250,95.0,NA,0.5,2023,(quasi-solid),Sci. Adv.,10.1126/sciadv.adh1181,med,0,gel-polymer Mo6S8
+MLCC 2023,Mo6S8,MgCl2-LiCl all-inorganic,10000,99.0,NA,50,2023,Fan,Energy Environ. Mater.,10.1002/eem2.12327,med,0,ultrahigh-rate 50C; confirm vs primary
+Yang 2026,Mo6S8,TFSI + SiBr4/TMSP,500,99.5,96,0.5,2026,Yang,Chem. Sci.,10.1039/D6SC00095A,low,0,2026; peak CE 99.97; confirm vs primary
+Ren 2023,PAQS (organic),APC,1000,NA,99,5.0,2023,Ren,Chem. Eng. J.,10.1016/j.cej.2022.139570,high,0,CE not stated in abstract
+Chen 2024,MVOH/rGO,APC + Mg(TFSI)2,850,NA,84,0.1,2024,Chen,Nano-Micro Lett.,10.1007/s40820-024-01410-8,high,0,hydrated vanadia
+Qu 2025,CuSe,Mg(TFSI)2-MgCl2,400,NA,91,0.4,2025,Qu,Nat. Commun.,10.1038/s41467-025-56556-9,high,0,in-situ activated
+Abouzari 2021,Cu-porphyrin,APC,500,NA,NA,1.0,2021,Abouzari-Lotf,ChemSusChem,10.1002/cssc.202100340,high,0,self-conditioned organic
+Liang 2011,MoS2,Mg(AlCl3Bu)2,50,NA,95,0.1,2011,Liang,Adv. Mater.,10.1002/adma.201003560,high,0,graphene-like MoS2
+Gu 2026,Mo6S8,Mg(OTf)2 + InBr3/BHFP,1700,NA,83.7,1.0,2026,Gu,Adv. Energy Mater.,10.1002/aenm.70844,low,0,2026; confirm vs primary
+Zhang 2026,Mo6S8,boron dual-anion (YBTFC),4500,NA,NA,3.0,2026,Zhang,Adv. Funct. Mater.,10.1002/adfm.202520292,low,0,2026; confirm vs primary
+Xiang 2026,Mo6S8,(nanoconfined Mg),3000,NA,NA,1.0,2026,Xiang,Adv. Mater.,10.1002/adma.202520754,low,0,2026 coin cell; confirm vs primary

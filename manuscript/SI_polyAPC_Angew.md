@@ -47,6 +47,34 @@ Figure S1 (below) shows the depth-resolved multi-element XPS used in the main-te
 ![Fig3b_XPS_multielement](figures/Fig3b_XPS_multielement.png)
 *Figure S1. Depth-resolved XPS core levels (Al 2p, Si 2p, Cl 2p, Mg 1s, O 1s, C 1s) for bare-APC and poly-APC at etch depths of 0, 10, and 20 nm. Open circles: raw data; grey line: Shirley background; shaded peaks: fitted Gaussian–Lorentzian components; black line: envelope.*
 
+### Mg Full-Cell Performance Benchmark (Literature)
+
+Table S1 compiles the reported non-aqueous magnesium-metal full cells used for the cycle-life versus Coulombic-efficiency benchmark in Figure 2e. Values are reproduced as stated in the cited sources. The confidence column records how directly each number could be verified (high: confirmed from the abstract or publisher text; med: consistent across secondary sources with the primary PDF inaccessible; low: single secondary source or a 2026 report); low-confidence and 2026 entries are listed for completeness but were not independently confirmed here and should be checked against the primary source before publication. This work is included for reference.
+
+| System | Cathode | Electrolyte | Cycles | CE % | Ret. % | Rate (C) | Year | DOI | Conf. |
+|---|---|---|---|---|---|---|---|---|---|
+| this work 1C | Mo6S8 | poly-APC gel | 1592 | 99.9 | 80 | 1.0 | 2026 |  |  |
+| this work 0.5C | Mo6S8 | poly-APC gel | 842 | 99.9 | 80 | 0.5 | 2026 |  |  |
+| Aurbach 2000 | Mo6S8 | DCC (Grignard) | 2000 | 99.5 | 85 | 0.05 | 2000 | 10.1038/35037553 | high |
+| Mohtadi 2012 | Mo6S8 | Mg(BH4)2-LiBH4 | 40 | 94 | NA | 1.0 | 2012 | 10.1002/anie.201204913 | med |
+| Kim 2011 | Mo6S8 | HMDS-AlCl3 | 300 | 98.5 | NA | 0.2 | 2011 | 10.1038/ncomms1435 | med |
+| Pan 2016 | 1,4-PAQ (organic) | Mg(HMDS)2-4MgCl2 | 1000 | 99.2 | 90.4 | 1.0 | 2016 | 10.1002/aenm.201600140 | high |
+| Yoo 2017 | exp-TiS2 | MgCl2-AlCl3 (MMC) | 400 | 99.0 | 80 | 1.0 | 2017 | 10.1038/s41467-017-00431-9 | high |
+| Nguyen 2020 | Mo6S8 | Mg(OTf)2-MgCl2 | 100 | 99.4 | 90.8 | 0.1 | 2020 | 10.1016/j.xcrp.2020.100265 | high |
+| PTB gel 2023 | Mo6S8 | PTB gel-polymer (APC-derived) | 250 | 95.0 | NA | 0.5 | 2023 | 10.1126/sciadv.adh1181 | med |
+| MLCC 2023 | Mo6S8 | MgCl2-LiCl all-inorganic | 10000 | 99.0 | NA | 50 | 2023 | 10.1002/eem2.12327 | med |
+| Yang 2026 | Mo6S8 | TFSI + SiBr4/TMSP | 500 | 99.5 | 96 | 0.5 | 2026 | 10.1039/D6SC00095A | low |
+| Ren 2023 | PAQS (organic) | APC | 1000 | NA | 99 | 5.0 | 2023 | 10.1016/j.cej.2022.139570 | high |
+| Chen 2024 | MVOH/rGO | APC + Mg(TFSI)2 | 850 | NA | 84 | 0.1 | 2024 | 10.1007/s40820-024-01410-8 | high |
+| Qu 2025 | CuSe | Mg(TFSI)2-MgCl2 | 400 | NA | 91 | 0.4 | 2025 | 10.1038/s41467-025-56556-9 | high |
+| Abouzari 2021 | Cu-porphyrin | APC | 500 | NA | NA | 1.0 | 2021 | 10.1002/cssc.202100340 | high |
+| Liang 2011 | MoS2 | Mg(AlCl3Bu)2 | 50 | NA | 95 | 0.1 | 2011 | 10.1002/adma.201003560 | high |
+| Gu 2026 | Mo6S8 | Mg(OTf)2 + InBr3/BHFP | 1700 | NA | 83.7 | 1.0 | 2026 | 10.1002/aenm.70844 | low |
+| Zhang 2026 | Mo6S8 | boron dual-anion (YBTFC) | 4500 | NA | NA | 3.0 | 2026 | 10.1002/adfm.202520292 | low |
+| Xiang 2026 | Mo6S8 | (nanoconfined Mg) | 3000 | NA | NA | 1.0 | 2026 | 10.1002/adma.202520754 | low |
+
+*Table S1. Reported non-aqueous Mg-metal full cells (electrolyte, cathode, cycle life, Coulombic efficiency, capacity retention, rate) underlying the Figure 2e Pareto benchmark.*
+
 ## Supplementary References
 
 [36] T. H. Wan, M. Saccoccio, C. Chen, F. Ciucci, “Influence of the Discretization Methods on the Distribution of Relaxation Times Deconvolution: Implementing Radial Basis Functions with DRTtools,” Electrochim. Acta 2015, 184, 483–499.
