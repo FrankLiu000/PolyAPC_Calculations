@@ -1,0 +1,16 @@
+%chk=phosphazene.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+phosphazene
+
+0 1
+P 0.0 0.0 0.0
+N 1.55 0.0 0.30
+H 1.95 0.85 0.0
+H -0.5 1.05 0.7
+H -0.5 -1.05 0.7
+H -0.4 0.0 -1.25
+
+

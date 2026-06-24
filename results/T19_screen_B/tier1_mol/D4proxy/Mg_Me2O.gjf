@@ -1,0 +1,19 @@
+%chk=Mg_Me2O.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+Mg_Me2O
+
+2 1
+Mg 0.0 0.0 -2.05
+O 0.0 0.0 0.0
+C 0.0 1.20 0.65
+C 0.0 -1.20 0.65
+H 0.89 1.25 1.28
+H -0.89 1.25 1.28
+H 0.0 2.03 -0.05
+H 0.89 -1.25 1.28
+H -0.89 -1.25 1.28
+H 0.0 -2.03 -0.05
+

@@ -1,0 +1,10 @@
+species,E_Ha,role
+THF,-232.293498,reference_ligand
+Me2O,-154.918302,ether_donor
+disiloxane,-657.689441,siloxane_donor
+Mg_THF_2plus,-432.050524,complex
+Mg_Me2O_2plus,-354.668266,complex
+Mg_disiloxane_2plus,-857.423415,complex
+donor,dE_exch_kcalmol,verdict
+siloxane-O,14.47,PASS_strongly_transparent
+ether-O,4.43,PASS_marginal

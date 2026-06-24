@@ -1,0 +1,7 @@
+phase,role,gap_eV,chi_eV,CBM_vs_vac_eV,VBM_vs_vac_eV,Mg_Ef_vs_vac_eV,e_injection_barrier_eV,verdict,chi_source
+SiO2,poly SEI,8.46,0.90,-0.90,-9.36,-3.97,3.07,BLOCKS (e-injection barrier 3.07 eV),lit. SiO2 chi~0.9
+Al2O3,bare oxide residue,6.21,1.35,-1.35,-7.56,-3.97,2.62,BLOCKS (e-injection barrier 2.62 eV),lit. a-Al2O3 chi~1.35
+MgO,shared,3.92,0.85,-0.85,-4.77,-3.97,3.12,BLOCKS (e-injection barrier 3.12 eV),lit. MgO chi~0.85
+MgCl2,shared,2.93,0.50,-0.50,-3.43,-3.97,3.47,BLOCKS (e-injection barrier 3.47 eV),est. chi~0.5
+Al_fcc,bare SEI (metallic),0.00,,,,-3.97,0.00,LEAKY (metallic: states at Mg E_F),metal (no gap)
+Mg17Al12,bare SEI (metallic),0.18,,,,-3.97,0.00,LEAKY (metallic: states at Mg E_F),metal alloy

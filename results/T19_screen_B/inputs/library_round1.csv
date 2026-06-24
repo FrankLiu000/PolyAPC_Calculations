@@ -1,0 +1,41 @@
+cand_id,cls,family,motif,variant,cured_phase,anion_fixed_or_target,predicted_verdict,tier1_D1_D3p_D4p,tier2_D2
+B001,network,silsesquioxane,Si-O-Si,H,SiO2,[AlPh2Cl2]-,reference / strong (POSS = validated hit),yes,yes
+B002,network,silsesquioxane,Si-O-Si,methyl,SiO2,[AlPh2Cl2]-,reference / strong (POSS = validated hit),yes,yes
+B003,network,silsesquioxane,Si-O-Si,vinyl,SiO2,[AlPh2Cl2]-,reference / strong (POSS = validated hit),yes,yes
+B004,network,silsesquioxane,Si-O-Si,phenyl,SiO2,[AlPh2Cl2]-,reference / strong (POSS = validated hit),yes,yes
+B005,network,silsesquioxane,Si-O-Si,aminopropyl,SiO2,[AlPh2Cl2]-,reference / strong (POSS = validated hit),yes,yes
+B006,network,silsesquioxane,Si-O-Si,glycidoxy,SiO2,[AlPh2Cl2]-,reference / strong (POSS = validated hit),yes,yes
+B007,network,silsesquioxane,Si-O-Si,mercaptopropyl,SiO2,[AlPh2Cl2]-,reference / strong (POSS = validated hit),yes,yes
+B008,network,silsesquioxane,Si-O-Si,trifluoropropyl,SiO2,[AlPh2Cl2]-,reference / strong (POSS = validated hit),yes,yes
+B009,network,borosiloxane,B-O-Si,B:Si=1:3,borosilicate (B2O3.SiO2),[AlPh2Cl2]-,predicted STRONG (wide gap + Lewis-acid Cl/anion binding),yes,yes
+B010,network,borosiloxane,B-O-Si,B:Si=1:1,borosilicate (B2O3.SiO2),[AlPh2Cl2]-,predicted STRONG (wide gap + Lewis-acid Cl/anion binding),yes,yes
+B011,network,borosiloxane,B-O-Si,B:Si=3:1,borosilicate (B2O3.SiO2),[AlPh2Cl2]-,predicted STRONG (wide gap + Lewis-acid Cl/anion binding),yes,yes
+B012,network,phosphazene,P=N,chloro,phosphorus oxynitride (PON/P3N5),[AlPh2Cl2]-,moderate,yes,yes
+B013,network,phosphazene,P=N,phenoxy,phosphorus oxynitride (PON/P3N5),[AlPh2Cl2]-,moderate,yes,yes
+B014,network,phosphazene,P=N,trifluoroethoxy,phosphorus oxynitride (PON/P3N5),[AlPh2Cl2]-,moderate,yes,yes
+B015,network,phosphazene,P=N,dimethylamino,phosphorus oxynitride (PON/P3N5),[AlPh2Cl2]-,moderate,yes,yes
+B016,network,polyether-siloxane,C-O-C/Si-O,EO2,SiO2 + ether,[AlPh2Cl2]-,moderate; ether-O may lower D4 (Mg2+ coordination),yes,yes
+B017,network,polyether-siloxane,C-O-C/Si-O,EO4,SiO2 + ether,[AlPh2Cl2]-,moderate; ether-O may lower D4 (Mg2+ coordination),yes,yes
+B018,network,polyether-siloxane,C-O-C/Si-O,EO8,SiO2 + ether,[AlPh2Cl2]-,moderate; ether-O may lower D4 (Mg2+ coordination),yes,yes
+B019,network,carbosilane,Si-C,methylene,SiOC/SiC,[AlPh2Cl2]-,leaky risk (narrower gap / C states),yes,yes
+B020,network,carbosilane,Si-C,ethylene,SiOC/SiC,[AlPh2Cl2]-,leaky risk (narrower gap / C states),yes,yes
+B021,network,carbosilane,Si-C,phenylene,SiOC/SiC,[AlPh2Cl2]-,leaky risk (narrower gap / C states),yes,yes
+B022,network,titanosiloxane,Ti-O-Si,Ti:Si=1:4,TiO2.SiO2,[AlPh2Cl2]-,narrow-gap risk (TiO2 ~3 eV),yes,yes
+B023,network,titanosiloxane,Ti-O-Si,Ti:Si=1:1,TiO2.SiO2,[AlPh2Cl2]-,narrow-gap risk (TiO2 ~3 eV),yes,yes
+B024,network,zirconosiloxane,Zr-O-Si,Zr:Si=1:4,ZrO2.SiO2,[AlPh2Cl2]-,predicted STRONG (wide gap),yes,yes
+B025,network,zirconosiloxane,Zr-O-Si,Zr:Si=1:1,ZrO2.SiO2,[AlPh2Cl2]-,predicted STRONG (wide gap),yes,yes
+B026,network,phosphosilicate,P-O-Si,P:Si=1:4,P2O5.SiO2,[AlPh2Cl2]-,moderate,yes,yes
+B027,network,phosphosilicate,P-O-Si,P:Si=1:1,P2O5.SiO2,[AlPh2Cl2]-,moderate,yes,yes
+B028,network,germania network,Ge-O,amorphous,GeO2,[AlPh2Cl2]-,narrow-gap risk,yes,yes
+B029,network,aluminosiloxane / alumoxane,Al-O-Si / Al-O,Al:Si=1:4,Al2O3.SiO2 / Al2O3,[AlPh2Cl2]-,FAIL control (Al-rich -> leaky/metallic on reduction),yes,yes
+B030,network,aluminosiloxane / alumoxane,Al-O-Si / Al-O,Al:Si=1:1,Al2O3.SiO2 / Al2O3,[AlPh2Cl2]-,FAIL control (Al-rich -> leaky/metallic on reduction),yes,yes
+B031,network,aluminosiloxane / alumoxane,Al-O-Si / Al-O,pure Al-O,Al2O3.SiO2 / Al2O3,[AlPh2Cl2]-,FAIL control (Al-rich -> leaky/metallic on reduction),yes,yes
+B032,anion,APC dominant aluminate,anion redox,[AlPh2Cl2]-,"SiO2 (POSS, fixed)",[AlPh2Cl2]-,reducible -1.9..-3.4 V; deposits Al0 (baseline),yes,n/a (anion axis: D1 only)
+B033,anion,APC aluminate,anion redox,[AlPhCl3]-,"SiO2 (POSS, fixed)",[AlPhCl3]-,reducible; deposits Al0,yes,n/a (anion axis: D1 only)
+B034,anion,APC aluminate,anion redox,[AlPh3Cl]-,"SiO2 (POSS, fixed)",[AlPh3Cl]-,reducible; deposits Al0,yes,n/a (anion axis: D1 only)
+B035,anion,inorganic Mg-Al chloride,anion redox,[AlCl4]-,"SiO2 (POSS, fixed)",[AlCl4]-,reducible; deposits Al0,yes,n/a (anion axis: D1 only)
+B036,anion,borohydride (non-Al),anion redox,[BH4]-,"SiO2 (POSS, fixed)",[BH4]-,transferability test (no metal co-deposition expected),yes,n/a (anion axis: D1 only)
+B037,anion,fluorinated borate,anion redox,[B(OCH(CF3)2)4]-,"SiO2 (POSS, fixed)",[B(OCH(CF3)2)4]-,"off-narrative COMPARATOR only (screened, not claimed)",yes,n/a (anion axis: D1 only)
+B038,anion,carborane (weakly coordinating),anion redox,[CB11H12]-,"SiO2 (POSS, fixed)",[CB11H12]-,transferability test,yes,n/a (anion axis: D1 only)
+B039,anion,bis(trifluoromethanesulfonyl)imide,anion redox,[TFSI]-,"SiO2 (POSS, fixed)",[TFSI]-,"off-narrative COMPARATOR only (screened, not claimed)",yes,n/a (anion axis: D1 only)
+B040,anion,perfluoroaryl borate,anion redox,[B(C6F5)4]-,"SiO2 (POSS, fixed)",[B(C6F5)4]-,"off-narrative COMPARATOR only (screened, not claimed)",yes,n/a (anion axis: D1 only)

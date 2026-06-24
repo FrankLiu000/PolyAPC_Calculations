@@ -1,0 +1,106 @@
+{
+  "Al_fcc": {
+    "type": "metal",
+    "energy_reference": "E_F",
+    "E_F_eV": 5.404,
+    "VBM_eV": 5.404,
+    "CBM_eV": 5.404,
+    "gamma_DOS_gap_eV": 0.0,
+    "t8_authoritative_gap_eV": 0.0,
+    "elements": [
+      "Al"
+    ],
+    "sigma_eV": 0.1,
+    "note": "metallic: states at E_F (gapless)"
+  },
+  "Mg17Al12": {
+    "type": "metal",
+    "energy_reference": "E_F",
+    "E_F_eV": 4.829,
+    "VBM_eV": 4.829,
+    "CBM_eV": 4.829,
+    "gamma_DOS_gap_eV": 0.0,
+    "t8_authoritative_gap_eV": 0.18,
+    "elements": [
+      "Al",
+      "Mg"
+    ],
+    "sigma_eV": 0.1,
+    "note": "metallic: states at E_F (gapless)"
+  },
+  "Mg_hcp": {
+    "type": "metal",
+    "energy_reference": "E_F",
+    "E_F_eV": 3.597,
+    "VBM_eV": 3.597,
+    "CBM_eV": 3.597,
+    "gamma_DOS_gap_eV": 0.0,
+    "t8_authoritative_gap_eV": 0.0,
+    "elements": [
+      "Mg"
+    ],
+    "sigma_eV": 0.1,
+    "note": "metallic: states at E_F (gapless)"
+  },
+  "SiO2": {
+    "type": "insulator",
+    "energy_reference": "VBM",
+    "E_F_eV": 8.157,
+    "VBM_eV": 1.922,
+    "CBM_eV": 9.035,
+    "gamma_DOS_gap_eV": 7.113,
+    "t8_authoritative_gap_eV": 8.46,
+    "elements": [
+      "O",
+      "Si"
+    ],
+    "sigma_eV": 0.1,
+    "note": "Gamma-DOS gap underestimates; T8 k-point gap 8.46 is authoritative"
+  },
+  "Al2O3": {
+    "type": "insulator",
+    "energy_reference": "VBM",
+    "E_F_eV": 11.824,
+    "VBM_eV": 6.456,
+    "CBM_eV": 12.666,
+    "gamma_DOS_gap_eV": 6.21,
+    "t8_authoritative_gap_eV": 6.21,
+    "elements": [
+      "Al",
+      "O"
+    ],
+    "sigma_eV": 0.1,
+    "note": ""
+  },
+  "MgO": {
+    "type": "insulator",
+    "energy_reference": "VBM",
+    "E_F_eV": 10.138,
+    "VBM_eV": 7.083,
+    "CBM_eV": 10.998,
+    "gamma_DOS_gap_eV": 3.915,
+    "t8_authoritative_gap_eV": 3.92,
+    "elements": [
+      "Mg",
+      "O"
+    ],
+    "sigma_eV": 0.1,
+    "note": ""
+  },
+  "MgCl2": {
+    "type": "insulator",
+    "energy_reference": "VBM",
+    "E_F_eV": 1.586,
+    "VBM_eV": -0.484,
+    "CBM_eV": 2.446,
+    "gamma_DOS_gap_eV": 2.931,
+    "t8_authoritative_gap_eV": 2.93,
+    "elements": [
+      "Cl",
+      "Mg"
+    ],
+    "sigma_eV": 0.1,
+    "note": ""
+  },
+  "_provenance": "CP2K 2025.1 PBE Gamma-point single-point on T8 relaxed geoms; PDOS COMPONENTS; Gaussian sigma=0.1 eV; 2026-06-23"
+}

@@ -1,0 +1,23 @@
+%chk=disiloxane_cpx.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt=(maxcycles=200) scf=xqc SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+disiloxane+AlCl4(-) restart
+
+-1 1
+Si 3.49774 1.32325 0.01192
+O 3.34253 -0.32675 -0.07168
+Si 2.27496 -1.60191 0.00896
+H 4.92019 1.61288 0.35690
+H 2.62280 1.90539 1.06666
+H 3.20332 1.95293 -1.30311
+H 3.07631 -2.80316 0.38968
+H 1.25207 -1.36545 1.05955
+H 1.64516 -1.86228 -1.31051
+Al -1.54010 0.07814 0.01177
+Cl 0.12012 1.05426 -1.00214
+Cl -1.26651 0.23025 2.15126
+Cl -1.61593 -1.99959 -0.58282
+Cl -3.37042 1.07149 -0.57400
+

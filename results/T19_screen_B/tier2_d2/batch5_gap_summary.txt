@@ -1,0 +1,21 @@
+# T19 tier2 batch5 band-aligns (PON, phosphosilicate) — min band gap over MP 4x4x4 mesh, on Gamma-relaxed geoms
+## PON_kp
+  *** SCF run converged in    13 steps ***
+ MO| E(Fermi):            0.265180 a.u.          7.215908 eV
+ MO| Band gap:            0.171544 a.u.          4.667944 eV
+ MO| E(Fermi):            0.265180 a.u.          7.215908 eV
+ MO| Band gap:            0.174670 a.u.          4.753011 eV
+ MO| E(Fermi):            0.265180 a.u.          7.215908 eV
+ MO| Band gap:            0.186413 a.u.          5.072551 eV
+ MO| E(Fermi):            0.265180 a.u.          7.215908 eV
+ MO| Band gap:            0.183838 a.u.          5.002487 eV
+## PSiOx_kp
+  *** SCF run converged in    14 steps ***
+ MO| E(Fermi):            0.189009 a.u.          5.143200 eV
+ MO| Band gap:            0.254090 a.u.          6.914139 eV
+ MO| E(Fermi):            0.189009 a.u.          5.143200 eV
+ MO| Band gap:            0.250880 a.u.          6.826795 eV
+ MO| E(Fermi):            0.189009 a.u.          5.143200 eV
+ MO| Band gap:            0.242852 a.u.          6.608342 eV
+ MO| E(Fermi):            0.189009 a.u.          5.143200 eV
+ MO| Band gap:            0.250110 a.u.          6.805837 eV

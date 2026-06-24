@@ -1,0 +1,18 @@
+%chk=BSiOx.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+BSiOx
+
+0 1
+B 0.0 0.0 0.0
+O 1.36 0.0 0.50
+Si 2.70 0.0 -0.20
+H -0.7 0.95 -0.40
+H -0.7 -0.95 -0.40
+H 3.3 1.1 0.5
+H 3.3 -1.1 0.5
+H 2.9 0.0 -1.6
+
+

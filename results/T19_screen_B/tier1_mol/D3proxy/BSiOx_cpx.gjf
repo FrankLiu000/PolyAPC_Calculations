@@ -1,0 +1,22 @@
+%chk=BSiOx_cpx.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt=(maxcycles=200) scf=xqc SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+BSiOx+AlCl4(-) restart
+
+-1 1
+B 2.50707 1.80012 0.21627
+O 3.12833 0.71890 -0.34384
+Si 3.13225 -0.91910 0.06416
+H 1.93531 1.70745 1.28002
+H 2.66563 2.87907 -0.31385
+H 2.17968 -1.17317 1.17420
+H 2.77820 -1.69226 -1.15037
+H 4.51888 -1.26768 0.48373
+Al -1.18185 -0.03821 -0.00112
+Cl -0.11383 1.53709 -1.06154
+Cl -0.52224 -1.95391 -0.75683
+Cl -3.30085 0.21281 -0.33945
+Cl -0.77645 0.09572 2.11734
+

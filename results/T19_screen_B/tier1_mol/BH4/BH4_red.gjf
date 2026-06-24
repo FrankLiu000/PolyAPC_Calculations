@@ -1,0 +1,14 @@
+%chk=BH4_red.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ opt freq SCRF=(SMD,Solvent=Tetrahydrofuran) int=ultrafine
+
+BH4_red D1 (T19 screen)
+
+-2 2
+B 0.0 0.0 0.0
+H 0.7159 0.7159 0.7159
+H 0.7159 -0.7159 -0.7159
+H -0.7159 0.7159 -0.7159
+H -0.7159 -0.7159 0.7159
+

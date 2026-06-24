@@ -1,0 +1,23 @@
+%chk=Me2O_bsse.chk
+%nprocshared=8
+%mem=14GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ Counterpoise=2 int=ultrafine
+
+Me2O_bsse
+
+-1,1 0,1 -1,1
+O(Fragment=1) -3.84173 0.21184 0.01753
+C(Fragment=1) -2.77571 1.12863 -0.00519
+C(Fragment=1) -3.39971 -1.12113 -0.00587
+H(Fragment=1) -2.10842 1.01175 0.86957
+H(Fragment=1) -2.15398 1.02183 -0.91471
+H(Fragment=1) -3.19891 2.14545 0.01090
+H(Fragment=1) -4.28590 -1.77496 0.02104
+H(Fragment=1) -2.75328 -1.36275 0.86118
+H(Fragment=1) -2.81648 -1.35183 -0.91967
+Al(Fragment=2) 1.04627 -0.01698 -0.00094
+Cl(Fragment=2) 0.17634 -0.97276 -1.74119
+Cl(Fragment=2) 0.15241 -0.81906 1.80475
+Cl(Fragment=2) 0.70084 2.11905 -0.09642
+Cl(Fragment=2) 3.17640 -0.39832 0.03346
+
