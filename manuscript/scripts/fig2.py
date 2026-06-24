@@ -8,6 +8,8 @@ sys.path.insert(0, r"C:/Users/刘悦铮/AppData/Local/Temp/claude/D--20260602-po
 from angew_style import *
 import matplotlib.pyplot as plt
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401  (enables projection='3d')
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 ROOT=r"D:/20260602_polyAPC_data"
 SC=r"C:/Users/刘悦铮/AppData/Local/Temp/claude/D--20260602-polyAPC-data/302d1e65-667d-4649-a77b-21f3a1304446/scratchpad/mo6s8_out"
@@ -25,13 +27,15 @@ tb=rd(ROOT+"/MgMg/results/data/LE_bare_trace_downsampled.csv")
 
 def twin_fix(ax,ax2): ax.tick_params(axis="y",which="both",right=False); ax2.tick_params(axis="x",which="both",top=False)
 
-# 3-row layout so the tri-variate benchmark (e) gets a full wide row:
+# 3-row layout. Row 2 (panel e) is now a 3D scatter "cube" and needs a tall,
+# roughly-square footprint: the cube lives in gs[2,0:2], with the confidence
+# key + provenance note stacked in the narrow right column gs[2,2].
 #   row 0: (a)(b)(c) cycling + voltage profiles
 #   row 1: (d) Mg||Mg symmetric V-t  -- full width
-#   row 2: (e) tri-variate full-cell benchmark -- full width, room for 2 legends at right
-fig=plt.figure(figsize=(W2,1.18*W2))
-gs=fig.add_gridspec(3,3,height_ratios=[1.0,0.82,0.92],hspace=0.62,wspace=0.42,
-                    left=0.07,right=0.945,top=0.965,bottom=0.065)
+#   row 2: (e) 3D (cycle x rate x CE) Pareto cube + legend/notes column
+fig=plt.figure(figsize=(W2,1.62*W2))
+gs=fig.add_gridspec(3,3,height_ratios=[1.0,0.82,1.62],hspace=0.42,wspace=0.42,
+                    left=0.07,right=0.945,top=0.975,bottom=0.045)
 
 def cap_panel(ax,rowsets,title,xmax,cut=None,ref=None):
     for rows,sty,fc in rowsets:
@@ -100,110 +104,144 @@ axin.set_xlim(100,110); axin.set_ylim(-0.35,0.35); axin.set_title("100–110 h",
 axin.tick_params(labelsize=5); axin.set_xlabel("t (h)",fontsize=5,labelpad=1); axin.set_ylabel("V",fontsize=5,labelpad=1)
 panel_label(ax,"d",x=-0.065)
 
-# (e) Tri-variate Mg full-cell benchmark: cycle (x) x CE (y) x RATE (bubble size). -- ADDED
-# Real CSV values only; honest rendering: confidence -> marker fill, rate -> bubble area.
-# Conclusion landed: poly-APC sits on the Pareto front of (cycle, CE, rate) at a
-# practical 1C -- highest-CE point among long-cycle Mg full cells.
-axb=fig.add_subplot(gs[2,0:3])
-def rd_lit(p):
-    # tolerant reader: one literature `cathode` value contains an unquoted comma
-    # (e.g. "1,4-PAQ (organic)"), which over-splits that row. Re-merge extra
-    # field(s) into `cathode` so every column realigns. No values are altered.
-    with open(p,encoding="utf-8") as f:
-        rdr=csv.reader(f); hdr=next(rdr); n=len(hdr); ci=hdr.index("cathode")
-        out=[]
-        for cells in rdr:
-            if not cells: continue
-            if len(cells)>n:
-                extra=len(cells)-n
-                cells=cells[:ci]+[",".join(cells[ci:ci+1+extra])]+cells[ci+1+extra:]
-            out.append(dict(zip(hdr,cells)))
-        return out
-lb=rd_lit(ROOT+"/PolyAPC_repo/results/lit_benchmark/mg_fullcell_benchmark.csv")
-rows_ce=[r for r in lb if r["CE_pct"].strip().upper()!="NA"]   # CE-less rows are SI-table only
-# confidence -> fill style (shape+fill so it survives grayscale): high=dark fill, med=gray, low=open
-CONF_FC={"high":C["ink"],"med":"#AFAFAF","low":"none"}
-# rate -> bubble AREA on a log scale: 0.05C small ... 50C large, clearly readable steps.
-# scatter `s` is point-area; map area linearly in log10(rate) so each decade is a visible jump.
-_RMIN=0.05
-def s_of_rate(rate):
-    return 16.0 + 108.0*(np.log10(float(rate))-np.log10(_RMIN))   # 0.05C->16 ... 50C->~340
-# --- literature points (bubble size = rate) ---
-for r in rows_ce:
-    if r["this_work"].strip()=="1": continue
-    cyc=float(r["cycle"]); ce=float(r["CE_pct"]); rate=float(r["rate_C"]); conf=r["confidence"].strip()
-    fc=CONF_FC.get(conf,"none")
-    axb.scatter(cyc,ce,s=s_of_rate(rate),marker="o",facecolor=fc,edgecolor=C["ink"],
-                linewidths=0.7,zorder=3)
-# --- Pareto frontier (non-dominated: maximise BOTH cycle and CE) over the plotted CE rows ---
-pts=sorted([(float(r["cycle"]),float(r["CE_pct"])) for r in rows_ce])
-front=[]
-best_ce=-1e9
-for cyc,ce in sorted(pts,key=lambda t:-t[0]):   # high cycle -> low; keep running max CE
-    if ce>best_ce+1e-9:
-        front.append((cyc,ce)); best_ce=ce
-front=sorted(front)                              # ascending cycle for drawing
-fx=[p[0] for p in front]; fy=[p[1] for p in front]
-# extend the stepped front to the axis edges so the shaded dominated region reads clearly
-fx_d=[fx[0]]+fx+[14000]; fy_d=[fy[0]]+fy+[fy[-1]]
-axb.fill_between(fx_d,fy_d,92,step="pre",color=C["green"],alpha=0.10,lw=0,zorder=0)
-axb.step(fx_d,fy_d,where="pre",color=C["green"],lw=1.2,ls=(0,(4,1.8)),zorder=2,alpha=0.95)
-axb.text(2700,98.55,"dominated",fontsize=4.6,style="italic",color="#7AA9A0",ha="center",va="center",zorder=1)
-# --- anchor labels (first_author + year); offsets hand-tuned to avoid bubbles/overlap ---
-ANCH={"Aurbach 2000":(11,5,"left"),"MLCC 2023":(0,-15,"center"),"Pan 2016":(-9,-7,"right"),
-      "Yoo 2017":(-10,-2,"right"),"Nguyen 2020":(-9,2,"right")}
-for r in rows_ce:
-    lab=r["label"].strip()
-    if lab in ANCH and r["this_work"].strip()!="1":
-        cyc=float(r["cycle"]); ce=float(r["CE_pct"]); dx,dy,ha=ANCH[lab]
-        axb.annotate(f"{r['first_author']} {r['year']}",xy=(cyc,ce),xytext=(dx,dy),
-                     textcoords="offset points",fontsize=5.0,color=C["ink"],ha=ha,va="center",zorder=7)
-# --- this-work stars (the hero): drawn last so they sit on top; rate tags splayed apart ---
-tw=sorted([r for r in rows_ce if r["this_work"].strip()=="1"],key=lambda r:float(r["cycle"]))
-# Tags go UP into the empty 100-101% band: 0.5C up-left, 1C up-right.
-TWLAB={ "0.5":(-11,9,"right"), "1.0":(11,9,"left") }
-for i,r in enumerate(tw):
-    cyc=float(r["cycle"]); ce=float(r["CE_pct"]); rstr=r["rate_C"].strip()
-    axb.plot(cyc,ce,marker="*",ls="none",ms=18,mfc=C["poly"],mec="white",mew=0.9,zorder=6,
-             label="this work" if i==0 else None)
-    dx,dy,ha=TWLAB.get(rstr,(0,9,"center"))
-    axb.annotate(f"{rstr.rstrip('0').rstrip('.')}C",xy=(cyc,ce),xytext=(dx,dy),
-                 textcoords="offset points",fontsize=6.2,color=C["poly"],fontweight="bold",
-                 ha=ha,va="bottom",zorder=8)
-axb.set_xscale("log")
-axb.set_xlim(8,14000); axb.set_ylim(92,101)
-axb.set_xlabel("Cycle number"); axb.set_ylabel("Coulombic efficiency (%)")
-axb.set_title("Tri-variate Mg full-cell benchmark: cycle life x CE x rate",pad=3)
-
-# ---- LEGEND 1: SIZE = RATE (reference bubbles 0.1C / 1C / 10C / 50C) ----
+# (e) 3D scatter "cube": cycle number (x) x rate (y) x Coulombic efficiency (z).
+# Real CSV values only. Honest rendering: position = the three dimensions,
+# fill = confidence, this-work = blue stars. matplotlib's 3D log scaling is
+# unreliable, so x and y are plotted as log10(value) with custom tick labels.
+# Conclusion landed: poly-APC Mg||Mo6S8 sits on the 3D Pareto front of
+# (cycle life, rate, CE) -- highest CE among long-cycle Mg full cells, at a
+# practical 1C, between the ultralow-rate early benchmark (Aurbach) and the
+# extreme-rate longest-cycle outlier (MLCC).
 from matplotlib.lines import Line2D as _L2D
-def _size_handle(rate):
-    # Line2D markersize is a DIAMETER (pts); scatter s is AREA (pts^2). Match them: ms=sqrt(s).
-    return _L2D([0],[0],marker="o",ls="none",mfc="#AFAFAF",mec=C["ink"],mew=0.7,
-                markersize=np.sqrt(s_of_rate(rate)),label=f"{rate:g}C")
-size_handles=[_size_handle(0.1),_size_handle(1.0),_size_handle(10.0),_size_handle(50.0)]
-leg_size=axb.legend(handles=size_handles,loc="lower right",
-                    title="bubble size = rate\n(1C = 128.8 mA g$^{-1}$)",title_fontsize=5.0,
-                    fontsize=5.4,labelspacing=1.30,handletextpad=2.0,borderpad=0.8,
-                    handlelength=2.0,framealpha=1.0,edgecolor="#BBBBBB",facecolor="white",
-                    bbox_to_anchor=(0.999,0.028))
-leg_size.get_title().set_multialignment("center")
-leg_size.get_frame().set_linewidth(0.6)
-axb.add_artist(leg_size)
+# 11 authoritative points: (label, first_author, year, cycle, rate_C, CE, confidence, this_work)
+PTS=[
+    ("this work 1C","this work",2026, 1592, 1.0,  99.9,"hero",True),
+    ("this work 0.5C","this work",2026, 842, 0.5,  99.9,"hero",True),
+    ("Aurbach 2000","Aurbach",2000,    2000, 0.05, 99.5,"high",False),
+    ("Mohtadi 2012","Mohtadi",2012,      40, 1.0,  94.0,"med", False),
+    ("Kim 2011","Kim",2011,             300, 0.2,  98.5,"med", False),
+    ("Pan 2016","Pan",2016,            1000, 1.0,  99.2,"high",False),
+    ("Yoo 2017","Yoo",2017,             400, 1.0,  99.0,"high",False),
+    ("Nguyen 2020","Nguyen",2020,       100, 0.1,  99.4,"high",False),
+    ("PTB gel 2023","(quasi-solid)",2023,250, 0.5, 95.0,"med", False),
+    ("MLCC 2023","Fan",2023,          10000, 50.0, 99.0,"med", False),
+    ("Yang 2026","Yang",2026,           500, 0.5,  99.5,"low", False),
+]
+def lx(v): return np.log10(float(v))   # x = log10(cycle)
+def ly(v): return np.log10(float(v))   # y = log10(rate)
+# confidence -> fill (shape+fill so it survives grayscale): high=dark, med=gray, low=open
+CONF_FC={"high":C["ink"],"med":"#AFAFAF","low":"white"}
+Z0=93.5                                # cube floor (z-min) -- stems drop to here
 
-# ---- LEGEND 2: confidence key (fill) + hero star + front -- grayscale-separable ----
-conf_handles=[_L2D([0],[0],marker="*",ls="none",ms=11,mfc=C["poly"],mec="white",mew=0.6,label="this work"),
-              _L2D([0],[0],marker="o",ls="none",ms=6,mfc=C["ink"],mec=C["ink"],mew=0.7,label="high conf."),
-              _L2D([0],[0],marker="o",ls="none",ms=6,mfc="#AFAFAF",mec=C["ink"],mew=0.7,label="med conf."),
-              _L2D([0],[0],marker="o",ls="none",ms=6,mfc="none",mec=C["ink"],mew=0.7,label="low / unconf."),
-              _L2D([0],[0],color=C["green"],lw=1.0,ls=(0,(5,2)),label="Pareto front")]
-leg_conf=axb.legend(handles=conf_handles,loc="lower left",fontsize=5.4,handlelength=1.3,
-                    labelspacing=0.30,handletextpad=0.5,borderpad=0.5,framealpha=0.0,
-                    bbox_to_anchor=(0.012,0.012))
-axb.add_artist(leg_conf)
-axb.text(0.012,0.985,"non-aqueous Mg-metal full cells; values as reported (Table S1);  open fill = not independently confirmed",
-         transform=axb.transAxes,fontsize=4.4,color="#666666",ha="left",va="top")
-panel_label(axb,"e",x=-0.058)
+axb=fig.add_subplot(gs[2,0:2],projection="3d")
+axb.set_box_aspect((1.0,1.0,0.95))     # roughly cubic
+axb.view_init(elev=20,azim=-58)
+# Pull the 3D cube out to fill its cell (mplot3d leaves wide internal margins);
+# grow leftward/upward into the empty corner so ticks+labels stay readable.
+_p=axb.get_position()
+axb.set_position([_p.x0-0.045, _p.y0-0.050, _p.width+0.075, _p.height+0.060])
+
+# axis ranges (plotted in log10 for x,y)
+X_TK=[10,100,1000,10000]; Y_TK=[0.05,0.1,1,10,50]
+xlo,xhi=lx(8),lx(14000); ylo,yhi=ly(0.04),ly(60); zlo,zhi=Z0,100.3
+axb.set_xlim(xlo,xhi); axb.set_ylim(ylo,yhi); axb.set_zlim(zlo,zhi)
+
+# --- faint vertical stems from each point to the cube floor (z=Z0): depth cue ---
+for lab,fa,yr,cyc,rate,ce,conf,tw in PTS:
+    axb.plot([lx(cyc),lx(cyc)],[ly(rate),ly(rate)],[Z0,ce],
+             color="0.55",lw=0.45,ls="-",zorder=1,alpha=0.7)
+    axb.scatter([lx(cyc)],[ly(rate)],[Z0],s=3,marker=".",color="0.6",zorder=1)  # floor foot
+
+# --- 3D Pareto front: non-dominated trio (this-work-1C, Aurbach, MLCC) ---
+PF=[("this work 1C",1592,1.0,99.9),("Aurbach 2000",2000,0.05,99.5),("MLCC 2023",10000,50.0,99.0)]
+pfx=[lx(c) for _,c,_,_ in PF]; pfy=[ly(r) for _,_,r,_ in PF]; pfz=[z for *_,z in PF]
+# faint translucent triangular surface spanning the trio
+tri=Poly3DCollection([list(zip(pfx,pfy,pfz))],facecolor=C["green"],alpha=0.13,
+                     edgecolor="none",zorder=2)
+axb.add_collection3d(tri)
+# bold connecting line through the three non-dominated cells
+axb.plot(pfx,pfy,pfz,color=C["green"],lw=1.6,ls="-",zorder=5,solid_capstyle="round")
+
+# --- literature points (open/gray/dark by confidence) ---
+for lab,fa,yr,cyc,rate,ce,conf,tw in PTS:
+    if tw: continue
+    fc=CONF_FC.get(conf,"white")
+    axb.scatter([lx(cyc)],[ly(rate)],[ce],s=26,marker="o",
+                facecolor=fc,edgecolor=C["ink"],linewidths=0.7,depthshade=False,zorder=6)
+
+# --- this-work stars (hero): drawn last so they sit on top ---
+for lab,fa,yr,cyc,rate,ce,conf,tw in PTS:
+    if not tw: continue
+    axb.scatter([lx(cyc)],[ly(rate)],[ce],s=200,marker="*",
+                facecolor=C["poly"],edgecolor="white",linewidths=0.9,depthshade=False,zorder=10)
+
+# --- short author-year text labels near key points (small offsets, 3D text) ---
+# offsets hand-tuned in data space (dz in CE-%, ddx/ddy in log10 units) to clear
+# both the markers and the star cluster at high CE.
+TXT={  # label -> (dz, ddx, ddy, ha, color)
+    "Aurbach 2000": (-1.10,  0.10, 0.00,"left",  C["ink"]),   # drop below to clear stars
+    "MLCC 2023":    (-1.25, -0.02,-0.12,"right", C["ink"]),   # drop below + toward viewer, clear front line
+    "Pan 2016":     (-1.35, -0.06, 0.00,"right", C["ink"]),
+    "Nguyen 2020":  ( 0.70, -0.06, 0.00,"right", C["ink"]),
+    "Yang 2026":    (-1.05,  0.00,-0.10,"center",C["ink"]),
+}
+for lab,fa,yr,cyc,rate,ce,conf,tw in PTS:
+    if lab in TXT:
+        dz,ddx,ddy,ha,cl=TXT[lab]
+        axb.text(lx(cyc)+ddx,ly(rate)+ddy,ce+dz,f"{fa} {yr}",fontsize=5.0,color=cl,
+                 ha=ha,va="center",zorder=11)
+# "this work" label above-left of the star pair, clear of "Pareto front"
+axb.text(lx(700)-0.05,ly(0.6),99.9+1.05,"this work",fontsize=6.2,color=C["poly"],
+         fontweight="bold",ha="right",va="center",zorder=12)
+# Pareto-front label, ride along the trio (mid-segment toward MLCC, above the line)
+axb.text(lx(4200),ly(12),99.0+0.95,"Pareto front",fontsize=5.6,color=C["green"],
+         fontweight="bold",ha="center",va="center",zorder=11)
+# "better ->" cue toward the favorable corner (high cycle, high rate, high CE)
+axb.text(lx(150),ly(30),100.1,"better →",fontsize=5.8,color="#444444",
+         style="italic",ha="left",va="center",zorder=11)
+
+# --- axes: custom log10 ticks + labels ---
+axb.set_xticks([lx(v) for v in X_TK]); axb.set_xticklabels(["10","100","1k","10k"])
+axb.set_yticks([ly(v) for v in Y_TK]); axb.set_yticklabels(["0.05","0.1","1","10","50"])
+axb.set_zticks([94,96,98,100])
+axb.set_xlabel("Cycle number",labelpad=-4,fontsize=7.0)
+axb.set_ylabel("Rate (C)  ·  1C=128.8 mA g$^{-1}$",labelpad=-3,fontsize=6.4)
+axb.set_zlabel("CE (%)",labelpad=-5,fontsize=7.0)
+axb.tick_params(axis="x",pad=-2.5,labelsize=6.0)
+axb.tick_params(axis="y",pad=-2.5,labelsize=6.0)
+axb.tick_params(axis="z",pad=0.5,labelsize=6.0)
+# Title as text2D (axes-fraction) so growing the 3D box doesn't clip set_title.
+axb.text2D(0.52,0.99,"Mg full-cell benchmark cube: cycle × rate × CE",
+           transform=axb.transAxes,fontsize=8.0,ha="center",va="top")
+
+# light panes, subtle gridlines, thin axis lines (Angew restraint)
+for pane in (axb.xaxis,axb.yaxis,axb.zaxis):
+    pane.pane.set_facecolor((1,1,1,0.0)); pane.pane.set_edgecolor((0.6,0.6,0.6,0.4))
+    pane.pane.set_alpha(0.04); pane._axinfo["grid"].update(color="#D7DBE0",linewidth=0.4)
+    pane.line.set_linewidth(0.7); pane.line.set_color("0.5")
+
+# panel label: Axes3D.text() has a 3D signature, so use text2D (axes-fraction)
+axb.text2D(0.02,0.94,"e",transform=axb.transAxes,fontsize=10,fontweight="bold",
+           va="bottom",ha="left")
+
+# ---- legend / notes column (gs[2,2]): confidence key + provenance note ----
+axl=fig.add_subplot(gs[2,2]); axl.axis("off")
+conf_handles=[
+    _L2D([0],[0],marker="*",ls="none",ms=12,mfc=C["poly"],mec="white",mew=0.6,label="this work"),
+    _L2D([0],[0],marker="o",ls="none",ms=6,mfc=C["ink"],mec=C["ink"],mew=0.7,label="high conf."),
+    _L2D([0],[0],marker="o",ls="none",ms=6,mfc="#AFAFAF",mec=C["ink"],mew=0.7,label="med conf."),
+    _L2D([0],[0],marker="o",ls="none",ms=6,mfc="white",mec=C["ink"],mew=0.7,label="low / unconf."),
+    _L2D([0],[0],color=C["green"],lw=1.6,label="Pareto front"),
+    _L2D([0],[0],color="0.55",lw=0.7,label="stem → (cycle, rate)"),
+]
+leg=axl.legend(handles=conf_handles,loc="upper center",fontsize=6.0,handlelength=1.6,
+               labelspacing=0.85,handletextpad=0.7,borderpad=0.8,framealpha=1.0,
+               edgecolor="#BBBBBB",facecolor="white",bbox_to_anchor=(0.5,0.98),
+               title="confidence key",title_fontsize=6.4)
+leg.get_frame().set_linewidth(0.6)
+axl.add_artist(leg)
+axl.text(0.5,0.30,"non-aqueous Mg-metal full cells;\nvalues as reported (Table S1);\nopen = not independently confirmed",
+         transform=axl.transAxes,fontsize=4.8,color="#666666",ha="center",va="top",linespacing=1.5)
 
 import os; os.makedirs(os.path.dirname(OUT),exist_ok=True)
 save_pub(fig,OUT)
