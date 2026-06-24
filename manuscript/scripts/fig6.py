@@ -103,16 +103,68 @@ ax.set_title("Mg|SEI band alignment: e$^-$-injection barrier",pad=3)
 ax.text(0,-10.4,"poly SiO$_2$: 3.07 eV blocks",fontsize=5.2,color=C["poly"],fontweight="bold")
 panel_label(ax,"e")
 
-# (f) network sequestration
+# (f) interfacial ion ordering INVERSION (T20: 3D ion-electrode min-distance)
+# bare: reducible Al-anion (4.58 A) leads, ahead of cation (5.78 A)
+# poly: innocuous cation (5.20 A) leads, Al-anion excluded to a SLOW, RANGE-VALUED standoff (6.81 +/- 1.27 A)
 ax=fig.add_subplot(gs[2,1])
-ax.bar([0,1],[47.5,24.7],color=[C["Al"],C["poly"]],hatch=[HATCH["Al"],HATCH["poly"]],edgecolor="white",lw=0.6,width=0.55)
-for i,v in zip([0,1],[47.5,24.7]): ax.text(i,v+1.5,f"{v:.1f}%",ha="center",fontsize=6.5)
-ax.set_xticks([0,1]); ax.set_xticklabels(["Al-anion","cation"],fontsize=6.5)
-ax.set_ylabel("network-associated (%)"); ax.set_ylim(0,60)
-ax.set_title("POSS network sequesters Al-anion",pad=3)
-ax.text(0.5,0.80,"anion 4.2× slower in gel;\nsupports the 3.07 eV block (d,e)",
-        transform=ax.transAxes,fontsize=5.2,ha="center",color=C["ink"],
+def rd_nc(p):  # DictReader that skips leading '#' comment lines (header is first non-# line)
+    with open(p,encoding="utf-8") as f:
+        return list(csv.DictReader(l for l in f if not l.lstrip().startswith("#")))
+prof=rd_nc(REPO+"/results/T20_iface_profile/outputs/anion_density_profile.csv")
+z   =np.array([float(r["z_angstrom"]) for r in prof])
+def col(k): return np.array([float(r[k]) for r in prof])
+# 3D min-distance markers + their spreads (from iface_accumulation_metrics.csv)
+AN_B,AN_P = 4.58, 6.81           # anion.Al bare / poly
+CT_B,CT_P = 5.78, 5.20           # cation.Mg bare / poly
+AN_P_SD   = 1.27                  # poly anion standoff is a RANGE (slow DOF; indep. runs 6.8-10.3 A)
+# distribution curves (scaled to share one axis) -- poly anion drawn broad/noisy on purpose
+def band(name,base,c,ls,lw,fill):
+    rho=col(f"rho_{name}"); err=col(f"rho_{name}_err"); s=rho/(rho.max() or 1)*0.9
+    e=err/(rho.max() or 1)*0.9
+    if fill: ax.fill_between(z,np.clip(s-e,0,None)+base,s+e+base,color=c,alpha=0.16,lw=0)
+    ax.plot(z,s+base,color=c,ls=ls,lw=lw,zorder=3)
+    return rho.max() or 1
+# baselines: bare on lower track, poly on upper track (curves are schematic densities, markers are the metric)
+band("anion_bare", 0.00,C["bare"],"-",        1.5,False)
+band("cation_bare",0.00,C["bare"],(0,(5,2)),  1.1,False)
+band("anion_poly", 1.30,C["poly"],"-",        1.5,True)   # broad/noisy band = the point
+band("cation_poly",1.30,C["poly"],(0,(5,2)),  1.1,False)
+# reductive zone (<2.5 A) -- both anions sit OUTSIDE it (field-free, 0% contact)
+ax.axvspan(0,2.5,color="0.82",alpha=0.55,lw=0,zorder=0)
+ax.text(1.25,2.18,"reductive\nzone <2.5 Å",fontsize=4.6,ha="center",va="top",color="0.35",rotation=90)
+# min-distance markers (the robust metric). horizontal error bar on poly anion = wide RANGE.
+mk=dict(ms=5,mec="white",mew=0.5,zorder=5,clip_on=False)
+ax.plot(AN_B,0.30,"o",color=C["bare"],**mk)                                   # anion bare (crisp)
+ax.plot(CT_B,0.10,"s",color=C["bare"],**mk)                                   # cation bare
+ax.errorbar(AN_P,1.62,xerr=AN_P_SD,fmt="o",color=C["poly"],ecolor=C["poly"],  # anion poly (RANGE)
+            elinewidth=1.2,capsize=2.6,capthick=1.0,**mk)
+ax.plot(CT_P,1.42,"s",color=C["poly"],**mk)                                   # cation poly
+# inversion arrows: bare anion<cation (anion leads) ; poly cation<anion (cation leads, anion out)
+ax.annotate("",xy=(AN_B,0.30),xytext=(CT_B,0.30),
+            arrowprops=dict(arrowstyle="->",color=C["bare_d"],lw=1.0))
+ax.annotate("",xy=(CT_P,1.42),xytext=(AN_P,1.42),
+            arrowprops=dict(arrowstyle="->",color=C["poly"],lw=1.0))
+ax.text((AN_B+CT_B)/2,0.46,"anion leads",fontsize=5.0,ha="center",color=C["bare_d"],fontweight="bold")
+ax.text((CT_P+AN_P)/2,1.26,"cation leads\n(anion excluded)",fontsize=5.0,ha="center",va="top",
+        color=C["poly"],fontweight="bold")
+# poly standoff is range-valued / slow -> make the honesty explicit
+ax.text(AN_P,1.92,"poly standoff:\nrange (slow DOF)",fontsize=4.6,ha="center",va="bottom",color=C["poly"])
+# near-front occupancy headline
+ax.text(0.97,0.97,"Al ≤5 Å occupancy:\nbare 99% → poly 2%",transform=ax.transAxes,
+        fontsize=5.2,ha="right",va="top",color=C["ink"],
         bbox=dict(boxstyle="round,pad=0.3",fc="#F2F4F6",ec="none"))
+# legend (color=species/system, linestyle=ion: solid anion / dashed cation)
+from matplotlib.lines import Line2D
+leg=[Line2D([0],[0],color=C["bare"],ls="-",lw=1.5,marker="o",ms=4,mec="white",label="anion·Al bare (4.58)"),
+     Line2D([0],[0],color=C["bare"],ls=(0,(5,2)),lw=1.1,marker="s",ms=4,mec="white",label="cation·Mg bare (5.78)"),
+     Line2D([0],[0],color=C["poly"],ls="-",lw=1.5,marker="o",ms=4,mec="white",label="anion·Al poly (6.81±1.3)"),
+     Line2D([0],[0],color=C["poly"],ls=(0,(5,2)),lw=1.1,marker="s",ms=4,mec="white",label="cation·Mg poly (5.20)")]
+ax.legend(handles=leg,fontsize=4.7,loc="lower right",handlelength=1.8,labelspacing=0.25,borderpad=0.3)
+ax.set_xlim(0,12); ax.set_ylim(0,2.55)
+ax.set_yticks([])
+ax.set_xlabel("ion–electrode 3D min distance (Å)")
+ax.set_ylabel("prob. density (a.u.)")
+ax.set_title("Network inverts the interfacial ion ordering",pad=3)
 panel_label(ax,"f")
 
 os.makedirs(os.path.dirname(OUT),exist_ok=True)
