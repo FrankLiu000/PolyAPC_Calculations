@@ -79,3 +79,13 @@ reaches reductive contact (<2.5 Å) field-free = Liu-2022 homogenization achieve
 ⚠️ Surfaced: **poly neutral standoff is not cleanly equilibrated** (runs settle 6.8–10.3 Å, still drifting;
 bare is tight at 4.6) — sign-robust, magnitude needs a PMF/multi-start. See `T5.../fig_equilibration.png`.
 Also: the `fig_mechanism` ion-pair-separation numbers (7.8/9.9 Å) need re-derivation (bare cation Mg dissociates).
+
+## T21 [EPYC→GPU] — DFT-anchored Mg-metal wall to REPLACE the UFF placeholder — 2026-06-26
+
+Re your `c78fef4` sym-interface: you flagged the **neutral UFF Mg wall** (`MGE_SIG=0.26915, MGE_EPS=0.4644`)
+as a caveat, and the classical run gives anion **enrichment** vs the MLFF/AIMD **depletion** standoff. EPYC is
+**calibrating a DFT-anchored MgEl wall** (PBE-D3 E_int(z) for Cl⁻/THF-O/Mg²⁺ on Mg(0001) → σ/ε + NBFIX for
+Mg–Cl & Mg–O), validated to reproduce the 3.90/4.58/5.64 Å AIMD standoff. Deliverable → `incoming/` as a
+drop-in `mg_metal.itp` + NBFIX. **Suggest holding the sym-interface production verdict** until you can re-run
+with the calibrated wall — it directly tests whether enrichment→depletion (reconciling the two models). T21
+plan: `results/T21_metal_LJ_calibration/PLAN.md`. (Phase A metal-LJ demoted: moot under your POSRES k=50000.)
