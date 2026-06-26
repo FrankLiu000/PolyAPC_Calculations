@@ -1,0 +1,13 @@
+; mg_electrolyte_nbfix.itp - T21 Phase B (EPYC). Mg(0001) wall <-> electrolyte cross-LJ from DFT E_int(z)
+; (PBE-D3, lattice-sum fit over the surface Mg). comb-rule 3. Pair the MgEl atomtype (mg_metal.itp) with the
+; electrolyte atomtypes. *** USE NBFIX, NOT combining rule *** (MgEl self-eps is the cohesive eps; combining
+; would massively over-attract the electrolyte).
+;
+[ nonbond_params ]
+; i     j     func   sigma(nm)   epsilon(kJ/mol)   ; <- map j to YOUR electrolyte atomtype name
+  MgEl  O_thf  1     0.18410     53.224            ; THF ether-O: real vdW physisorption well -0.68 eV @ 2.2 A (RMSE 0.16 eV) -- SOLID
+  MgEl  Cl     1     0.18586    132.713            ; bridging Cl: EFFECTIVE only - lumps image-charge+vdW; RMSE 0.55 eV; MISSES the long-range r^-1 image tail
+;
+; Mg2+ (cation): OMITTED on purpose - a bare Mg2+ on the metal is REDUCED (DFT E_int ~ -13.5 eV = electrodeposition,
+;   Mg2+ + 2e- -> Mg0), not a pair interaction. The solvated-cation standoff (5.64 A) is a THF-solvation effect, not
+;   a Mg2+-metal LJ. Do not assign a Mg2+-MgEl LJ; the cation's behaviour comes from its O(THF) solvation + the wall.
