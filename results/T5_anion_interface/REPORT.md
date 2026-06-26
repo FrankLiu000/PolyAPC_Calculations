@@ -5,6 +5,26 @@
 > **Honest spine (do not violate):** bulk Mg²⁺ transport is NOT the discriminator (MD + GITT agree); the win is interfacial-compositional. This ticket asks a *kinetic* question about the **anion**: can it reach the anode to be reduced (→ Al co-deposition), and does the network impede that? It does **not** claim a transport advantage.
 
 ---
+## ★ v3.2 UPDATE (2026-06-26) — Classical poly interface IS buildable; symmetric two-slab + 3dc; per-face gel effect
+
+**R4's "a poly atomistic electrode interface cannot be built in classical MD" is OVERTURNED.** The percolating NET1 runs in GROMACS with **`periodic-molecules=yes`** (the abort was a missing flag, not a topology limit). For a clean *electrode* interface we then built a **symmetric two-slab** cell: two Mg(0001) slabs (POSRES k=50000) with the electrolyte between, **`pbc=xyz` + `ewald-geometry=3dc` + vacuum** — the PME-accurate realization of a 2D slab (literal `pbc=xy` forbids Ewald in GROMACS). Density set by gentle single-slab NPT-z (c-rescale **tau-p 50**, judged by box-z plateau; both bare & poly within ~0.3 % of 1 bar in the normal pressure P_zz — the large negative *scalar* pressure is in-plane slab-lattice virial, not a density error). Production: NVT+3dc, 200 ns target, `sym/{bare,poly}/prod3dc`.
+
+**The two-face diagnostic.** With the electrolyte between two equivalent faces, **bare's faces converge to equal (A=B by ~28 ns)** — the geometry control passes. **poly's two faces do NOT** (~4–20×): one face is gel-contacted, the other gel-poor. Disentangled, this is **network-driven** (POSRES-pinned gel sits asymmetrically), not a geometry artifact — so the question was reframed **per-face**.
+
+**Per-face result (neutral, t≈40 ns, still equilibrating):**
+| surface | near-surf anion /nm² | vs bare |
+|---|---|---|
+| **bare** (both faces, converged) | ~0.016 | reference |
+| **poly gel-CONTACT face** | ~0.05–0.07 | **~3–4× ENRICHED** |
+| **poly gel-POOR face** | ~0.003–0.007 | **depleted (< bare)** |
+
+→ Where the gel touches Mg the anion is **enriched**; where it doesn't, **depleted**. Mechanism = **network-O coordination** pulling both ions (displacing THF) to wherever the network contacts the electrode — a **redistribution**, not a transport advantage (guardrail honoured). **This is ENRICHMENT at the gel-contact face — opposite in sign to the v3 (06-22) MLFF 1.65× "standoff" (a depletion).** The two models differ (MLFF r6: reactive, anion-z metric; classical here: neutral UFF wall + the sparse network, areal near-surface density) and are reported as such — no standoff claimed for the classical run.
+
+**Critical caveat — the network is sparse (4 POSS cages).** NET1 has only **4 T8 POSS** cross-link junctions (32 Si / 8) in the box. The interfacial gel statistics are therefore **under-sampled**: the cages split ~symmetrically (2–2) but sit 1.8–3.5 nm off the walls; the near-wall density is the fluctuating linker arms (the poly-rich/poly-poor label can swap frame-to-frame). The up/down asymmetry is largely a **finite-size + pinning artifact** (identical neutral slabs ⇒ no thermodynamic driver; bare confirms symmetric), and the per-face magnitudes stay statistically soft (±~20 %). **A denser-POSS poly box is needed to put the interfacial gel effect on firm footing.** Production continues; per-face 2×2 verdict (error bars + this caveat) at plateau, then the +0.3 V/nm field phase (3dc → the two faces become cathode/anode).
+
+*Provenance (this campaign): `/lyz/.../storyT5/` — `build_interface_sym.py`, `build_poly_sym.py` (network surgery: cut cross-z bonds), `twoface_sym.py`, `prod_run.sh`; copies in `code/`. Figs: `fig_face_asymmetry.png`, `npt_conv_{bare,poly}.gif`, `traj_{bare,poly}.gif`, `snapshot_polyB_{box,network}.png`. A symmetric-gel "polyB" (mirror-doubled, gel-rich-mid) was built and shelved in favour of the per-face reframe.*
+
+---
 ## ★ v3 UPDATE (2026-06-22) — Matched MLFF-MD interface: the standoff is REAL (updates R4's "null")
 
 The reactive MLFF (T16/T17, model **r6**) finally enabled the **matched bare-vs-poly atomistic electrode
