@@ -47,6 +47,13 @@ UFF + POSRES k=50000 wall). So **both phases are needed and compose cleanly:**
 - **Why it matters:** the GPU's UFF-wall run gives anion **enrichment** vs the MLFF/AIMD **depletion/standoff**;
   the calibrated free-slab wall tests whether enrichment→depletion (reconciling the models).
 
-## Status
-- [running] Phase A bulk EOS + Mg atom + slab36 (CP2K PBE-D3).
-- [next] fit Mg–Mg 12-6 LJ → deliver `mg_metal.itp` → GPU rebuilds FREE slab → Phase B cross-LJ NBFIX → validate.
+## Status — DONE (2026-06-27)
+- **Phase A ✅** `mg_metal.itp`: Mg–Mg σ=0.29436 nm, ε=18.10 kJ/mol (E_coh 1.616 eV, a₀ 3.209; γ(0001)=0.544 J/m²).
+  UFF ε was 39× too weak → why their slab needed POSRES. Caveat: B ~2.4× high; elastic/phonons qualitative.
+- **Phase B ✅** `mg_electrolyte_nbfix.itp` + the **ion-metal finding** (the real result):
+  DFT E_int(z) → **THF neutral = clean vdW well −0.68 eV @ 2.2 Å (MgEl–O_thf NBFIX, solid)**; **Cl⁻ = image-charge
+  (effective LJ only, RMSE 0.55 eV)**; **Mg²⁺ = reduced/electrodeposited (−13.5 eV, not a pair)**.
+- **HEADLINE:** a neutral fixed-charge LJ wall (UFF or DFT-calibrated) **cannot** represent ion-metal
+  (image-charge + charge-transfer) — only neutral THF is LJ-fittable. The classical(enrich)–vs–MLFF(deplete)
+  discrepancy is **rooted there**, not in a bad ε. Wall fixes solvent structure; **charged-interface verdict needs
+  constant-potential electrodes (LAMMPS fix electrode/MetalWalls) or the MLFF** — MLFF/AIMD stays the ion reference.
