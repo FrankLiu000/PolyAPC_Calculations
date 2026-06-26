@@ -1,0 +1,16 @@
+; mg_metal.itp - DFT-anchored (PBE-D3) Mg(0001) metal atomtype for a FREE relaxable slab
+; T21 Phase A (EPYC). comb-rule 3 (geometric sigma & epsilon). Replaces the UFF MgEl placeholder.
+; Fit: sigma <- hcp NN a0=3.209 A via LJ-solid r0=1.0903*sigma ; epsilon <- E_coh=1.616 eV via E_coh=8.61*eps
+;
+; *** CRITICAL: do NOT let Mg-electrolyte pairs use the combining rule. ***
+; The cohesive epsilon (needed so the FREE slab self-coheres) is ~39x the UFF vdW value;
+; geometric-combined Mg-O/Mg-Cl/... would massively over-bind the electrolyte. Use the Phase-B [ nonbond_params ]
+; NBFIX (DFT E_int(z)-calibrated) for ALL Mg-electrolyte cross pairs. NBFIX does not affect Mg-Mg.
+;
+[ atomtypes ]
+;name  at.num   mass      charge  ptype   sigma(nm)    epsilon(kJ/mol)
+ MgEl  12      24.30500   0.0000   A      0.29436     18.1032
+;
+; Free-slab use: anchor only the bottom 1-2 layers (weak POSRES); surface layers free (AIMD convention).
+; Caveats (12-6 LJ for hcp metal): bulk modulus over-predicted ~2.4x; elastic anisotropy / c-a /
+; phonons only qualitative (pairwise Cauchy limit). EAM/MEAM-in-LAMMPS = higher fidelity if metal mechanics matter.
