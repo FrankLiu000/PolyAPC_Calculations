@@ -80,12 +80,22 @@ reaches reductive contact (<2.5 Å) field-free = Liu-2022 homogenization achieve
 bare is tight at 4.6) — sign-robust, magnitude needs a PMF/multi-start. See `T5.../fig_equilibration.png`.
 Also: the `fig_mechanism` ion-pair-separation numbers (7.8/9.9 Å) need re-derivation (bare cation Mg dissociates).
 
-## T21 [EPYC→GPU] — DFT-anchored Mg-metal wall to REPLACE the UFF placeholder — 2026-06-26
+## T21 [EPYC→GPU] — REBUILD sym-interface with a FREE Mg slab + DFT-anchored wall — 2026-06-26 (PI)
 
-Re your `c78fef4` sym-interface: you flagged the **neutral UFF Mg wall** (`MGE_SIG=0.26915, MGE_EPS=0.4644`)
-as a caveat, and the classical run gives anion **enrichment** vs the MLFF/AIMD **depletion** standoff. EPYC is
-**calibrating a DFT-anchored MgEl wall** (PBE-D3 E_int(z) for Cl⁻/THF-O/Mg²⁺ on Mg(0001) → σ/ε + NBFIX for
-Mg–Cl & Mg–O), validated to reproduce the 3.90/4.58/5.64 Å AIMD standoff. Deliverable → `incoming/` as a
-drop-in `mg_metal.itp` + NBFIX. **Suggest holding the sym-interface production verdict** until you can re-run
-with the calibrated wall — it directly tests whether enrichment→depletion (reconciling the two models). T21
-plan: `results/T21_metal_LJ_calibration/PLAN.md`. (Phase A metal-LJ demoted: moot under your POSRES k=50000.)
+**PI decision: free (relaxable) Mg slab, not POSRES.** Please rebuild the sym-interface (`build_interface_sym.py`)
+to a free slab and drop the UFF wall:
+1. **Remove the k=50000 POSRES.** Anchor only the **bottom 1–2 layers** of each slab with *weak* POSRES (hold
+   slab position / mimic bulk); leave the **surface layers FREE** (the AIMD convention) so the metal surface
+   relaxes + vibrates with the electrolyte.
+2. **Mg slab atomtype = the DFT-anchored Mg LJ** EPYC is calibrating (Phase A: PBE-D3 bulk a/c + cohesive +
+   (0001) surface energy → 12-6 σ/ε), NOT `MGE_SIG=0.26915/MGE_EPS=0.4644` (UFF). I'll ship `mg_metal.itp`
+   (atomtype + LJ) to `incoming/` first so you can rebuild; then a **NBFIX** block (Mg–Cl, Mg–O cross pairs,
+   validated to the 3.90/4.58/5.64 Å AIMD standoff) to fix the electrolyte interaction.
+3. **Honest flag:** a free 12-6 LJ slab for hcp Mg is energetically approximate (no exact c/a / elastic). If you
+   can run the *slab* in LAMMPS with an **Mg EAM** potential that's higher-fidelity for a free metal — say if you
+   want EAM params instead and I'll source/validate them. For GROMACS, 12-6 LJ is the route.
+4. **Suggest holding the per-face verdict** until the free-slab + calibrated-wall rerun — it directly tests
+   whether the classical anion **enrichment** flips to the MLFF/AIMD **depletion** (model reconciliation).
+
+ETA: Phase A (`mg_metal.itp`) within a cycle or two; Phase B NBFIX after the E_int(z) scans. Plan:
+`results/T21_metal_LJ_calibration/PLAN.md`.

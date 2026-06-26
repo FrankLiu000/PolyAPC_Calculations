@@ -32,20 +32,21 @@ Run GROMACS slab+electrolyte MD → reproduce 3.90 / 4.58 / 5.64 Å + interfacia
 `mg_metal.itp` (atomtype + LJ), NBFIX block, fit report (DFT refs, fitted params, validation), and the
 honest non-polarizable/image-charge caveat (constant-potential electrode = follow-up).
 
-## ★ RE-PRIORITIZED after GPU `c78fef4` (T5 v3.2, 2026-06-26)
-The GPU built the **classical** Mg(0001)|electrolyte|Mg(0001) interface using a **UFF Mg wall placeholder**
-(`MGE_SIG=0.26915 nm`, `MGE_EPS=0.4644 kJ/mol`) with the slab **POSRES k=50000** (restrained, not free).
-Consequences:
-- **Phase B (cross-LJ) is now PRIMARY** — it is the calibrated drop-in replacement for their UFF wall.
-- **Phase A (Mg–Mg metal LJ) is DEMOTED** — under POSRES k=50000 the metal LJ barely matters (restraints
-  pin the lattice). Keep the cheap bulk EOS for the record / for an eventual free slab; surface-energy slab
-  doubles as the **bare-slab reference for Phase B** so it is not wasted.
-- **Why it matters:** the classical UFF-wall run gives anion **enrichment** at the gel face — opposite in
-  sign to the MLFF/AIMD **depletion/standoff**. A leading suspect is the un-calibrated UFF wall. Delivering a
-  DFT-anchored MgEl wall (reproduces the 3.90/4.58/5.64 Å standoff) **tests whether a calibrated wall flips
-  enrichment→depletion** and reconciles the two models.
+## ★ SCOPE LOCKED — FREE SLAB (PI, 2026-06-26)
+PI: **free (relaxable) slab**, and the GPU rebuilds the sym-interface accordingly (replacing its current
+UFF + POSRES k=50000 wall). So **both phases are needed and compose cleanly:**
+- **Phase A (Mg–Mg metal LJ) — PRIMARY:** sets `Mg_m` σ/ε so the free slab is cohesive + relaxes realistically
+  (fit to bulk a/c, cohesive energy, (0001) surface energy). Anchor only the **bottom 1–2 layers** (weak POSRES)
+  to hold slab position / mimic bulk; top surface FREE (the AIMD convention). Deliver FIRST so the GPU can rebuild.
+- **Phase B (Mg_m–electrolyte cross-LJ):** the same `Mg_m` σ/ε generates the cross terms via comb-rule 3; add
+  **NBFIX** for Mg_m–Cl & Mg_m–O to match the DFT E_int(z) standoff (NBFIX overrides ONLY the cross pair, leaving
+  Mg–Mg untouched). Validate vs 3.90/4.58/5.64 Å.
+- **Honest caveat (free hcp metal):** a 12-6 LJ can't match c/a + elastic anisotropy + surface energy
+  simultaneously — the free LJ slab relaxes/vibrates realistically but is energetically approximate. **EAM
+  (LAMMPS) is the higher-fidelity route for a free metal**; 12-6 LJ delivered because the production MD is GROMACS.
+- **Why it matters:** the GPU's UFF-wall run gives anion **enrichment** vs the MLFF/AIMD **depletion/standoff**;
+  the calibrated free-slab wall tests whether enrichment→depletion (reconciling the models).
 
 ## Status
-- [running] Phase A bulk EOS + Mg atom + slab36 (slab36 = Phase-B bare-slab reference).
-- [next, PRIMARY] Phase B E_int(z) scans (Cl⁻, THF-O, Mg²⁺ on Mg(0001)) → fit MgEl σ/ε + NBFIX → deliver
-  drop-in replacement for the GPU's UFF wall → GPU re-runs the sym-interface with the calibrated wall.
+- [running] Phase A bulk EOS + Mg atom + slab36 (CP2K PBE-D3).
+- [next] fit Mg–Mg 12-6 LJ → deliver `mg_metal.itp` → GPU rebuilds FREE slab → Phase B cross-LJ NBFIX → validate.
