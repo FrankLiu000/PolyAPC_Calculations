@@ -1,13 +1,21 @@
-; mg_electrolyte_nbfix.itp - T21 Phase B (EPYC). Mg(0001) wall <-> electrolyte cross-LJ from DFT E_int(z)
-; (PBE-D3, lattice-sum fit over the surface Mg). comb-rule 3. Pair the MgEl atomtype (mg_metal.itp) with the
-; electrolyte atomtypes. *** USE NBFIX, NOT combining rule *** (MgEl self-eps is the cohesive eps; combining
-; would massively over-attract the electrolyte).
+; mg_electrolyte_nbfix.itp - T21 Phase B COMPLETE (EPYC). Mg(0001) wall <-> ALL electrolyte atom types.
+; comb-rule 3. Pair MgEl (mg_metal.itp) with each electrolyte atomtype. *** USE NBFIX, NOT combining rule ***
+; (the cohesive MgEl self-eps does NOT transfer to adsorbates - it UNDER-binds the chemistry pairs and is
+; wrong for vdW; every Mg-X is given explicitly here).
 ;
 [ nonbond_params ]
-; i     j     func   sigma(nm)   epsilon(kJ/mol)   ; <- map j to YOUR electrolyte atomtype name
-  MgEl  O_thf  1     0.18410     53.224            ; THF ether-O: real vdW physisorption well -0.68 eV @ 2.2 A (RMSE 0.16 eV) -- SOLID
-  MgEl  Cl     1     0.18586    132.713            ; bridging Cl: EFFECTIVE only - lumps image-charge+vdW; RMSE 0.55 eV; MISSES the long-range r^-1 image tail
+; i     j      func  sigma(nm)   epsilon(kJ/mol)  ; provenance / accuracy
+  MgEl  O_thf   1    0.18410     53.224           ; DFT chemisorption well -0.668 eV; TZVPP+counterpoise BSSE VALIDATED (SOLID)
+  MgEl  Cl      1    0.18586    132.713           ; EFFECTIVE - image-charge lumped into LJ (RMSE 0.55 eV); misses long-range r^-1 tail
+  MgEl  H       1    0.23683      1.426           ; DFT H2 probe; weak vdW well -0.07 eV (clean)
+  MgEl  C       1    0.32326      2.566           ; D3 dispersion (C6 from PBE-D3, consistent); weak vdW
+  MgEl  Si      1    0.33969      5.855           ; D3 dispersion; weak vdW (C6 extraction approximate, but eps small -> low impact)
 ;
-; Mg2+ (cation): OMITTED on purpose - a bare Mg2+ on the metal is REDUCED (DFT E_int ~ -13.5 eV = electrodeposition,
-;   Mg2+ + 2e- -> Mg0), not a pair interaction. The solvated-cation standoff (5.64 A) is a THF-solvation effect, not
-;   a Mg2+-metal LJ. Do not assign a Mg2+-MgEl LJ; the cation's behaviour comes from its O(THF) solvation + the wall.
+; Mg2+ (cation): OMITTED - solvated [Mg2(mu-Cl)3(THF)6]+ never contacts bare metal; standoff (5.64 A) = THF
+;   solvation/sterics, reproduced via MgEl-O_thf. Bare-Mg2+ on metal = reduction (-13.5 eV), not a pair.
+; Al (anion): OMITTED - in [AlPh2Cl2]- the Al is 4-coordinate (2 Ph + 2 Cl), shielded; the anion contacts the
+;   surface via its Cl / phenyl C,H (parametrized above), not bare Al. (Bare AlCl3 probe chemisorbs -1.13 eV but
+;   that exposure is unphysical for the real anion.)
+;
+; ACCURACY: O = gold-standard (TZVPP+BSSE). H,C,Si = weak vdW (small eps, second-order vs O/Cl). Cl = effective
+; (needs constant-potential/MLFF for the image-charge tail). Interface physics is carried by MgEl-O + MgEl-Cl.
