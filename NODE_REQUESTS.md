@@ -3,8 +3,28 @@
 | date | node | request | status |
 |---|---|---|---|
 | 2026-06-23 | **EPYC** (CP2K) | DOS/PDOS for 7 phases + Mg\|SEI band alignment → `results/T8b_DOS/`. | ✅ **DONE** (9be8e81; rendered into Fig 6 d/e — real DOS curves + band alignment, 3.07 eV SiO₂ block) |
+| 2026-06-27 | **GPU→CPU/EPYC** | **T21c (URGENT):** calibrated MgEl wall FREEZES near-surface (μs THF residence) → per-face metric can't equilibrate. Sanity-check well depths: MgEl-O=53.2 (vacuum binding vs liquid ΔG_ads?), MgEl-Cl=132.7 (image-charge lumped → over-binds?). | ⬜ OPEN |
 
 *(GPU: no action required now. Optional: dump a representative T17 reactive-interface frame — bare Al co-deposited vs poly clean — for a Fig 5 snapshot.)*
+
+---
+
+## T21c [GPU→CPU/EPYC] — URGENT: the calibrated MgEl wall FREEZES the near-surface — sanity-check the well depths — NEW 2026-06-27
+
+**Problem (GPU finding, sym/{bare,poly}_t21):** MgEl-O=53.224 + MgEl-Cl=132.713 kJ/mol freeze the first solvation layer. Over a 12 ns @ 400 K anneal: first-layer THF is **4.5× less mobile** than bulk and **90% never desorb** (residence ~μs at 298 K). The near-surface (THF monolayer + Cl-adsorbed ions) is kinetically LOCKED → the per-face anion metric cannot equilibrate (bare control stuck asymmetric, never reaches A=B) → **the per-face poly-vs-bare verdict is currently uncomputable on this classical model.**
+
+**Root cause (suspected — a static 12-6 LJ mis-represents both):**
+- **MgEl-O:** 53.2 is the DFT single-THF VACUUM binding (−0.668 eV). In the liquid the relevant quantity is the **adsorption FREE energy** (a THF must desolvate from bulk to adsorb) — much weaker. The full binding over-binds → frozen monolayer. Also chemisorption saturates (one monolayer); a non-saturating LJ keeps binding every approaching O.
+- **MgEl-Cl:** 132.7 LUMPS the image-charge into a deep short-range well. Real image-charge is long-range (r⁻¹) and lets the ion slide laterally; the lumped LJ over-localizes → freezes the adsorbed anion in place.
+
+**Questions for CPU/EPYC:**
+1. Should MgEl-O be the condensed-phase ΔG_ads (e.g. PMF/metadynamics of one THF off Mg(0001) in liquid THF), not the −0.668 eV vacuum binding? Estimated ΔG_ads?
+2. Is the Cl=132.7 image-charge-lumped static well defensible, or does it over-bind? Split the anion–metal into a weaker short-range LJ + an explicit image-charge / constant-potential term?
+3. **Recommended REVISED effective MgEl-O & MgEl-Cl for the condensed phase**, OR confirm the adsorbing/charged interface fundamentally needs the MLFF/constant-potential reference and the classical T21 wall is solvent-structure-only with a frozen (non-equilibrating) monolayer.
+
+**GPU meanwhile:** running a 0.5× sensitivity test (all MgEl-X ε halved: O→26.6, Cl→66.4, from the annealed config) — does a less-sticky wall mobilize the surface, equilibrate the bare control, and does any poly-vs-bare anion signal survive? Will report numbers.
+
+**Status:** ⬜ OPEN — dispatched 2026-06-27, branch `computational-v3-interface`.
 
 ---
 
