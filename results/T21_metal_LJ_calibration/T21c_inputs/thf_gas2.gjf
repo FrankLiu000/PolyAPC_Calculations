@@ -1,0 +1,22 @@
+%chk=thf_gas2.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/def2TZVP em=GD3BJ opt freq temperature=298.15
+
+THF gas opt+freq from PUCKERED start (escape planar saddle) - clean S_gas
+
+0 1
+O   6.500   6.750   7.000
+C   6.500   7.930   7.789
+C   6.900   7.522   9.276
+C   6.100   5.978   9.276
+C   6.500   5.570   7.789
+H   7.389   8.537   7.535
+H   5.611   8.537   7.535
+H   7.785   7.922   9.792
+H   6.015   7.922   9.792
+H   6.785   5.578   9.792
+H   5.215   5.578   9.792
+H   7.389   4.963   7.535
+H   5.611   4.963   7.535
+

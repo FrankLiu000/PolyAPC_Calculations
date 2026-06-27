@@ -3,7 +3,7 @@
 | date | node | request | status |
 |---|---|---|---|
 | 2026-06-23 | **EPYC** (CP2K) | DOS/PDOS for 7 phases + Mg\|SEI band alignment → `results/T8b_DOS/`. | ✅ **DONE** (9be8e81; rendered into Fig 6 d/e — real DOS curves + band alignment, 3.07 eV SiO₂ block) |
-| 2026-06-27 | **GPU→CPU/EPYC** | **T21c (URGENT):** calibrated MgEl wall FREEZES near-surface (μs THF residence) → per-face metric can't equilibrate. Sanity-check well depths: MgEl-O=53.2 (vacuum binding vs liquid ΔG_ads?), MgEl-Cl=132.7 (image-charge lumped → over-binds?). | ✅ **RESOLVED** (EPYC): diagnosis confirmed → condensed-phase O 53.2→**26.0** (ΔG_ads) + Cl 132.7→**3.74** (D3 dispersion, image stripped) in `incoming/`+`gpu_build/`; charged-interface verdict → MLFF/constant-V |
+| 2026-06-27 | **GPU→CPU/EPYC** | **T21c (URGENT):** calibrated MgEl wall FREEZES near-surface (μs THF residence) → per-face metric can't equilibrate. Sanity-check well depths: MgEl-O=53.2 (vacuum binding vs liquid ΔG_ads?), MgEl-Cl=132.7 (image-charge lumped → over-binds?). | ✅ **RESOLVED + QUANTIFIED** (EPYC): O **stays 53.2** (two-body potential — explicit-liquid MD generates ΔG_ads itself; ΔG_ads=−0.27 eV/26 is the emergent target, not ε; freezing is the REAL Mg-O bond per kinetic check). **Cl 132.7→3.74** (image stripped — the actual anion de-pin). Anion slowness left = sampling, not wall. `incoming/`+`gpu_build/`+`T21c_inputs/` |
 
 *(GPU: no action required now. Optional: dump a representative T17 reactive-interface frame — bare Al co-deposited vs poly clean — for a Fig 5 snapshot.)*
 
@@ -40,6 +40,21 @@
 **Q3 — recommendation: BOTH.** (a) The classical wall **is** a solvent-structure model — with the condensed O/Cl above it will **not** freeze, so the bare control should now reach A=B; re-run it. (b) The **anion–metal electrostatics (image charge / reductive plating) genuinely needs the MLFF / constant-potential reference** — that's where the charged-interface poly-vs-bare verdict lives (consistent with the T17 MACE+LES result), NOT the neutral LJ wall. If the structural poly-vs-bare anion signal **survives** the de-frozen wall → it's a real solvent-structure exclusion; if it **vanishes** → it was a freezing artifact and the verdict rests on the MLFF. Either outcome is informative. A one-THF-off-Mg(0001) PMF in liquid THF (GPU) would pin ΔG_ads beyond my cycle estimate. Status: ✅ **RESOLVED** — condensed wall delivered.
 
 **Status:** ✅ RESOLVED 2026-06-27 (EPYC) — condensed-phase O/Cl in `incoming/` + `gpu_build/`; branch `computational-v3-interface`.
+
+### ⚠️ T21c-quant — Mg-O QUANTIFIED → my first-pass "reduce O to 26" was an OVER-correction; reverted — 2026-06-27
+
+I quantified Mg-O on the CPU (slab+THF binding scan + g16 gas-THF freq; `results/T21_metal_LJ_calibration/T21c_inputs/`). The number 26 was right *as a free energy* but **mis-assigned as the pair ε**. Key realization: **your interface MD is EXPLICIT-liquid**, so:
+
+| quantity | value | role |
+|---|---|---|
+| **two-body Mg-O potential** | **−0.70 eV** (slab scan @2.32 Å) / −0.668 (TZVPP+BSSE) → ε **53.2** | the **pair LJ ε** (the liquid generates desolvation+entropy itself) |
+| **ΔG_ads(liquid)** | **−0.27 eV ≈ 26 kJ/mol** (DFT binding + DFT S_gas=301 + Campbell-Sellers + ΔG_vap) | the **EMERGENT PMF** the MD should reproduce — a validation target, **NOT** ε |
+
+In an explicit-liquid MD, baking ΔG_ads into ε **double-counts** the desolvation → under-binds. **Reverted O → 53.224** (`incoming/` + `gpu_build/`).
+
+**The frozen THF monolayer is REAL, not a parameter bug.** Kinetic check: your observed *90 % no-desorb / 12 ns @ 400 K* requires a barrier **~0.4–0.55 eV = the two-body potential** (ΔG_ads's 0.26 eV → τ~2 ns @400 K → would NOT freeze). Mg–O is a genuine ~0.5 eV bond → a long-lived THF monolayer is correct. **So don't soften the real O bond to chase mobility.** The actual anion lever is **Cl** (kept stripped to dispersion-only 3.738 — the image-charge pin was the over-localizer); with Cl freed, the anion should equilibrate *over* the (physically) bound THF layer. If the THF monolayer's slowness still blocks the per-face metric → that's a **sampling** problem (enhanced sampling / a direct anion PMF), not a wall-depth problem.
+
+**One thing for you to check:** a near-wall **O-density profile**. A 12-6 LJ doesn't saturate, so it over-pulls 2nd-layer O beyond the 1 real chemisorbed monolayer (+ σ=0.184 nm is short/stiff). If that *artifact* multilayer dominates the freezing (not the 1st layer), an effective O ε ~26–40 is a documented **mobility-prioritized fallback** (under-binds — label it as such). Status: ✅ **quantified; O reverted; Cl stripped stands.**
 
 ---
 

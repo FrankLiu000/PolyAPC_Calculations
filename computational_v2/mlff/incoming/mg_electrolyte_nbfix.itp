@@ -5,7 +5,7 @@
 ;
 [ nonbond_params ]
 ; i     j      func  sigma(nm)   epsilon(kJ/mol)  ; provenance / accuracy
-  MgEl  O_thf   1    0.18410     26.000           ; *** T21c CONDENSED-PHASE (dynamics) *** dG_ads ~ -0.27 eV (range 24-34). VACUUM binding -0.668 eV (=eps 53.224, TZVPP+BSSE, still correct as a static number) FROZE the liquid monolayer -> use dG_ads here. See T21c note.
+  MgEl  O_thf   1    0.18410     53.224           ; TWO-BODY potential (DFT -0.668 eV, TZVPP+BSSE). CORRECT for EXPLICIT-liquid MD - the liquid generates desolvation+entropy; dG_ads(liq)=-0.27 eV EMERGES (do NOT bake it in). See T21c-quant note. [mobility fallback 26.0 if no THF reservoir]
   MgEl  Cl      1    0.31636      3.738           ; *** T21c CONDENSED-PHASE (dynamics) *** D3 dispersion-ONLY (image-charge stripped). Static image-lumped well (0.18586/132.713) over-localized -> froze the anion. Anion-metal electrostatics OUT-OF-SCOPE for a neutral wall -> MLFF/constant-V. See T21c note.
   MgEl  H       1    0.23683      1.426           ; DFT H2 probe; weak vdW well -0.07 eV (clean)
   MgEl  C       1    0.32326      2.566           ; D3 dispersion (C6 from PBE-D3, consistent); weak vdW
@@ -26,22 +26,28 @@
 ;   surface via its Cl / phenyl C,H (parametrized above), not bare Al. (Bare AlCl3 probe chemisorbs -1.13 eV but
 ;   that exposure is unphysical for the real anion.)
 ;
-; ===== T21c CONDENSED-PHASE REVISION (2026-06-27) — fixes the GPU "frozen near-surface" finding =====
-; GPU found the ORIGINAL O=53.2 + Cl=132.7 freeze the first solvation layer (THF residence ~us, 90% never
-; desorb over 12ns@400K) -> per-face anion metric cannot equilibrate. Diagnosis CONFIRMED (both over-bind):
-;  - O: 53.2/-0.668 eV is the VACUUM single-THF binding. In liquid the relevant quantity is the ADSORPTION
-;    FREE energy: a THF must DESOLVATE from bulk (pay ~0.5-1x dHvap(THF)=+0.17..+0.33 eV) and LOSE translation/
-;    rotation (-TdS ~ +0.1..+0.2 eV). Thermodynamic cycle: dG_ads ~ -0.668 + 0.25 + 0.15 ~ -0.27 eV
-;    (range -0.20..-0.35) ~ 24-34 kJ/mol -> use eps ~ 26 (=0.49x). Also a 12-6 LJ does NOT saturate (chemisorption
-;    is 1 monolayer); the deep non-saturating well kept binding every approaching O. [GPU 0.5x test = this estimate.]
-;  - Cl: 132.7 LUMPED the image charge (long-range r^-1, laterally FLAT -> ion slides) into a deep SHORT-range
-;    site well -> over-localized -> froze the adsorbed anion. Stripped to D3 dispersion-only (0.31636/3.738);
-;    the real anion-metal attraction is the image/field term, which a NEUTRAL fixed-charge LJ wall cannot carry
-;    -> keep it in the MLFF / constant-potential reference (charged-interface verdict lives there, not here).
-; NET: the active O/Cl lines above are now the CONDENSED-PHASE (dynamics) values. The classical T21 wall is a
-; SOLVENT-STRUCTURE model; it will NOT freeze with these. The static vacuum/effective values are preserved in
-; the inline comments for binding-energy reproduction/validation only. Re-run the bare control -> should now
-; reach A=B (symmetric). A one-THF-off-Mg(0001) PMF in liquid THF (GPU) would refine dG_ads further.
+; ===== T21c-quant: Mg-O QUANTIFIED (2026-06-27, supersedes the T21c "reduce O to 26" first pass) =====
+; The interface MD is EXPLICIT-liquid (THF+ions placed between the slabs). That changes what eps must be:
+;  - PAIR LJ eps = the TWO-BODY potential. In explicit liquid the MD generates desolvation + entropy ITSELF;
+;    you must NOT also bake them into eps (double-count -> under-bind). So O eps = two-body well = 53.2
+;    (DFT -0.668 eV / -0.70 eV from the periodic slab+THF scan, well at 2.32 A). REVERTED from the 26 first pass.
+;  - dG_ads(LIQUID) = -0.27 eV (=26 kJ/mol) is the EMERGENT free energy (CPU-quantified: slab two-body binding
+;    + DFT gas entropy S_gas=301 J/mol/K (g16 freq) + Campbell-Sellers S_ads + dG_vap). It is the PMF the MD
+;    should REPRODUCE / a validation target -- NOT the pair eps.
+;  - The "frozen monolayer" is REAL physics: kinetic check shows the observed 90%-no-desorb/12ns@400K needs a
+;    barrier ~0.4-0.55 eV = the two-body potential (the 0.26 eV dG_ads would give tau~2 ns @400K = NOT frozen).
+;    Mg-O is a genuine ~0.5 eV bond -> a long-lived THF monolayer is correct, not an artifact to be parametrized
+;    away. The honest fix for the slow ANION metric is enhanced sampling / a direct anion PMF (the monolayer need
+;    not melt for the anion to equilibrate OVER it) -- AND the Cl de-pin below, which is the actual anion lever.
+;  - Genuine artifacts that DO add spurious stickiness (separate from the real bond): a 12-6 LJ does not saturate
+;    (pulls in 2nd-layer O beyond the 1 real chemisorbed monolayer) and sigma=0.184 nm is short/stiff (over-
+;    localizes). A GPU near-wall O-density profile separates "real 1st layer" from "artifact multilayer"; if the
+;    latter dominates, an effective O eps ~ 26-40 is a documented MOBILITY-PRIORITIZED fallback (under-binds).
+;  - Cl: UNCHANGED from T21c -> dispersion-only 0.31636/3.738. The image charge (long-range r^-1, laterally flat)
+;    is NOT a two-body vdW term and a neutral LJ cannot carry it; lumping it (old 132.7) over-localized + PINNED
+;    the anion. Stripping it is the real anion de-freeze; the charged-interface attraction lives in MLFF/const-V.
+; NET: O = 53.2 (two-body, faithful for explicit liquid) ; Cl = 3.738 (image stripped, de-pins anion). Re-run the
+; bare control: the anion should now equilibrate via the freed Cl even with the (physically) bound THF monolayer.
 ; ====================================================================================================
-; ACCURACY: O = condensed dG_ads (estimate, range 24-34 kJ/mol; vacuum value gold-standard TZVPP+BSSE).
+; ACCURACY: O = two-body potential (gold-std TZVPP+BSSE; dG_ads(liq)=-0.27 eV is the emergent target, not eps).
 ; H,C,Si,S,F = weak vdW (small eps, second-order). Cl = dispersion-only (image/charge -> MLFF/constant-V).

@@ -1,6 +1,33 @@
 # T21c — condensed-phase revision of the MgEl wall (fixes the GPU "frozen near-surface" finding)
 
 **Node:** EPYC (CPU/DFT) · **Date:** 2026-06-27 · **Status:** ✅ RESOLVED
+
+---
+## ⚠️ UPDATE (T21c-quant, 2026-06-27) — Mg-O QUANTIFIED → O reverted to the two-body potential
+The first pass below reduced **O 53.2 → 26** (ΔG_ads). After quantifying Mg-O on the CPU and noting the
+interface MD is **explicit-liquid**, that was an **over-correction** and is **reverted**. Cl (132.7 → 3.738,
+image stripped) **stands**. Summary:
+
+| quantity | value | how | role |
+|---|---|---|---|
+| two-body Mg-O potential | **−0.70 eV** @ 2.32 Å (slab scan, DZVP); −0.668 (TZVPP+BSSE) | `mgO_quantify.py` parabola fit of the periodic slab+THF scan | **the pair LJ ε** (→ 53.2) for explicit liquid |
+| frustrated stretch | ν ≈ **118 cm⁻¹** | curvature of the same well (rigid THF, m=72) | — |
+| **ΔG_ads(liquid)** | **−0.27 eV ≈ 26 kJ/mol** | −0.668 eV + Campbell–Sellers (−TΔS=+35.1, S_gas=300.8 J/mol·K from g16 freq) + ΔG_vap(+3.7) | **emergent PMF / validation target — NOT ε** |
+
+**Why ε stays 53.2 (two-body), not 26 (ΔG_ads):** in an explicit-liquid MD the solvent generates the
+desolvation + entropy itself, so the pair LJ must be the two-body potential; baking ΔG_ads into ε
+double-counts → under-binds. **The frozen monolayer is REAL:** the observed *90 % no-desorb/12 ns@400 K*
+requires a barrier ~0.4–0.55 eV = the two-body well (ΔG_ads's 0.26 eV → τ~2 ns@400 K → would NOT freeze).
+Mg–O is a genuine ~0.5 eV bond. The anion lever is **Cl** (stripped), not the THF O bond; residual anion
+slowness = a **sampling** problem (enhanced sampling / direct anion PMF). A mobility-prioritized O ε≈26–40 is
+a documented fallback only if a GPU near-wall O-density profile shows the non-saturating 12-6 over-binds a
+spurious *multilayer* (vs the 1 real chemisorbed layer). Inputs: `T21c_inputs/{mgO_quantify.py, thf_gas2.gjf}`.
+
+*(The first-pass reasoning below is retained for the record; the O-specific "use 26" conclusion is superseded
+by this update. The Cl analysis is unchanged and correct.)*
+---
+
+**Node:** EPYC (CPU/DFT) · **Date:** 2026-06-27 · **Status:** ✅ RESOLVED (O reverted per the update above)
 **Trigger:** GPU (LYZ-ROG) T21c — the calibrated wall (MgEl-O 53.224 + MgEl-Cl 132.713 kJ/mol)
 **freezes the first solvation layer** (first-layer THF 4.5× less mobile, 90% never desorb over 12 ns @ 400 K;
 residence ~μs at 298 K) → the per-face anion metric cannot equilibrate (bare control stuck asymmetric).

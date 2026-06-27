@@ -1,0 +1,10 @@
+                     E (Thermal)             CV                S
+                      KCal/Mol        Cal/Mol-Kelvin    Cal/Mol-Kelvin
+ Total                   76.207             16.954             71.896
+ Electronic               0.000              0.000              0.000
+ Translational            0.889              2.981             38.741
+ Rotational               0.889              2.981             24.890
+ Vibrational             74.429             10.993              8.265
+ Vibration     1          0.597              1.973              4.441
+ Vibration     2          0.663              1.761              1.722
+S_gas(DFT,B3LYP-D3/def2-TZVP) = 300.8 J/mol/K (=71.896 cal/mol-K); 0 imaginary; lowest vib 60.5 cm^-1
