@@ -5,8 +5,8 @@
 ;
 [ nonbond_params ]
 ; i     j      func  sigma(nm)   epsilon(kJ/mol)  ; provenance / accuracy
-  MgEl  O_thf   1    0.18410     53.224           ; DFT chemisorption well -0.668 eV; TZVPP+counterpoise BSSE VALIDATED (SOLID)
-  MgEl  Cl      1    0.18586    132.713           ; EFFECTIVE - image-charge lumped into LJ (RMSE 0.55 eV); misses long-range r^-1 tail
+  MgEl  O_thf   1    0.18410     26.000           ; *** T21c CONDENSED-PHASE (dynamics) *** dG_ads ~ -0.27 eV (range 24-34). VACUUM binding -0.668 eV (=eps 53.224, TZVPP+BSSE, still correct as a static number) FROZE the liquid monolayer -> use dG_ads here. See T21c note.
+  MgEl  Cl      1    0.31636      3.738           ; *** T21c CONDENSED-PHASE (dynamics) *** D3 dispersion-ONLY (image-charge stripped). Static image-lumped well (0.18586/132.713) over-localized -> froze the anion. Anion-metal electrostatics OUT-OF-SCOPE for a neutral wall -> MLFF/constant-V. See T21c note.
   MgEl  H       1    0.23683      1.426           ; DFT H2 probe; weak vdW well -0.07 eV (clean)
   MgEl  C       1    0.32326      2.566           ; D3 dispersion (C6 from PBE-D3, consistent); weak vdW
   MgEl  Si      1    0.33969      5.855           ; D3 dispersion; weak vdW (C6 extraction approximate, but eps small -> low impact)
@@ -26,5 +26,22 @@
 ;   surface via its Cl / phenyl C,H (parametrized above), not bare Al. (Bare AlCl3 probe chemisorbs -1.13 eV but
 ;   that exposure is unphysical for the real anion.)
 ;
-; ACCURACY: O = gold-standard (TZVPP+BSSE). H,C,Si = weak vdW (small eps, second-order vs O/Cl). Cl = effective
-; (needs constant-potential/MLFF for the image-charge tail). Interface physics is carried by MgEl-O + MgEl-Cl.
+; ===== T21c CONDENSED-PHASE REVISION (2026-06-27) — fixes the GPU "frozen near-surface" finding =====
+; GPU found the ORIGINAL O=53.2 + Cl=132.7 freeze the first solvation layer (THF residence ~us, 90% never
+; desorb over 12ns@400K) -> per-face anion metric cannot equilibrate. Diagnosis CONFIRMED (both over-bind):
+;  - O: 53.2/-0.668 eV is the VACUUM single-THF binding. In liquid the relevant quantity is the ADSORPTION
+;    FREE energy: a THF must DESOLVATE from bulk (pay ~0.5-1x dHvap(THF)=+0.17..+0.33 eV) and LOSE translation/
+;    rotation (-TdS ~ +0.1..+0.2 eV). Thermodynamic cycle: dG_ads ~ -0.668 + 0.25 + 0.15 ~ -0.27 eV
+;    (range -0.20..-0.35) ~ 24-34 kJ/mol -> use eps ~ 26 (=0.49x). Also a 12-6 LJ does NOT saturate (chemisorption
+;    is 1 monolayer); the deep non-saturating well kept binding every approaching O. [GPU 0.5x test = this estimate.]
+;  - Cl: 132.7 LUMPED the image charge (long-range r^-1, laterally FLAT -> ion slides) into a deep SHORT-range
+;    site well -> over-localized -> froze the adsorbed anion. Stripped to D3 dispersion-only (0.31636/3.738);
+;    the real anion-metal attraction is the image/field term, which a NEUTRAL fixed-charge LJ wall cannot carry
+;    -> keep it in the MLFF / constant-potential reference (charged-interface verdict lives there, not here).
+; NET: the active O/Cl lines above are now the CONDENSED-PHASE (dynamics) values. The classical T21 wall is a
+; SOLVENT-STRUCTURE model; it will NOT freeze with these. The static vacuum/effective values are preserved in
+; the inline comments for binding-energy reproduction/validation only. Re-run the bare control -> should now
+; reach A=B (symmetric). A one-THF-off-Mg(0001) PMF in liquid THF (GPU) would refine dG_ads further.
+; ====================================================================================================
+; ACCURACY: O = condensed dG_ads (estimate, range 24-34 kJ/mol; vacuum value gold-standard TZVPP+BSSE).
+; H,C,Si,S,F = weak vdW (small eps, second-order). Cl = dispersion-only (image/charge -> MLFF/constant-V).

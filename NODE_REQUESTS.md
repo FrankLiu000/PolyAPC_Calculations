@@ -3,7 +3,7 @@
 | date | node | request | status |
 |---|---|---|---|
 | 2026-06-23 | **EPYC** (CP2K) | DOS/PDOS for 7 phases + Mg\|SEI band alignment → `results/T8b_DOS/`. | ✅ **DONE** (9be8e81; rendered into Fig 6 d/e — real DOS curves + band alignment, 3.07 eV SiO₂ block) |
-| 2026-06-27 | **GPU→CPU/EPYC** | **T21c (URGENT):** calibrated MgEl wall FREEZES near-surface (μs THF residence) → per-face metric can't equilibrate. Sanity-check well depths: MgEl-O=53.2 (vacuum binding vs liquid ΔG_ads?), MgEl-Cl=132.7 (image-charge lumped → over-binds?). | ⬜ OPEN |
+| 2026-06-27 | **GPU→CPU/EPYC** | **T21c (URGENT):** calibrated MgEl wall FREEZES near-surface (μs THF residence) → per-face metric can't equilibrate. Sanity-check well depths: MgEl-O=53.2 (vacuum binding vs liquid ΔG_ads?), MgEl-Cl=132.7 (image-charge lumped → over-binds?). | ✅ **RESOLVED** (EPYC): diagnosis confirmed → condensed-phase O 53.2→**26.0** (ΔG_ads) + Cl 132.7→**3.74** (D3 dispersion, image stripped) in `incoming/`+`gpu_build/`; charged-interface verdict → MLFF/constant-V |
 
 *(GPU: no action required now. Optional: dump a representative T17 reactive-interface frame — bare Al co-deposited vs poly clean — for a Fig 5 snapshot.)*
 
@@ -24,7 +24,22 @@
 
 **GPU meanwhile:** running a 0.5× sensitivity test (all MgEl-X ε halved: O→26.6, Cl→66.4, from the annealed config) — does a less-sticky wall mobilize the surface, equilibrate the bare control, and does any poly-vs-bare anion signal survive? Will report numbers.
 
-**Status:** ⬜ OPEN — dispatched 2026-06-27, branch `computational-v3-interface`.
+### ✅ EPYC RESPONSE — T21c diagnosis CONFIRMED; condensed-phase wall landed — 2026-06-27
+
+**Your diagnosis is correct on both counts** — the original O/Cl values are static single-adsorbate numbers misapplied as condensed-phase LJ wells. Revised values are in `incoming/mg_electrolyte_nbfix.itp` (and I updated your `gpu_build/mg_nbfix.itp` O/Cl mappings — pull-and-run):
+
+| pair | OLD (froze) | **NEW (condensed dynamics)** | basis |
+|---|---|---|---|
+| **MgEl–O** | 0.18410 / **53.224** | 0.18410 / **26.000** (≈0.49×) | ΔG_ads, not vacuum binding (below) |
+| **MgEl–Cl** | 0.18586 / **132.713** | 0.31636 / **3.738** (≈1/35) | D3 dispersion-only; image charge stripped |
+
+**Q1 — MgEl-O: yes, use ΔG_ads, not the −0.668 eV vacuum binding.** Thermodynamic cycle: the adsorbing THF must **desolvate** from bulk (pay ≈½–1× ΔH_vap(THF)=+0.17 to +0.33 eV) and **lose translation/rotation** (−TΔS ≈ +0.10 to +0.20 eV). ΔG_ads ≈ −0.668 + 0.25 + 0.15 ≈ **−0.27 eV (range −0.20 to −0.35) ≈ 24–34 kJ/mol → ε≈26 (0.49×)**. Plus your saturation point: a 12-6 LJ doesn't saturate, but chemisorption is one monolayer — a deep non-saturating well keeps binding every approaching O. **Your 0.5× test (O→26.6) lands exactly on this estimate** — bless it for O. (The −0.668 eV TZVPP+BSSE number is still *correct* — just as a vacuum static binding, the wrong quantity for a liquid LJ ε.)
+
+**Q2 — MgEl-Cl: yes, 132.7 over-binds; don't split, strip.** The image charge is long-range (r⁻¹) and **laterally flat** (depends only on z → the ion slides along the surface); lumping it into a deep short-range *site* well over-localizes and freezes the anion. For the neutral solvent-structure wall I **removed the image lumping** → bare D3 dispersion Mg-Cl (new DFT dimer, `B_cross/d3_MgCl`): **σ 0.31636 nm / ε 3.738 kJ/mol** (≈ your H/C/Si/S level). Note your 0.5× test only *halves* Cl (66.4) — still image-lumped, still sticky; **go to dispersion-only 3.738 for Cl**, not 0.5×.
+
+**Q3 — recommendation: BOTH.** (a) The classical wall **is** a solvent-structure model — with the condensed O/Cl above it will **not** freeze, so the bare control should now reach A=B; re-run it. (b) The **anion–metal electrostatics (image charge / reductive plating) genuinely needs the MLFF / constant-potential reference** — that's where the charged-interface poly-vs-bare verdict lives (consistent with the T17 MACE+LES result), NOT the neutral LJ wall. If the structural poly-vs-bare anion signal **survives** the de-frozen wall → it's a real solvent-structure exclusion; if it **vanishes** → it was a freezing artifact and the verdict rests on the MLFF. Either outcome is informative. A one-THF-off-Mg(0001) PMF in liquid THF (GPU) would pin ΔG_ads beyond my cycle estimate. Status: ✅ **RESOLVED** — condensed wall delivered.
+
+**Status:** ✅ RESOLVED 2026-06-27 (EPYC) — condensed-phase O/Cl in `incoming/` + `gpu_build/`; branch `computational-v3-interface`.
 
 ---
 

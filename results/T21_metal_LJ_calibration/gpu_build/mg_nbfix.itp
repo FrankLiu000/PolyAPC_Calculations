@@ -3,15 +3,17 @@
 ; (the cohesive MgEl self-eps=18.1 kJ/mol does NOT transfer to adsorbates). Source: mg_electrolyte_nbfix.itp.
 [ nonbond_params ]
 ;  i     j       func   sigma(nm)   epsilon(kJ/mol)
-; --- O (ether/all O) <- MgEl-O_thf  (DFT chemisorption -0.668 eV, TZVPP+BSSE, gold-standard) ---
-   MgEl  opls_OS   1    0.18410     53.224
-   MgEl  opls_OB   1    0.18410     53.224
-   MgEl  opls_OE   1    0.18410     53.224
-   MgEl  opls_OH   1    0.18410     53.224
-   MgEl  opls_OT   1    0.18410     53.224
-; --- Cl (bridging + anion) <- MgEl-Cl  (EFFECTIVE; image-charge lumped, RMSE 0.55 eV; misses r^-1 tail) ---
-   MgEl  opls_CLA  1    0.18586    132.713
-   MgEl  opls_CLB  1    0.18586    132.713
+; --- O (ether/all O) <- MgEl-O_thf  *** T21c CONDENSED dG_ads ~ -0.27 eV (eps 26, ~0.5x) *** ---
+;     (vacuum binding -0.668 eV/53.224 was correct as a STATIC number but FROZE the liquid monolayer; use dG_ads in dynamics)
+   MgEl  opls_OS   1    0.18410     26.000
+   MgEl  opls_OB   1    0.18410     26.000
+   MgEl  opls_OE   1    0.18410     26.000
+   MgEl  opls_OH   1    0.18410     26.000
+   MgEl  opls_OT   1    0.18410     26.000
+; --- Cl (bridging + anion) <- MgEl-Cl  *** T21c CONDENSED: D3 dispersion-only, image-charge STRIPPED *** ---
+;     (static image-lumped 0.18586/132.713 over-localized -> froze the anion; anion-metal electrostatics -> MLFF/constant-V)
+   MgEl  opls_CLA  1    0.31636      3.738
+   MgEl  opls_CLB  1    0.31636      3.738
 ; --- H <- MgEl-H  (weak vdW -0.07 eV) ---
    MgEl  opls_HA   1    0.23683      1.426
    MgEl  opls_HC   1    0.23683      1.426
