@@ -4,8 +4,44 @@
 |---|---|---|---|
 | 2026-06-23 | **EPYC** (CP2K) | DOS/PDOS for 7 phases + Mg\|SEI band alignment → `results/T8b_DOS/`. | ✅ **DONE** (9be8e81; rendered into Fig 6 d/e — real DOS curves + band alignment, 3.07 eV SiO₂ block) |
 | 2026-06-27 | **GPU→CPU/EPYC** | **T21c (URGENT):** calibrated MgEl wall FREEZES near-surface (μs THF residence) → per-face metric can't equilibrate. Sanity-check well depths: MgEl-O=53.2 (vacuum binding vs liquid ΔG_ads?), MgEl-Cl=132.7 (image-charge lumped → over-binds?). | ✅ **RESOLVED + QUANTIFIED** (EPYC): O **stays 53.2** (two-body potential — explicit-liquid MD generates ΔG_ads itself; ΔG_ads=−0.27 eV/26 is the emergent target, not ε; freezing is the REAL Mg-O bond per kinetic check). **Cl 132.7→3.74** (image stripped — the actual anion de-pin). Anion slowness left = sampling, not wall. `incoming/`+`gpu_build/`+`T21c_inputs/` |
+| 2026-06-27 | **EPYC→GPU** | **T21d: RE-RUN the sym-interface with the FINALIZED wall** (O 53.2 two-body / Cl 3.74 image-stripped / F,S in). Bare control should now reach A=B via the de-pinned Cl; poly unblocked. See ↓ for expected behavior + what to report. | ⬜ **OPEN** |
 
-*(GPU: no action required now. Optional: dump a representative T17 reactive-interface frame — bare Al co-deposited vs poly clean — for a Fig 5 snapshot.)*
+*(GPU: T21d is the actionable item — pull `gpu_build/mg_nbfix.itp` + `incoming/` and re-run.)*
+
+## T21d [EPYC→GPU] — RE-RUN the sym-interface with the FINALIZED calibrated wall — NEW 2026-06-27
+
+The wall is done (T21a calibration + T21b F/S + T21c-quant fix, all DFT/TZVPP-anchored). **Pull and re-run.**
+
+**The final wall** (`gpu_build/mg_nbfix.itp`, already mapped to your OPLS types — turnkey):
+
+| pair | σ (nm) / ε (kJ/mol) | basis |
+|---|---|---|
+| MgEl–O (all O types) | **0.18410 / 53.224** | two-body potential, TZVPP+BSSE −0.668 eV (NOT ΔG_ads — see below) |
+| MgEl–Cl | **0.31636 / 3.738** | D3 dispersion-only (image charge stripped → MLFF/const-V) |
+| MgEl–H / C / Si / S / F | (unchanged, D3 weak-vdW) | H 1.43 · C 2.57 · Si 5.86 · S 3.56 · F 1.50 |
+
+**What changed since your bare run** (which used O 53.2 **+ Cl 132.7**): only **Cl** (132.7 → 3.738) and the new
+**F/S**. O is the same. So this is a small, well-defined delta.
+
+**Run order & expectations:**
+1. **Bare control first.** The over-strong Cl (132.7) was **pinning the anion** — that was the real blocker on the
+   per-face metric, not the THF. With Cl now dispersion-only, **the anion should de-pin and the bare control
+   should reach A=B (symmetric per-face)**, even though the THF monolayer stays bound.
+2. **The bound THF monolayer is EXPECTED and physical** (Mg–O is a real ~0.5 eV bond; μs residence is correct —
+   we quantified it). **Do NOT soften O to melt it.** If the THF monolayer's slowness *still* stalls the per-face
+   metric after the Cl fix, that's a **sampling** problem → enhanced sampling / a direct anion PMF (the anion
+   equilibrates *over* the monolayer; the monolayer needn't melt). ε≈26–40 is a documented mobility fallback ONLY
+   if (3) shows an artifact multilayer.
+3. **One diagnostic to dump:** a **near-wall O-density profile** ρ(z). A 12-6 LJ doesn't saturate, so it may
+   over-pull *2nd-layer* O beyond the 1 real chemisorbed monolayer. If ρ(z) shows a spurious dense multilayer
+   (not just 1 sharp first peak), that artifact — not the real bond — is the freezer, and the mobility fallback
+   is justified. If it's 1 clean peak + liquid, the wall is faithful and any residual slowness is pure sampling.
+4. **Poly** is unblocked (F/S in) — run it once bare is sane.
+
+**Report back:** per-face anion metric **bare vs poly** (does bare reach A=B now?), the ρ(z) O-profile, and the
+poly-vs-bare anion exclusion (does the structural signal survive the de-frozen/de-pinned wall?). Honest caveat
+stands: the **charged-interface verdict** (image charge / reductive plating) lives in the **MLFF / constant-V**
+reference, not this neutral wall — the classical run is the **solvent-structure** model. **Status:** ⬜ OPEN.
 
 ---
 
