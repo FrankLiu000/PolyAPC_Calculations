@@ -47,14 +47,14 @@ I quantified Mg-O on the CPU (slab+THF binding scan + g16 gas-THF freq; `results
 
 | quantity | value | role |
 |---|---|---|
-| **two-body Mg-O potential** | **−0.70 eV** (slab scan @2.32 Å) / −0.668 (TZVPP+BSSE) → ε **53.2** | the **pair LJ ε** (the liquid generates desolvation+entropy itself) |
+| **two-body Mg-O potential** | **−0.668 eV** (TZVPP+BSSE; raw TZVPP scan −0.735 @2.28 Å, BSSE 0.056) → ε **53.2** | the **pair LJ ε** (the liquid generates desolvation+entropy itself) |
 | **ΔG_ads(liquid)** | **−0.27 eV ≈ 26 kJ/mol** (DFT binding + DFT S_gas=301 + Campbell-Sellers + ΔG_vap) | the **EMERGENT PMF** the MD should reproduce — a validation target, **NOT** ε |
 
 In an explicit-liquid MD, baking ΔG_ads into ε **double-counts** the desolvation → under-binds. **Reverted O → 53.224** (`incoming/` + `gpu_build/`).
 
 **The frozen THF monolayer is REAL, not a parameter bug.** Kinetic check: your observed *90 % no-desorb / 12 ns @ 400 K* requires a barrier **~0.4–0.55 eV = the two-body potential** (ΔG_ads's 0.26 eV → τ~2 ns @400 K → would NOT freeze). Mg–O is a genuine ~0.5 eV bond → a long-lived THF monolayer is correct. **So don't soften the real O bond to chase mobility.** The actual anion lever is **Cl** (kept stripped to dispersion-only 3.738 — the image-charge pin was the over-localizer); with Cl freed, the anion should equilibrate *over* the (physically) bound THF layer. If the THF monolayer's slowness still blocks the per-face metric → that's a **sampling** problem (enhanced sampling / a direct anion PMF), not a wall-depth problem.
 
-**One thing for you to check:** a near-wall **O-density profile**. A 12-6 LJ doesn't saturate, so it over-pulls 2nd-layer O beyond the 1 real chemisorbed monolayer (+ σ=0.184 nm is short/stiff). If that *artifact* multilayer dominates the freezing (not the 1st layer), an effective O ε ~26–40 is a documented **mobility-prioritized fallback** (under-binds — label it as such). Status: ✅ **quantified; O reverted; Cl stripped stands.**
+**One thing for you to check:** a near-wall **O-density profile**. A 12-6 LJ doesn't saturate, so it over-pulls 2nd-layer O beyond the 1 real chemisorbed monolayer (+ σ=0.184 nm is short/stiff). If that *artifact* multilayer dominates the freezing (not the 1st layer), an effective O ε ~26–40 is a documented **mobility-prioritized fallback** (under-binds — label it as such). Status: ✅ **quantified; O reverted; Cl stripped stands.** *(Binding scan upgraded DZVP→TZVPP 2026-06-27: well −0.668 eV BSSE confirmed, ν 111 cm⁻¹; ε/ΔG_ads unchanged.)*
 
 ---
 

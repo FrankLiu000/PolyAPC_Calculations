@@ -30,7 +30,8 @@
 ; The interface MD is EXPLICIT-liquid (THF+ions placed between the slabs). That changes what eps must be:
 ;  - PAIR LJ eps = the TWO-BODY potential. In explicit liquid the MD generates desolvation + entropy ITSELF;
 ;    you must NOT also bake them into eps (double-count -> under-bind). So O eps = two-body well = 53.2
-;    (DFT -0.668 eV / -0.70 eV from the periodic slab+THF scan, well at 2.32 A). REVERTED from the 26 first pass.
+;    (TZVPP+BSSE -0.668 eV; raw TZVPP slab+THF scan -0.735 @2.28 A, BSSE 0.056; nu_stretch~111 cm^-1).
+;    REVERTED from the 26 first pass. [scan upgraded DZVP->TZVPP 2026-06-27; eps/dG_ads unchanged.]
 ;  - dG_ads(LIQUID) = -0.27 eV (=26 kJ/mol) is the EMERGENT free energy (CPU-quantified: slab two-body binding
 ;    + DFT gas entropy S_gas=301 J/mol/K (g16 freq) + Campbell-Sellers S_ads + dG_vap). It is the PMF the MD
 ;    should REPRODUCE / a validation target -- NOT the pair eps.

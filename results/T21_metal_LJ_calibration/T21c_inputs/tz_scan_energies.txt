@@ -1,0 +1,13 @@
+# TZVPP (TZV2P-MOLOPT-PBE-GTH) slab+THF binding scan -- replaces DZVP single-points (2026-06-27)
+# fragments: tz_slab=-2278.390738814  tz_THF=-43.519160708 (Ha)
+# z(A)  E_total(Ha)  E_bind(eV)
+1.8  -2321.913662718  -0.102
+2.0  -2321.932197103  -0.607
+2.2  -2321.936507681  -0.724
+2.5  -2321.934031042  -0.657
+3.0  -2321.926446286  -0.450
+3.5  -2321.920767141  -0.296
+4.0  -2321.917020243  -0.194
+5.0  -2321.913168357  -0.089
+# well: raw TZVPP -0.735 eV @2.28A ; counterpoise BSSE -0.668 eV (BSSE 0.056); nu(stretch)~111 cm^-1
+# ghost CP @2.2: cp_slabGhostTHF_22=-2278.392071751  cp_THFGhostSlab_22=-43.519883466 (Ha)

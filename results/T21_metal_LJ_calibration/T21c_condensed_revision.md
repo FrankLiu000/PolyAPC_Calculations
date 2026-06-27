@@ -10,8 +10,8 @@ image stripped) **stands**. Summary:
 
 | quantity | value | how | role |
 |---|---|---|---|
-| two-body Mg-O potential | **−0.70 eV** @ 2.32 Å (slab scan, DZVP); −0.668 (TZVPP+BSSE) | `mgO_quantify.py` parabola fit of the periodic slab+THF scan | **the pair LJ ε** (→ 53.2) for explicit liquid |
-| frustrated stretch | ν ≈ **118 cm⁻¹** | curvature of the same well (rigid THF, m=72) | — |
+| two-body Mg-O potential | **−0.668 eV** (TZVPP+BSSE @2.2 Å; raw TZVPP −0.735 @2.28 Å, BSSE 0.056) | `mgO_quantify.py` over the **TZVPP** slab+THF scan (`tz_sTHF_*`, replaces DZVP) + counterpoise ghost CP | **the pair LJ ε** (→ 53.2) for explicit liquid |
+| frustrated stretch | ν ≈ **111 cm⁻¹** | curvature of the TZVPP well (rigid THF, m=72) | — |
 | **ΔG_ads(liquid)** | **−0.27 eV ≈ 26 kJ/mol** | −0.668 eV + Campbell–Sellers (−TΔS=+35.1, S_gas=300.8 J/mol·K from g16 freq) + ΔG_vap(+3.7) | **emergent PMF / validation target — NOT ε** |
 
 **Why ε stays 53.2 (two-body), not 26 (ΔG_ads):** in an explicit-liquid MD the solvent generates the
@@ -21,7 +21,12 @@ requires a barrier ~0.4–0.55 eV = the two-body well (ΔG_ads's 0.26 eV → τ~
 Mg–O is a genuine ~0.5 eV bond. The anion lever is **Cl** (stripped), not the THF O bond; residual anion
 slowness = a **sampling** problem (enhanced sampling / direct anion PMF). A mobility-prioritized O ε≈26–40 is
 a documented fallback only if a GPU near-wall O-density profile shows the non-saturating 12-6 over-binds a
-spurious *multilayer* (vs the 1 real chemisorbed layer). Inputs: `T21c_inputs/{mgO_quantify.py, thf_gas2.gjf}`.
+spurious *multilayer* (vs the 1 real chemisorbed layer). Inputs: `T21c_inputs/{mgO_quantify.py, thf_gas2.gjf, tz_scan_energies.txt}`.
+
+**Basis note (2026-06-27):** the binding scan was re-run at **TZVPP** (TZV2P-MOLOPT-PBE-GTH, replacing the
+illustrative DZVP single-points). Raw TZVPP well −0.735 eV @2.28 Å; counterpoise BSSE 0.056 eV → **−0.668 eV**
+(identical to the prior TZVPP+BSSE anchor). ν 118→**111 cm⁻¹**. ε(53.2), ΔG_ads(−0.27 eV) and every conclusion
+are **unchanged** — already TZVPP+BSSE-anchored; the scan upgrade just makes the curve self-consistent.
 
 *(The first-pass reasoning below is retained for the record; the O-specific "use 26" conclusion is superseded
 by this update. The Cl analysis is unchanged and correct.)*
