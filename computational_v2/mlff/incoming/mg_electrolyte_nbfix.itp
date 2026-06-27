@@ -10,6 +10,15 @@
   MgEl  H       1    0.23683      1.426           ; DFT H2 probe; weak vdW well -0.07 eV (clean)
   MgEl  C       1    0.32326      2.566           ; D3 dispersion (C6 from PBE-D3, consistent); weak vdW
   MgEl  Si      1    0.33969      5.855           ; D3 dispersion; weak vdW (C6 extraction approximate, but eps small -> low impact)
+  MgEl  S       1    0.32326      3.556           ; D3 dispersion (TMSOTf sulfonate S); S buried in -SO2CF3, low surface contact -> low impact
+  MgEl  F       1    0.29717      1.501           ; ESTIMATED (D3/atomic-C6 trend; F GTH basis aborted). CF3 fluorines, most INERT pair
+;
+; TMSOTf [(CH3)3Si-O-SO2-CF3]: present in the real electrolyte but OMITTED from the current NET1/poly_geom MD
+;   model (which has only {Mg,Al,Cl,C,H,O,Si}). If TMSOTf is added, note:
+;   - triflate sulfonate-O is NOT ether-O: MgEl-O_thf (53.2, -0.67 eV) OVER-binds the -SO2- oxygens (more diffuse,
+;     anionic-resonance delocalized). Use ~half (or scan an explicit triflate-O well) - do not reuse the ether value.
+;   - TMS silicon ~ POSS-Si (MgEl-Si above is transferable).
+;   - F (CF3) and S (sulfonate) are weak/inert vdW (above); they do NOT change the Si-up/Al-down interface story.
 ;
 ; Mg2+ (cation): OMITTED - solvated [Mg2(mu-Cl)3(THF)6]+ never contacts bare metal; standoff (5.64 A) = THF
 ;   solvation/sterics, reproduced via MgEl-O_thf. Bare-Mg2+ on metal = reduction (-13.5 eV), not a pair.
