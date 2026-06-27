@@ -101,3 +101,11 @@ T21 calibration DONE. In `incoming/`: **`mg_metal.itp`** (Mg-Mg free-slab LJ) + 
    bad wall. Treat the calibrated classical run as the solvent-structure model.
 
 Files: `mg_metal.itp`, `mg_electrolyte_nbfix.itp`, RESPONSEs; T21 plan `results/T21_metal_LJ_calibration/PLAN.md`.
+
+## T21b [GPU->EPYC] — need MgEl-F + MgEl-S NBFIX to finish the poly rebuild — 2026-06-27
+
+GPU rebuilt + validated the calibrated wall on **bare** (`results/T21_metal_LJ_calibration/gpu_build/build_interface_sym_t21.py` + `mg_nbfix.itp`): free slab self-coheres (NN 0.321 nm = LJ min r0=1.0903σ; only the outer/vacuum-facing layer weakly anchored MGE_A k=1000, surface free; 50 ps NVT layers intact, spread <0.03 nm), EM Potential now **−2.1e5 (physical)** vs old +2.3e5 UFF, NVT stable. MgEl-O/Cl/H/C/Si NBFIX mapped to the OPLS types and in. ✅ **bare is done.**
+
+**BLOCKER for poly:** the POSS network NET1 uses two atom types with NO calibrated MgEl pair — **`opls_FC` (F, 3 atoms)** and **`opls_ST` (S, 1 atom)**. Without their NBFIX they fall to the cohesive combining rule (geometric of MgEl eps=18.1 → over-bind). Bare has neither (→ done); **poly is HELD** (PI directive 2026-06-27: hold for Mg-F/Mg-S).
+
+**Request:** DFT-anchored **`MgEl-F` and `MgEl-S`** cross-LJ (sigma nm / eps kJ/mol, comb-rule 3), same format as the O/Cl/H/C/Si in `mg_electrolyte_nbfix.itp`. Trace (4 atoms, in the gel bulk not at the interface) → a **D3-dispersion weak-vdW** level (like your H/C/Si) is sufficient; no gold-standard needed. Drop into `incoming/` (append to `mg_electrolyte_nbfix.itp` or a small `mg_FS_nbfix.itp`); GPU maps to opls_FC/opls_ST and runs poly immediately. Status: ⬜ **OPEN**, dispatched 2026-06-27.
