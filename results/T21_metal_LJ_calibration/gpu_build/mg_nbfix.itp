@@ -1,0 +1,35 @@
+; mg_nbfix.itp — T21 (EPYC DFT-anchored) Mg(0001) wall <-> electrolyte cross-LJ, mapped to the OPLS types
+; actually used by THF/MGC/ANI/NET1. comb-rule 3. *** NBFIX — do NOT let MgEl-X use the combining rule ***
+; (the cohesive MgEl self-eps=18.1 kJ/mol does NOT transfer to adsorbates). Source: mg_electrolyte_nbfix.itp.
+[ nonbond_params ]
+;  i     j       func   sigma(nm)   epsilon(kJ/mol)
+; --- O (ether/all O) <- MgEl-O_thf  (DFT chemisorption -0.668 eV, TZVPP+BSSE, gold-standard) ---
+   MgEl  opls_OS   1    0.18410     53.224
+   MgEl  opls_OB   1    0.18410     53.224
+   MgEl  opls_OE   1    0.18410     53.224
+   MgEl  opls_OH   1    0.18410     53.224
+   MgEl  opls_OT   1    0.18410     53.224
+; --- Cl (bridging + anion) <- MgEl-Cl  (EFFECTIVE; image-charge lumped, RMSE 0.55 eV; misses r^-1 tail) ---
+   MgEl  opls_CLA  1    0.18586    132.713
+   MgEl  opls_CLB  1    0.18586    132.713
+; --- H <- MgEl-H  (weak vdW -0.07 eV) ---
+   MgEl  opls_HA   1    0.23683      1.426
+   MgEl  opls_HC   1    0.23683      1.426
+   MgEl  opls_HCe  1    0.23683      1.426
+   MgEl  opls_HO   1    0.23683      1.426
+; --- C <- MgEl-C  (D3 dispersion) ---
+   MgEl  opls_CA   1    0.32326      2.566
+   MgEl  opls_CF   1    0.32326      2.566
+   MgEl  opls_CT   1    0.32326      2.566
+   MgEl  opls_CTe  1    0.32326      2.566
+   MgEl  opls_CTo  1    0.32326      2.566
+; --- Si <- MgEl-Si  (D3 dispersion) ---
+   MgEl  opls_SI   1    0.33969      5.855
+   MgEl  opls_SIM  1    0.33969      5.855
+; --- HELD (user, 2026-06-27): MgEl-F (opls_FC, 3 atoms) + MgEl-S (opls_ST, 1 atom) in NET1 await DFT
+;     calibration from CPU. Estimates DISABLED. -> bare has NO F/S (unaffected); POLY rebuild is HELD until
+;     these land (without them poly's 3 F + 1 S fall to the cohesive combining rule = over-bind). ---
+;   MgEl  opls_FC   1    0.30000      1.500
+;   MgEl  opls_ST   1    0.34000      5.000
+; OMITTED (CPU): MgEl-opls_MG (cation solvated, standoff via Mg-O; never bare) ; MgEl-opls_AL (anion Al shielded
+;   in [AlPh2Cl2]-, contacts via Cl/C/H) -> these fall to the combining rule but are never sampled at short range.
