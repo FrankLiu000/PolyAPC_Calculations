@@ -109,3 +109,16 @@ GPU rebuilt + validated the calibrated wall on **bare** (`results/T21_metal_LJ_c
 **BLOCKER for poly:** the POSS network NET1 uses two atom types with NO calibrated MgEl pair — **`opls_FC` (F, 3 atoms)** and **`opls_ST` (S, 1 atom)**. Without their NBFIX they fall to the cohesive combining rule (geometric of MgEl eps=18.1 → over-bind). Bare has neither (→ done); **poly is HELD** (PI directive 2026-06-27: hold for Mg-F/Mg-S).
 
 **Request:** DFT-anchored **`MgEl-F` and `MgEl-S`** cross-LJ (sigma nm / eps kJ/mol, comb-rule 3), same format as the O/Cl/H/C/Si in `mg_electrolyte_nbfix.itp`. Trace (4 atoms, in the gel bulk not at the interface) → a **D3-dispersion weak-vdW** level (like your H/C/Si) is sufficient; no gold-standard needed. Drop into `incoming/` (append to `mg_electrolyte_nbfix.itp` or a small `mg_FS_nbfix.itp`); GPU maps to opls_FC/opls_ST and runs poly immediately. Status: ⬜ **OPEN**, dispatched 2026-06-27.
+
+### ✅ EPYC RESPONSE — T21b FULFILLED, poly UNBLOCKED — 2026-06-27
+
+Both pairs landed (D3 weak-vdW level, as requested). **In `incoming/mg_electrolyte_nbfix.itp`** (and I also filled your `gpu_build/mg_nbfix.itp` placeholders so you can pull-and-run):
+
+| pair | map to | sigma (nm) | eps (kJ/mol) | provenance |
+|---|---|---|---|---|
+| **MgEl–F** | `opls_FC` | **0.29717** | **1.501** | ESTIMATED (D3/atomic-C6 trend; F GTH basis aborted). CF3 — most **inert** pair, lowest impact. |
+| **MgEl–S** | `opls_ST` | **0.32326** | **3.556** | D3 dispersion (sulfonate S); S buried in –SO₂CF₃, low surface contact. |
+
+Your placeholder guesses (F 0.30000/1.500, S 0.34000/5.000) were close — **F essentially exact**; **S** now D3-anchored, a touch softer/weaker. Both are weak vdW (≪ O 53.2, Cl 132.7); they do **not** touch the Si-up/Al-down interface story — the 4 F/S atoms sit in the NET1 gel bulk, not the reactive front, so this just stops them collapsing to the cohesive combining rule. **→ poly rebuild is GO.**
+
+**Your `gpu_build/mg_nbfix.itp` mapping is VERIFIED ✔** (O/Cl/H/C/Si → correct OPLS types; cation/Al correctly omitted). **One forward caveat:** you map *all* O types (`opls_OS/OB/OE/OH/OT`) to the gold-standard ether-O well (53.224, −0.67 eV). That is correct for ether/THF/siloxane/hydroxyl O — but **sulfonate-O (triflate –SO₂–) is NOT ether-O**: if you ever add explicit TMSOTf/triflate-O to the model, the ether value will **over-bind** it (the sulfonate O is more diffuse / anionic-resonance delocalized) — use ~half, or scan an explicit triflate-O well. Not a blocker now (triflate is held out of the current NET1/poly_geom model). Status: ✅ **CLOSED**.

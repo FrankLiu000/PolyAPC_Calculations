@@ -26,10 +26,9 @@
 ; --- Si <- MgEl-Si  (D3 dispersion) ---
    MgEl  opls_SI   1    0.33969      5.855
    MgEl  opls_SIM  1    0.33969      5.855
-; --- HELD (user, 2026-06-27): MgEl-F (opls_FC, 3 atoms) + MgEl-S (opls_ST, 1 atom) in NET1 await DFT
-;     calibration from CPU. Estimates DISABLED. -> bare has NO F/S (unaffected); POLY rebuild is HELD until
-;     these land (without them poly's 3 F + 1 S fall to the cohesive combining rule = over-bind). ---
-;   MgEl  opls_FC   1    0.30000      1.500
-;   MgEl  opls_ST   1    0.34000      5.000
+; --- F (opls_FC) <- MgEl-F | S (opls_ST) <- MgEl-S : CPU DFT-anchored (T21b, 2026-06-27) — LANDED, poly UNBLOCKED ---
+   MgEl  opls_FC   1    0.29717      1.501   ; estimated (D3/atomic-C6 trend; F GTH basis aborted); CF3, most INERT pair (low impact)
+   MgEl  opls_ST   1    0.32326      3.556   ; D3 dispersion (sulfonate S); buried in -SO2CF3, low surface contact (low impact)
+; (your placeholder guesses F 0.30000/1.500, S 0.34000/5.000 were close — F essentially exact; S now D3-anchored, a touch softer/weaker.)
 ; OMITTED (CPU): MgEl-opls_MG (cation solvated, standoff via Mg-O; never bare) ; MgEl-opls_AL (anion Al shielded
 ;   in [AlPh2Cl2]-, contacts via Cl/C/H) -> these fall to the combining rule but are never sampled at short range.

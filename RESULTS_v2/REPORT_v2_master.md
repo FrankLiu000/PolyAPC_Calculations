@@ -68,6 +68,22 @@ Running the T16 model as an interface-MD engine (ASE+MACE, rigid DFT-masked 64-M
 
 ---
 
+## T20 — interfacial anion concentration profile C(z): the Liu-2022 "homogenize the interface" cure, realized structurally — `results/T20_iface_profile/`
+Post-processing the matched neutral MLFF trajectories (GPU; bare 3956 fr + poly 1401 fr, t16_broad model) into the PI's own stripping-killer coordinate (Liu, *Adv. Mater.* **2022**, 34, 2201886: uneven stripping is driven by **interfacial accumulation of Cl-bearing complex ions**; the prescribed cure is to **homogenize the interfacial anion concentration**). Tracer = the reducible **Al** center of the covalent Ph₂AlCl₂⁻ unit; metric = 3D min-distance to the slab (the physical approach), single-ion-per-cell ⇒ PMF-limit occupation density.
+
+| observable (field-free) | bare | poly |
+|---|---|---|
+| anion·Al — 3D min-distance to electrode | **4.58 ± 0.19 Å** | **6.81 ± 1.27 Å** |
+| anion — **near-front occupancy** (Al ≤ 5 Å) | **98.8 %** | **2.2 %** (~**44×** drop) |
+| anion — reductive contact (Al ≤ 2.5 Å) | 0 % | 0 % |
+| cation — leading-Mg 3D min-distance | 5.78 ± 0.18 Å | 5.20 ± 0.92 Å |
+
+**Headline — structural sequestration + an ion-ordering inversion.** The reducible Al sits within 5 Å of the **bare** electrode **98.8 %** of the time but only **2.2 %** in **poly** (~44×); the two Al distributions barely overlap. Cation transparency is preserved (leading Mg reaches the front *similarly*, 5.78 vs 5.20 Å), so the interfacial ion ordering **inverts**: **bare** the *reducible* anion leads (4.58 < 5.78 Å); **poly** the *innocuous* cation leads and the reducible anion is excluded behind it (6.81 > 5.20 Å). That is the field-free structural basis for suppressing anion reduction / Al co-deposition — the network keeps the reducible species out of the reactive front while letting the plating cation in. Cross-consistent with **T17** (poly 7.57 vs bare 4.58 Å), **T10** AIMD (~9.5 Å), and the bulk **T5** result; bare 4.58 Å is identical across T17/T20.
+
+**Honest caveats:** (1) **field-free** → both anions show 0 % reductive contact; T20 is an equilibrium *distribution* (model), the reductive discrimination needs driving (T5 biased MD + the EPYC co-deposition AIMD, ~2.5 Å gate). (2) The **44×** is threshold-placed between the two peaks (5 Å sits between 4.58 and 6.81) and is cutoff-sensitive — the robust statements are the **+2.2 Å mean 3D shift** and the **near-non-overlapping distributions**. (3) ⚠️ **Poly standoff is NOT cleanly equilibrated** (independent neutral runs settle 6.8–10.3 Å and still drift) → poly magnitude (6.81 Å, 44×) is **sign-robust but magnitude-uncertain**; a PMF/multi-start is needed to pin it. (4) Bare **cation** partially dissociates in this trajectory → the cation-centroid and **Al↔Mg₂ ion-pair-separation** numbers (`fig_mechanism` 7.8/9.9 Å) are excluded here and flagged for re-derivation; the **anion** and **inversion** results are independent and stand.
+
+---
+
 ## Reconciliation to the wet-lab (ARTICLE_PLAN Part D)
 | observable | value | explained by |
 |---|---|---|
