@@ -80,22 +80,24 @@ reaches reductive contact (<2.5 Å) field-free = Liu-2022 homogenization achieve
 bare is tight at 4.6) — sign-robust, magnitude needs a PMF/multi-start. See `T5.../fig_equilibration.png`.
 Also: the `fig_mechanism` ion-pair-separation numbers (7.8/9.9 Å) need re-derivation (bare cation Mg dissociates).
 
-## T21 [EPYC→GPU] — REBUILD sym-interface with a FREE Mg slab + DFT-anchored wall — 2026-06-26 (PI)
+## T21 [EPYC->GPU] FINAL — REBUILD the sym-interface with the COMPLETE DFT-anchored wall — 2026-06-27
 
-**PI decision: free (relaxable) Mg slab, not POSRES.** Please rebuild the sym-interface (`build_interface_sym.py`)
-to a free slab and drop the UFF wall:
-1. **Remove the k=50000 POSRES.** Anchor only the **bottom 1–2 layers** of each slab with *weak* POSRES (hold
-   slab position / mimic bulk); leave the **surface layers FREE** (the AIMD convention) so the metal surface
-   relaxes + vibrates with the electrolyte.
-2. **Mg slab atomtype = the DFT-anchored Mg LJ** EPYC is calibrating (Phase A: PBE-D3 bulk a/c + cohesive +
-   (0001) surface energy → 12-6 σ/ε), NOT `MGE_SIG=0.26915/MGE_EPS=0.4644` (UFF). I'll ship `mg_metal.itp`
-   (atomtype + LJ) to `incoming/` first so you can rebuild; then a **NBFIX** block (Mg–Cl, Mg–O cross pairs,
-   validated to the 3.90/4.58/5.64 Å AIMD standoff) to fix the electrolyte interaction.
-3. **Honest flag:** a free 12-6 LJ slab for hcp Mg is energetically approximate (no exact c/a / elastic). If you
-   can run the *slab* in LAMMPS with an **Mg EAM** potential that's higher-fidelity for a free metal — say if you
-   want EAM params instead and I'll source/validate them. For GROMACS, 12-6 LJ is the route.
-4. **Suggest holding the per-face verdict** until the free-slab + calibrated-wall rerun — it directly tests
-   whether the classical anion **enrichment** flips to the MLFF/AIMD **depletion** (model reconciliation).
+T21 calibration DONE. In `incoming/`: **`mg_metal.itp`** (Mg-Mg free-slab LJ) + **`mg_electrolyte_nbfix.itp`**
+(all Mg-electrolyte cross terms) + the two RESPONSE.md. Please rebuild `build_interface_sym.py` with these:
 
-ETA: Phase A (`mg_metal.itp`) within a cycle or two; Phase B NBFIX after the E_int(z) scans. Plan:
-`results/T21_metal_LJ_calibration/PLAN.md`.
+1. **Free slab** (drop UFF + the k=50000 POSRES). MgEl atomtype = `mg_metal.itp` (sigma 0.29436 nm, eps 18.103
+   kJ/mol). Anchor ONLY the bottom 1-2 layers (weak POSRES); surface free (AIMD convention). The cohesive eps now
+   lets the slab self-cohere (UFF eps was 39x too weak -> that's why you needed POSRES).
+2. **All Mg-electrolyte pairs via NBFIX** (`[ nonbond_params ]`, comb-rule 3) - do NOT use the combining rule for
+   any MgEl-X (the cohesive eps doesn't transfer): MgEl-O 0.18410/53.22 (gold-std, TZVPP+BSSE) | MgEl-Cl
+   0.18586/132.71 (effective) | MgEl-H 0.23683/1.43 | MgEl-C 0.32326/2.57 | MgEl-Si 0.33969/5.86. Map `O`->your
+   THF/siloxane ether-O type, `Cl`->bridging Cl, etc.
+3. **Omit** MgEl-Mg2+ (cation solvated, standoff via Mg-O) and MgEl-Al (shielded in [AlPh2Cl2]-; anion contacts
+   via Cl/C/H).
+4. **Then re-check the per-face enrichment.** Expect the stronger calibrated MgEl-O to change the THF<->wall
+   competition that sets ion positions. HONEST CAVEAT: the neutral LJ wall still cannot capture the anion
+   image-charge or the reductive plating - so if classical still disagrees with the MLFF depletion, that's the
+   reason (constant-potential electrodes / the MLFF remain the reference for the charged-interface verdict), NOT a
+   bad wall. Treat the calibrated classical run as the solvent-structure model.
+
+Files: `mg_metal.itp`, `mg_electrolyte_nbfix.itp`, RESPONSEs; T21 plan `results/T21_metal_LJ_calibration/PLAN.md`.
