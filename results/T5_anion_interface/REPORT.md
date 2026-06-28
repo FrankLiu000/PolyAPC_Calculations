@@ -222,3 +222,19 @@ A static **+0.3 V/nm** field (≈ the ±1 V/47 Å AIMD field, master §7) on the
 ## Provenance
 Workspace `/lyz/Claude_workplace/polyAPC/storyT5/` — `build_interface.py`, `build_poly_interface.py` (infeasible, documented), `analyze_interface.py`, `bulk_sequestration.py`, `fig_T5.py`, `mdp/`, `bare/` (slab+interface+MD), `bulk/bulk_poly.json`, `analysis/profile_bare.csv`. Transport: `analysis/msd_rep/RESULTS.txt`, `analysis/solv_poly_conv/`. GROMACS 2025.1 (CUDA), LYZ-ROG. Figure `fig_T5.png`.
 *Stage to branch `computational-v3-interface` (coordinate with EPYC) as `results/T5_anion_interface/` — NOT to `main`.*
+
+## ★ v3.3-draft (progress checkpoint 2026-06-28) — T21d de-pinned wall + whole-box-500K anneal fix; bare A=B gate MET; field phase queued
+
+**Wall (T21d, adopted):** MgEl-Cl ε 132.7→**3.738** (σ 0.31636) — image-charge STRIPPED, anion de-pinned (the 132.7 was the per-face blocker, not THF freezing). MgEl-O ε **53.224** kept (real Mg-O chemisorption; bound THF monolayer is physical, not softened). F/S unchanged. Symmetric two-slab, pbc=xyz + ewald-geometry=3dc, `POSRES_SLAB` = outer anchor layer only (k=1000); **slab surface is free**.
+
+**Two-face asymmetry — root cause found & fixed.** The validity control (bare, faces equivalent by construction) came out **3–4× face-asymmetric**, and the ELEC-only-hot anneal (ELEC 500 K / slab+COLD 298 K) *ended* 3× off — near-surface ions were pinned to the **cold slab sink** (bulk mixed, surface population didn't redistribute). The earlier "bare 7/2≈5/5 valid baseline" was overstated (7/2 = 3.5×). **Fix = whole-box-500K anneal** (heat slab+ELEC+network together, 40 ns @500 K + 20 ns cool→298 K): no cold sink → ions redistribute. poly requires `periodic-molecules=yes` (percolating NET1 gel, 10 119 atoms; without it → `mshift` "inconsistent shifts over PBC" fatal — temperature-independent, a static startup graph check).
+
+**Bare A=B gate MET** at the anneal endpoint: cation faceA/faceB = **1.00×** (was 1.8×), anion **0.67×** stochastic with no systematic face bias (was 1.8× faceA-rich). The systematic pinning is gone.
+
+**Preliminary production** (discard 10, ~30 ns, all still DRIFTing — verdict needs ~150 ns plateau):
+- bare: cation **1.04×** (gate holds), anion 0.64× (stochastic).
+- poly: anion RICH≈POOR (1.07×, **no gel-enrichment persisting** — contrasts the old run's contaminated "gel-contact enriches 4×", which was an artifact of the asymmetric ELEC-only start). cation POOR-richer (0.75×).
+
+**Field phase (+0.3 V/nm) queued** (`field_autofire.sh`) to auto-fire from the 200 ns eq endpoints: detects 200 ns across all `-noappend` parts, stops eq, extracts endpoint, grompp `field.tpr` (continuation), launches both. GROMACS 2025.1 keyword = **`electric-field-z = 0.3 0 0 0`** (per-axis, 4 vals; `electric-field`/`E-z` are NOT recognized). pbc=xyz+3dc, POSRES_SLAB (slab free, not frozen), 200 ns.
+
+**Caveats unchanged:** solvent-structure model (neutral LJ can't do image-charge/plating → MLFF/const-V is the charged reference); transport NULL; no fluorine/standoff invented; mechanism = network-O coordination. Verdict (bare vs poly per-face, ρ(z)) pending the ~150 ns plateau + the field phase.
