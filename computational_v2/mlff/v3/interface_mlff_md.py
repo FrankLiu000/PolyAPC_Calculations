@@ -3,8 +3,8 @@
 works where classical GROMACS cannot (MACE is geometry-based: no molecule-unwrap,
 so the percolating/POSS network is fine). Slab = first 64 atoms (EPYC convention,
 the DFT-masked rigid electrode). Tracks the Al-ANION approach to the front.
-usage: interface_mlff_md.py <model> <start.xyz> <label> [n_steps] [T_K]"""
-import sys, numpy as np
+usage: interface_mlff_md.py <model> <start.xyz> <label> [n_steps] [T_K] [DT] [FCAP] [EFIELD] [QFILE] [QTOT] [SEED]"""
+import sys, json, hashlib, numpy as np
 from ase.io import read, write
 from ase import units
 from ase.md.langevin import Langevin
@@ -41,7 +41,16 @@ FCAP   = float(sys.argv[7]) if len(sys.argv)>7 else 60.0   # eV/Å per-atom forc
 EFIELD = float(sys.argv[8]) if len(sys.argv)>8 else 0.0    # V/Å external z-field (0=off; cathodic<0)
 QFILE  = sys.argv[9] if len(sys.argv)>9 else None          # per-atom charge .npy (required if EFIELD!=0)
 QTOT   = float(sys.argv[10]) if len(sys.argv)>10 else 0.0   # total system charge -> charge-conditioned models (MACELES)
+SEED   = int(sys.argv[11]) if len(sys.argv)>11 and sys.argv[11].lower() != "none" else None
 NSLAB  = 64
+
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
 at = read(start)
 at.info["charge"] = QTOT   # MACELES reads total_charge from info['charge']; inert for plain MACE (r6)
 _charges = np.load(QFILE) if (EFIELD and QFILE) else None
@@ -53,9 +62,29 @@ at.set_constraint(FixAtoms(indices=slab.tolist()))   # rigid electrode (forces w
 Al = np.where(sym=="Al")[0]; Cl = np.where(sym=="Cl")[0]
 O  = np.where(sym=="O")[0];  Si = np.where(sym=="Si")[0]
 print(f"[{label}] {len(at)} atoms; slab(fixed)={NSLAB} Mg; Al={len(Al)} Cl={len(Cl)} O={len(O)} Si={len(Si)}; "
-      f"Efield={EFIELD} V/A (charges={'on,sum%.2f'%float(_charges.sum()) if _charges is not None else 'off'})")
-MaxwellBoltzmannDistribution(at, temperature_K=T_K)
-dyn = Langevin(at, DT*units.fs, temperature_K=T_K, friction=0.02)
+      f"Efield={EFIELD} V/A (charges={'on,sum%.2f'%float(_charges.sum()) if _charges is not None else 'off'}); "
+      f"seed={SEED if SEED is not None else 'uncontrolled'}")
+rng = np.random.RandomState(SEED) if SEED is not None else None
+meta = {
+    "label": label,
+    "model": model,
+    "model_sha256": sha256_file(model),
+    "start": start,
+    "start_sha256": sha256_file(start),
+    "nsteps": nsteps,
+    "temperature_K": T_K,
+    "dt_fs": DT,
+    "force_cap_eV_A": FCAP,
+    "efield_V_A": EFIELD,
+    "qfile": QFILE,
+    "qfile_sha256": sha256_file(QFILE) if QFILE else None,
+    "total_charge": QTOT,
+    "seed": SEED,
+}
+with open(f"{label}_meta.json", "w") as handle:
+    json.dump(meta, handle, indent=2)
+MaxwellBoltzmannDistribution(at, temperature_K=T_K, rng=rng)
+dyn = Langevin(at, DT*units.fs, temperature_K=T_K, friction=0.02, rng=rng)
 cv = open(f"{label}_cv.csv","w")
 cv.write("step,t_ps,T_K,Epot_eV,Al_height_A,Al_slabMin_A,Al_nCl,Al_nO,Al_SiMin_A\n")
 frames=[]
