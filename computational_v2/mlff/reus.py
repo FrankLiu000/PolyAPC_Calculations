@@ -10,7 +10,7 @@ Writes window_z<z0>.dat per window (umbrella.py-compatible -> feed to wham.py). 
 Usage: reus.py <model> <init_label|start.xyz> <k> <tau_fs> <ncycles> <out_dir> <z0_1 z0_2 ...>
   init_label: reuse umb_<init_label>/window_z<z0>_last.xyz as per-window starts (else a single start.xyz).
 """
-import sys, os, glob, re
+import sys, os, glob, re, time
 import numpy as np
 from ase.io import read, write
 from ase import units
@@ -26,6 +26,44 @@ DT, T_K, LOG = 1.0, 300.0, 20
 kT = units.kB * T_K
 os.makedirs(WD, exist_ok=True)
 calc = MACECalculator(model_paths=[model], device="cuda", default_dtype="float32")
+STATE = f"{WD}/reus_state.txt"
+RUNNING = f"{WD}/reus_running.txt"
+
+def last_step(dat):
+    """Last written MD step in a window .dat file."""
+    if not os.path.exists(dat):
+        return 0
+    last = 0
+    with open(dat) as fh:
+        for line in fh:
+            if line[:1].isdigit():
+                last = int(float(line.split()[0]))
+    return last
+
+def truncate_dat(dat, keep_step):
+    """Drop partially written rows beyond the last completed global cycle."""
+    if not os.path.exists(dat):
+        return
+    with open(dat) as fh:
+        lines = fh.readlines()
+    kept = []
+    for line in lines:
+        if not line[:1].isdigit():
+            kept.append(line)
+            continue
+        if int(float(line.split()[0])) <= keep_step:
+            kept.append(line)
+    with open(dat, "w") as fh:
+        fh.writelines(kept)
+
+def completed_state_step():
+    if os.path.exists(STATE):
+        try:
+            with open(STATE) as fh:
+                return int(float(fh.read().strip().split()[0]))
+        except Exception:
+            pass
+    return None
 
 # per-window start = NEAREST available umb_<init>/window_z*_last.xyz (else init treated as a start.xyz path)
 _cands = glob.glob(f"umb_{init}/window_z*_last.xyz")
@@ -58,13 +96,19 @@ def cn(at, cs, others, rc):
 
 # build replicas (RESUMABLE: window_z<z0>_chk.xyz = checkpoint config; appends to .dat on resume)
 reps, dyns, files, rsteps = [], [], [], []
+dat_paths = [f"{WD}/window_z{z0}.dat" for z0 in Z0]
+dat_steps = [last_step(p) for p in dat_paths]
+state_step = completed_state_step()
+resume_step = state_step if state_step is not None else (min(dat_steps) if dat_steps else 0)
+resume_step = (resume_step // TAU) * TAU
+if any(s != resume_step for s in dat_steps):
+    print(f"# RESUME_TRUNCATE target_step={resume_step} dat_steps={dat_steps}", flush=True)
+    for dat in dat_paths:
+        truncate_dat(dat, resume_step)
 for z0 in Z0:
     chk, dat = f"{WD}/window_z{z0}_chk.xyz", f"{WD}/window_z{z0}.dat"
     if os.path.exists(chk):                                    # RESUME this window
-        at = read(chk); last = 0
-        if os.path.exists(dat):
-            for L in open(dat):
-                if L[:1].isdigit(): last = int(L.split()[0])
+        at = read(chk); last = last_step(dat)
         rsteps.append(last); f = open(dat, "a")
     else:                                                      # fresh
         at = read(first_start(z0)); rsteps.append(0); f = open(dat, "w")
@@ -79,13 +123,17 @@ step = start_cyc * TAU; n_acc = 0; n_try = 0
 if start_cyc: print(f"# RESUMING from cycle {start_cyc} (step {step} fs)", flush=True)
 for cyc in range(start_cyc, NCYC):
     for i in range(len(Z0)):                                   # advance every window by tau (round-robin)
+        with open(RUNNING, "w") as fh:
+            fh.write(f"{time.strftime('%F %T')} cycle={cyc} step={step} window_index={i} z0={Z0[i]}\n")
         for _ in range(TAU // LOG):
             dyns[i].run(LOG)
             at = reps[i]; cvv = cv_of(at)
             fmax = np.linalg.norm(at.get_forces()[64:], axis=1).max()
             files[i].write(f"{step+(_+1)*LOG} {cvv:.4f} {cn(at,cat_mg,O,2.6)} {cn(at,cat_mg,cl,2.9)} "
                            f"{at.get_distance(int(cat_mg[0]),int(cat_mg[1]),mic=True):.3f} {fmax:.3f}\n")
+            files[i].flush()
         files[i].flush()
+        write(f"{WD}/window_z{Z0[i]}_chk.xyz", reps[i])
     step += TAU
     # neighbour exchanges (alternate even/odd pairs)
     for i in range(cyc % 2, len(Z0) - 1, 2):
@@ -98,7 +146,9 @@ for cyc in range(start_cyc, NCYC):
             reps[i + 1].set_positions(pi); reps[i + 1].set_velocities(vi); n_acc += 1
     for i, z0 in enumerate(Z0):                                # checkpoint configs (reboot-resumable)
         write(f"{WD}/window_z{z0}_chk.xyz", reps[i])
-    if cyc % 10 == 0:
-        print(f"  cyc {cyc}/{NCYC} step {step} fs  exch_acc={n_acc}/{n_try} ({100*n_acc/max(n_try,1):.0f}%)", flush=True)
+    with open(f"{STATE}.tmp", "w") as fh:
+        fh.write(f"{step}\n")
+    os.replace(f"{STATE}.tmp", STATE)
+    print(f"  cyc {cyc+1}/{NCYC} step {step} fs  exch_acc={n_acc}/{n_try} ({100*n_acc/max(n_try,1):.0f}%)", flush=True)
 for f in files: f.close()
 print(f"# REUS_DONE acc={n_acc}/{n_try} ({100*n_acc/max(n_try,1):.0f}%)", flush=True)
