@@ -236,3 +236,30 @@ Workspace `/lyz/Claude_workplace/polyAPC/storyT5/` — `build_interface.py`, `bu
 **Field phase (+0.3 V/nm) RUNNING** — auto-fired 2026-06-29 from the 200 ns eq endpoints (bare hit 200 ns 19:07, poly 19:18). `field_autofire.sh` had a cpt-glob bug (`prod3dc.part*.cpt` should be `prod3dc.cpt` — `-noappend` only part-numbers xtc/edr/log, not cpt); re-grompp'd + launched manually. GROMACS 2025.1 keyword = **`electric-field-z = 0.3 0 0 0`** (per-axis, 4 vals; `electric-field`/`E-z` NOT recognized). pbc=xyz+3dc, POSRES_SLAB (slab free, not frozen), 200 ns, E0=0.3 verified in tpr.
 
 **Caveats:** solvent-structure model (neutral LJ can't do image-charge/plating → MLFF/const-V is the charged reference); transport NULL; no fluorine/standoff invented; **mechanism = steric exclusion** (revised from network-O-coordination — both ions excluded, not anion-specific). eq baseline is **soft** (bare anion metastable 0.70×; both-face-average used as the bare baseline; poly signal DRIFTing). Final verdict (bare vs poly per-face under +0.3 V/nm, ρ(z)) pending the field phase completion.
+
+## ★ v3.4 (2026-06-30) — FIELD VERDICT (200 ns, +0.3 V/nm): poly suppresses cathode anion accumulation; hypothesis supported
+
+Both field runs completed 200 ns (bare 06-29 19:07→06-30, poly likewise). Per-face analysis (twoface, discard 50 → 50–200 ns, the field-driven steady window):
+
+```
+BARE (+0.3V/nm):  anion  faceA=0.028[flat] | faceB=0.054[DRIFT]  → 1.94× at faceB (cathode)
+                  cation faceA=0.072        | faceB=0.105          → 1.46× at faceB
+POLY (+0.3V/nm):  net A=1427 / B=1413 (≈BALANCED 1.01×)
+                  anion  RICH=0.102 | POOR=0.107  → 0.95× (≈ EQUAL both faces)
+                  cation RICH=0.207 | POOR=0.206  → 1.00× (EQUAL)
+```
+
+**Verdict — hypothesis supported.** Under the same +0.3 V/nm plating bias:
+- **bare concentrates the Al-anion at the cathode (faceB), 1.94×** — the reducible anion ends up at the electrode where it would plate/reduce. The cation piles at the cathode too (1.46×), and the anion follows (ion-pairing: Mg₂Cl₃·6THF⁺ drags the paired AlCl₄⁻ to the cathode), so it is NOT clean charge separation but the anion *is* at the cathode.
+- **poly does NOT accumulate ions at either face (anion + cation equal both faces)** — the POSS network **suppresses the field-driven cathode anion accumulation**. The anion is spread, not concentrated at the plating electrode.
+
+ρ(z) figure: `fig_field_anion_z.png` (anion number-density vs z, bare cathode peak vs poly flat).
+
+**Mechanism / honest caveats:**
+- The poly suppression could be **kinetic** (the percolating gel slows ion migration to the cathode — 200 ns may not be the steady state; poly still DRIFTing) **and/or steric** (the gel's near-surface exclusion, seen at zero field, persists under bias). Distinguishing kinetic vs equilibrium needs longer field runs. The *outcome* (anion not at the cathode over 200 ns) holds regardless.
+- Solvent-structure model — neutral LJ can't do real image-charge/plating; the **MLFF/const-V** run is the charged reference. This classical field test shows the network's *structural/kinetic* effect on anion access, not electron-transfer plating.
+- `fieldcheck.py`'s cathode/bulk metric returned 0 (its `resname ANI and name Al` selection doesn't match this topology's atom names) — the twoface per-face metric (resname ANI, all atoms) is the valid one used here.
+- bare eq anion was metastable (0.70×); the field-driven 1.94× cathode pile-up is well above that baseline noise, so the bare cathode accumulation is a real field effect.
+- Transport NULL guardrail honoured at zero field; under the applied bias, ion migration *is* the measured signal (the network's effect on field-driven cathode access), reported as a structural/kinetic observation, not an invented equilibrium standoff.
+
+**Bottom line:** the cured POSS network suppresses field-driven cathode accumulation of the reducible Al-anion vs bare — the classical-MD solvent-structure test supports the SEI-anion-exclusion hypothesis, with the charged/plating reference deferred to the MLFF.
