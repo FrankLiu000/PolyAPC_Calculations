@@ -17,17 +17,56 @@ from ase import units
 from ase.md.langevin import Langevin
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 from ase.constraints import FixAtoms
+from ase.calculators.calculator import Calculator, all_changes
 from mace.calculators import MACECalculator
 
 model, init = sys.argv[1], sys.argv[2]
 K, TAU, NCYC, WD = float(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5]), sys.argv[6]
 Z0 = [float(x) for x in sys.argv[7:]]
-DT, T_K, LOG = 1.0, 300.0, 20
+DT = float(os.environ.get("REUS_DT_FS", "1.0"))
+T_K = 300.0
+LOG_FS = float(os.environ.get("REUS_LOG_FS", "20"))
+LOG_STEPS = max(1, int(round(LOG_FS / DT)))
+N_LOGS = int(round(TAU / LOG_FS))
+if abs(LOG_STEPS * DT - LOG_FS) > 1e-9 or abs(N_LOGS * LOG_FS - TAU) > 1e-9:
+    raise SystemExit(f"REUS_DT_FS={DT} and REUS_LOG_FS={LOG_FS} must divide tau={TAU} fs exactly")
 kT = units.kB * T_K
+FCAP = float(os.environ.get("REUS_FCAP", "60"))
+MAX_ABS_CV = float(os.environ.get("REUS_MAX_ABS_CV", "25"))
+MAX_FMAX = float(os.environ.get("REUS_MAX_FMAX", "200"))
 os.makedirs(WD, exist_ok=True)
-calc = MACECalculator(model_paths=[model], device="cuda", default_dtype="float32")
 STATE = f"{WD}/reus_state.txt"
 RUNNING = f"{WD}/reus_running.txt"
+ABORT = f"{WD}/reus_abort.txt"
+
+class ForceCap(Calculator):
+    """Clip spurious MLFF force spikes before they run the REUS integrator away."""
+    implemented_properties = ["energy", "forces", "free_energy"]
+
+    def __init__(self, base, fmax=60.0):
+        Calculator.__init__(self)
+        self.base = base
+        self.fmax = fmax
+        self.ncap = 0
+        self.nnan = 0
+
+    def calculate(self, atoms=None, properties=("energy", "forces"), system_changes=all_changes):
+        Calculator.calculate(self, atoms, properties, system_changes)
+        a = atoms.copy()
+        a.calc = self.base
+        e = a.get_potential_energy()
+        f = np.array(a.get_forces(), dtype=float)
+        if not np.isfinite(f).all():
+            self.nnan += 1
+            f = np.nan_to_num(f, nan=0.0, posinf=self.fmax, neginf=-self.fmax)
+        n = np.linalg.norm(f, axis=1)
+        m = n > self.fmax
+        if m.any():
+            self.ncap += 1
+            f[m] *= (self.fmax / n[m])[:, None]
+        self.results = {"energy": float(e), "forces": f, "free_energy": float(e)}
+
+calc = ForceCap(MACECalculator(model_paths=[model], device="cuda", default_dtype="float32"), fmax=FCAP)
 
 def last_step(dat):
     """Last written MD step in a window .dat file."""
@@ -80,7 +119,11 @@ cat_cl = np.array([c for c in cl if c not in anion_cl])
 cat_mg = mg[np.argsort([min(at0.get_distance(int(m), int(c), mic=True) for c in cat_cl) for m in mg])[:2]]
 slab = np.array([m for m in mg if m not in cat_mg]); O = np.where(sym == "O")[0]
 z_ref = float(np.sort(pos[slab, 2])[-16:].mean())
-print(f"# REUS {len(Z0)} windows k={K} tau={TAU}fs ncyc={NCYC} zref={z_ref:.2f} cat_mg={cat_mg.tolist()}", flush=True)
+print(
+    f"# REUS {len(Z0)} windows k={K} tau={TAU}fs ncyc={NCYC} dt={DT:g}fs "
+    f"log={LOG_FS:g}fs fcap={FCAP:g} zref={z_ref:.2f} cat_mg={cat_mg.tolist()}",
+    flush=True,
+)
 
 class UmbrellaZ:
     def __init__(s, idx, z0, k, zr): s.idx, s.z0, s.k, s.zr = np.asarray(idx), z0, k, zr
@@ -93,6 +136,23 @@ class UmbrellaZ:
 def cv_of(at): return at.get_positions()[cat_mg, 2].mean() - z_ref
 def cn(at, cs, others, rc):
     return sum(int((np.array([at.get_distance(int(c), int(o), mic=True) for o in others]) < rc).sum()) for c in cs)
+
+def sanity_or_abort(cyc, window_i, step_fs, z0, cvv, fmax):
+    bad = (
+        (not np.isfinite(cvv))
+        or (not np.isfinite(fmax))
+        or abs(cvv) > MAX_ABS_CV
+        or fmax > MAX_FMAX
+    )
+    if bad:
+        msg = (
+            f"{time.strftime('%F %T')} abort cycle={cyc} window_index={window_i} "
+            f"step={step_fs} z0={z0} cv={cvv:.6g} fmax={fmax:.6g} "
+            f"limits_abs_cv={MAX_ABS_CV} limits_fmax={MAX_FMAX}"
+        )
+        with open(ABORT, "w") as fh:
+            fh.write(msg + "\n")
+        raise RuntimeError(msg)
 
 # build replicas (RESUMABLE: window_z<z0>_chk.xyz = checkpoint config; appends to .dat on resume)
 reps, dyns, files, rsteps = [], [], [], []
@@ -125,11 +185,13 @@ for cyc in range(start_cyc, NCYC):
     for i in range(len(Z0)):                                   # advance every window by tau (round-robin)
         with open(RUNNING, "w") as fh:
             fh.write(f"{time.strftime('%F %T')} cycle={cyc} step={step} window_index={i} z0={Z0[i]}\n")
-        for _ in range(TAU // LOG):
-            dyns[i].run(LOG)
+        for _ in range(N_LOGS):
+            dyns[i].run(LOG_STEPS)
             at = reps[i]; cvv = cv_of(at)
             fmax = np.linalg.norm(at.get_forces()[64:], axis=1).max()
-            files[i].write(f"{step+(_+1)*LOG} {cvv:.4f} {cn(at,cat_mg,O,2.6)} {cn(at,cat_mg,cl,2.9)} "
+            row_step = int(round(step + (_ + 1) * LOG_FS))
+            sanity_or_abort(cyc, i, row_step, Z0[i], cvv, fmax)
+            files[i].write(f"{row_step} {cvv:.4f} {cn(at,cat_mg,O,2.6)} {cn(at,cat_mg,cl,2.9)} "
                            f"{at.get_distance(int(cat_mg[0]),int(cat_mg[1]),mic=True):.3f} {fmax:.3f}\n")
             files[i].flush()
         files[i].flush()
@@ -149,6 +211,10 @@ for cyc in range(start_cyc, NCYC):
     with open(f"{STATE}.tmp", "w") as fh:
         fh.write(f"{step}\n")
     os.replace(f"{STATE}.tmp", STATE)
-    print(f"  cyc {cyc+1}/{NCYC} step {step} fs  exch_acc={n_acc}/{n_try} ({100*n_acc/max(n_try,1):.0f}%)", flush=True)
+    print(
+        f"  cyc {cyc+1}/{NCYC} step {step} fs  exch_acc={n_acc}/{n_try} "
+        f"({100*n_acc/max(n_try,1):.0f}%) cap={calc.ncap} nan={calc.nnan}",
+        flush=True,
+    )
 for f in files: f.close()
-print(f"# REUS_DONE acc={n_acc}/{n_try} ({100*n_acc/max(n_try,1):.0f}%)", flush=True)
+print(f"# REUS_DONE acc={n_acc}/{n_try} ({100*n_acc/max(n_try,1):.0f}%) cap={calc.ncap} nan={calc.nnan}", flush=True)

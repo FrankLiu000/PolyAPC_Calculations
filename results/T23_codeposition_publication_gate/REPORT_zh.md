@@ -3,6 +3,35 @@
 日期：2026-07-01  
 目标：完成发表级 AIMD、MLFF-MD 和 classical-MD，找到并验证 Mg/Al 共沉积证据。
 
+## 2026-07-01 07:46 CST 恢复更新
+
+本机死机后已按 OOM-safe 策略恢复 GPU 节点计算，并将 CUDA 使用率提升到接近满载但仍保留显存/内存安全余量。
+
+当前并行运行：
+
+```text
+REUS: PID 1589, out_dir = computational_v2/mlff/umb_poly_reus_dt05
+      dt = 0.5 fs, force cap = 60 eV/A, sanity abort = |CV| > 25 A or fmax > 200 eV/A
+T17:  PID 2435, bare_neutral_seed2026070101_500ps
+      500 ps target, dt = 0.5 fs, ForceCap60, seed = 2026070101
+GPU:  utilization ~94 %, memory 5.5 / 16.4 GB, free ~10.6 GB
+WSL:  MemAvailable ~26 GB, swap = 0
+```
+
+关键恢复判断：
+
+- 旧 `umb_poly_reus` 目录在 `z0=5.0` 恢复时产生过非物理坏行：`CV ~ 4.8e5-1.0e6 A`、`fmax ~ 1.6e6-1.0e7 eV/A`。该目录保留为失败审计，不作为正式 PMF 输入。
+- 已在 `reus.py` 中加入 `ForceCap`、`REUS_DT_FS`、`REUS_MAX_ABS_CV`、`REUS_MAX_FMAX` 和 `reus_abort.txt` 保护；`run_poly_reus.sh` 默认使用 `REUS_DT_FS=0.5` 并输出到干净目录 `umb_poly_reus_dt05`。
+- 100 fs 单窗口探针 `umb_poly_reus_probe_z50_dt05_20260701_0737` 通过：`cap=0, nan=0`，`fmax ~3-4 eV/A`。
+- 正式 `umb_poly_reus_dt05` 已跨过此前最不稳定的 `z0=5.0` 窗口：`500 fs` 末行 `CV=5.2813 A, mgO=1, mgCl=2, Mg-Mg=6.610 A, fmax=3.691 eV/A`，无 abort。
+
+当前 ETA 粗估：
+
+- REUS 第一 cycle 约 30 min 量级，50 cycles 约 25-27 h；与 T17 并跑时以实际 `reus_state.txt` 推进重新估算。
+- T17 neutral 500 ps 单条在当前并跑速度约 20-23 h；`run_neutral_replicates.sh` 会顺序补 bare/poly、两个 seed，目标是把 MLFF support 从 500 ps x1 推向独立种子复现。
+
+这些计算只补强 **poly 降低 Al 阴离子进入 productive contact / desolvation pathway 的统计证据**。它们不能替代 T23 AIMD publication gate；AIMD 仍需达到 bare 3 seeds x 3 ps sustained contact + low qAl，以及 matched poly negative controls。
+
 ## 结论先行
 
 目前证据链已经足以支撑一个谨慎机制：**APC Al 阴离子不是在远离金属表面时自发还原，而是在进入 Mg 内层接触区后发生 contact-gated electron transfer，随后形成 metallic / alloy-like Al-Mg 电子态；poly-APC 通过降低 cathode 还原前沿的 Al 阴离子接触机会并保持 Si/O-rich、Al-poor 接触层，降低这一路径概率。**
