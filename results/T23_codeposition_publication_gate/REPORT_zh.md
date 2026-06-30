@@ -1,6 +1,6 @@
 # Mg/Al 共沉积证据发表级门槛审计（AIMD + MLFF-MD + classical-MD）
 
-日期：2026-06-30  
+日期：2026-07-01  
 目标：完成发表级 AIMD、MLFF-MD 和 classical-MD，找到并验证 Mg/Al 共沉积证据。
 
 ## 结论先行
@@ -48,44 +48,52 @@
 | C1_TS mechanism | 已完成 | 强 | bare 反应坐标可连通；入口被 poly standoff/passivation 抑制 | 不是长时动力学统计 |
 | T10 unbiased / field AIMD | 已完成负结果 | 中-强 | 短时无偏 AIMD 不显示自发 Al plating，事件是 rare / activated | 不能声称已在自由 AIMD 看到 spontaneous plating |
 | T10b steered contact AIMD | 已完成 | 强机制证据 | Al-Mg 距离进入约 2.6 A 后 qAl 从约 0.45 降到约 0.23；Al-Cl 同步弱化；ET-first/contact-gated | 不能称为 spontaneous；release 太短且回退 |
-| T23 contact-frame release | 进行中 | 当前为支持性早期证据 | s1 已到 320 fs，near_slab_contact_low_qAl 连续 320 fs，MgCoord low-qAl 连续 320 fs；s2 已启动 50 fs | 未过 0.5 ps interim，更未过 3 ps x 3 publication gate |
+| T23 contact-frame release | 进行中 | 支持性证据增强，但 strict/publication gate 未过 | 23:00 ETA 记录：s1 到 1120 fs，MgCoord low-qAl 连续 1120 fs；near/near+deCl support 已过 0.5 ps；s2 到 510 fs，near/MgCoord 当前 385 fs | strict slab-contact 0.5 ps 尚未出现；不能称 spontaneous/publication-ready |
 | T17 neutral MLFF-MD | 长轨迹已找回并审计 | 强支持性，但不是直接 Al0 证据 | matched 500 ps x1：bare Al_slabMin 4.58 ± 0.19 A，poly 7.57 ± 0.79 A；poly q=-2 1 ns 仍为 8.46 ± 0.32 A | 不能单独证明 Al0/Mg-Al；仍未达到 200/500 ps x3 independent seeds |
 | REUS / MLFF PMF | 已恢复运行 | 正在补 desolvation/access 门控 | 可望提供 poly approach/desolvation gate 的更强统计 | 不是 Al0 形成证据 |
 | T5 classical-MD v3.6 | 已修正并提交 | 对接触机会有利 | cathode/faceB 侧 ANI atom density：bare 1.906 vs poly 0.574 /nm2；poly 降低还原前沿 anion 接触机会 | 不能证明 Al0/Mg-Al；total near-surface ANI 未降低 |
 
 ## 当前 T23 门槛状态
 
-依据本地 `results/T23_md_length_audit/t23_publication_gate.json`：
+依据本地镜像 2026-06-30 23:00 CST ETA 记录
+`_external/PolyAPC_DFT_work_mirror/results/T23_md_length_audit/T23_ETA_STATUS_20260630_2300.md`：
 
 - `publication_ready = false`
 - bare contact release 总 seed = 3，已启动 = 2
-- interim 0.5 ps event = false
+- strict interim 0.5 ps event = false
+- near-contact interim 0.5 ps event = true
+- near+dechlorinated 0.5 ps support = true
 - bare publication replicates = false
 - poly publication negative controls = false
 
-关键早期里程碑：
+关键 23:00 状态：
 
 ```text
 t23b_codep_contact_release_bare_qm2_s1_300K
-  last_time_fs = 320 fs
-  last Al-slab = 2.683 A
-  last qAl(Mulliken) = 0.221
-  near_slab_contact_low_qAl longest/current = 320/320 fs
-  MgCoord low-qAl longest/current = 320/320 fs
-  strict slab-contact low-qAl longest/current = 85/65 fs
-  near + nCl<=1 longest/current = 145/145 fs
+  trajectory = 1120 fs
+  last Al-slab = 2.917 A
+  last qAl(Mulliken) = 0.102
+  strict slab-contact low-qAl longest/current = 240/0 fs
+  near_slab_contact_low_qAl longest/current = 915/20 fs
+  near + nCl<=1 longest/current = 740/20 fs
+  MgCoord low-qAl longest/current = 1120/1120 fs
 
 t23b_codep_contact_release_bare_qm2_s2_325K
-  last_time_fs = 50 fs
-  last Al-slab = 2.655 A
-  last qAl(Mulliken) = 0.256
-  near_slab_contact_low_qAl longest/current = 50/50 fs
+  trajectory = 510 fs
+  last Al-slab = 2.809 A
+  last qAl(Mulliken) = 0.124
+  strict slab-contact low-qAl longest/current = 200/0 fs
+  near_slab_contact_low_qAl longest/current = 385/385 fs
+  near + nCl<=1 longest/current = 150/140 fs
+  MgCoord low-qAl longest/current = 385/385 fs
 
 t23b_codep_contact_release_bare_qm2_s3_350K
-  not started / no frames in current audit
+  pending / no frames in 23:00 audit
 ```
 
-判断：T23 已经超过旧 `/CH` 48 fs release 的长度，但还未过 0.5 ps interim gate。下一次应在 ETA 附近检查，不要短间隔刷新。
+判断：T23 已经从“早期接触”推进到 **support-level 0.5-1.0 ps evidence**：s1 低 qAl + MgCoord 连续 1.12 ps，且 near/near+deCl 曾连续超过 0.5 ps；s2 也接近 0.5 ps near/MgCoord support。但 **strict slab-contact** 窗口碎片化，最长仍只有 240 fs/200 fs，当前为 0，因此不能写成 strict interim，更不能写 publication-ready spontaneous plating。
+
+下一次合理检查点：2026-07-01 02:30 CST，重点看 s2 near/MgCoord 是否过 500 fs、s1/s2 strict slab-contact 是否重新形成连续窗口；检查前不要短间隔刷新。
 
 ## 当前 MLFF-MD / REUS 状态
 
