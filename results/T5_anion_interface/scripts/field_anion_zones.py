@@ -4,13 +4,19 @@ bare vs poly (discard 50ns). Looking for poly-favorable evidence: does the netwo
 anion in the bulk (away from Mg electrodes)? Also reports total near-surface (both faces)."""
 import glob, os, numpy as np, MDAnalysis as mda
 ST="/lyz/Claude_workplace/polyAPC/storyT5"; t0=50.0
+def reference_faces(gro):
+    ref=mda.Universe(gro)
+    z=np.sort(ref.select_atoms("resname MGE").positions[:,2]/10.0)
+    n=len(z)//2
+    return z[:n].max(), z[n:].min()
+
 def zones(sysdir):
     base=os.path.join(ST,"sym",sysdir,"field.xtc")
     xs=[x for x in [base]+sorted(glob.glob(base.replace('.xtc','.part*.xtc'))) if os.path.exists(x)]
-    u=mda.Universe(os.path.join(ST,"sym",sysdir,"em3dc.gro"), xs)
+    gro=os.path.join(ST,"sym",sysdir,"em3dc.gro")
+    s1max, s2min=reference_faces(gro)
+    u=mda.Universe(gro, xs)
     slab=u.select_atoms("resname MGE"); anion=u.select_atoms("resname ANI")
-    z=np.sort(slab.positions[:,2]/10.0); gaps=np.where(np.diff(z)>1.0)[0]
-    s1max=z[:gaps[0]+1].max(); s2min=z[gaps[0]+1:].min()
     mid=(s1max+s2min)/2; area=u.dimensions[0]*u.dimensions[1]/100.0
     nA=nB=nblk=n=0
     for ts in u.trajectory:

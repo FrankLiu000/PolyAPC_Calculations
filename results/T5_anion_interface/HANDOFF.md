@@ -1,6 +1,6 @@
 # HANDOFF — poly-APC T5 Mg/electrolyte interface classical-MD campaign
 
-**Status (2026-06-30): eq + field both COMPLETE (200 ns each, bare + poly). Field verdict CORRECTED (v3.5): hypothesis NOT supported on the headline metric; partial/indirect favorable evidence exists. All runs stopped (GPU idle). Report v3.5 committed LOCALLY (unpushed — GitHub network down; remote still has the WRONG v3.4).**
+**Status (2026-06-30 late): eq + field both COMPLETE (200 ns each, bare + poly). Field verdict CORRECTED again (v3.6): the v3.5 fixed-face script still inferred Mg faces from the first trajectory frame, where wrapped slab atoms in poly shifted the upper face to a false z position. Using reference `em3dc.gro` slab faces restores a strong faceB/cathode anion suppression in poly, but removes the previous "total near-surface anion -31%" claim. Poly redistributes ion pairs away from faceB/cathode toward faceA/anode. All runs stopped; poly REUS MLFF resumed 2026-06-30 23:38 CST. Report v3.6 not yet committed/pushed.**
 
 ---
 
@@ -9,7 +9,7 @@
 - **Guardrails (DO NOT VIOLATE):**
   - **Transport NULL at zero field** — do not claim a transport advantage at equilibrium.
   - **No fluorine / no invented standoff.**
-  - **Mechanism = steric exclusion** (revised; was "network-O-coordination"). The gel excludes BOTH anion+cation from its near-surface volume — not anion-specific.
+  - **Mechanism = steric/interface redistribution, not transport.** The gel changes where APC ion pairs occupy the interfacial volume; the classical-MD field metric is not an anion-specific reduction proof.
   - **Honest caveat:** neutral LJ can't do image-charge/plating → the **MLFF/const-V** run is the charged/plating reference (deferred). This classical test = solvent-structure only.
   - Sparse ions (~5–10 per face) → per-face metrics are soft; report ±SEM, expect metastability.
 
@@ -30,14 +30,14 @@
 - **bare A=B SOFT** — anion metastably stuck ~0.70× (spontaneous symmetry-breaking, not wall-pinning); cation converging (1.18× tail). Per-face A=B NOT achievable in 200 ns (sparse-ion). **Both-face-average = valid bare baseline** (faces equivalent by construction): anion 0.043, cation 0.075 /nm².
 - **poly gel-depletion = steric exclusion** (eq tail): gel-RICH face flat/depleted, gel-POOR 1.62× richer (BOTH ions → steric, not anion-specific).
 
-**Field (200 ns, +0.3 V/nm, discard 50) — CORRECTED v3.5:**
-- **Headline (cathode anion suppression): NOT supported.** Fixed-face: poly cathode (faceB, plating electrode) anion 1.89 ≈ bare 2.06 (~8%, noise). Both pile anion at cathode via **ion-pairing** (cation drags AlCl₄⁻).
-- **v3.4 "supported" was WRONG** — a `twoface_sym.py` RICH/POOR label artifact (see gotcha #1). Corrected by fixed-face analysis.
-- **Favorable to poly (real but indirect):** total near-surface anion (both Mg faces) −31% (poly 2.44 vs bare 3.55); anode (stripping face) anion −63% (0.55 vs 1.49); eq steric exclusion at zero field. The cathode (plating face, where anion reduces) only −8%. So the network keeps anion off Mg *broadly* (esp. anode + at rest), not specifically off the plating cathode.
-- **Drift:** NOT severe. bare cathode growing + tail-flat (1.38→1.51×); poly stable (1.89→1.86). Earlier DRIFT alarms were partly the RICH/POOR label flipping, not physical drift.
+**Field (200 ns, +0.3 V/nm, discard 50) — CORRECTED v3.6:**
+- **v3.5 fixed-face numbers were still wrong for poly.** `field_fixedface.py` and `field_anion_zones.py` inferred Mg faces from the first trajectory frame; a few wrapped Mg slab atoms in poly created spurious gaps and placed "faceB" at z≈11.65 nm rather than the upper inner Mg face at z≈17.55 nm. The scripts now use reference `em3dc.gro` slab faces (two 1794-atom slabs).
+- **Corrected faceB/cathode metric supports cathode anion suppression:** all-ANI-atom density at faceB/cathode is bare 1.906 vs poly 0.574 /nm² (50-200 ns), and bare 1.996 vs poly 0.538 /nm² (130-200 ns).
+- **But total near-surface anion is NOT lower:** bare 3.138 vs poly 3.196 /nm² (50-200 ns). Poly shifts ion-pair-rich interfacial volume to faceA/anode (ANI atoms faceA 2.621 vs bare 1.232 /nm²), rather than simply removing anions from all Mg surfaces.
+- **Caveat:** all-ANI-atom density should not be over-read as Al-metal-centre contact. PBC/orientation-sensitive Al-centre/COG metrics need a molecule-whole, polarity-validated reanalysis before manuscript use. Treat the classical field result as a solvent-structure/interfacial-distribution signal; reactive Al reduction/plating remains DFT/AIMD/MLFF.
 
 ## 5. CRITICAL gotchas (read before touching anything)
-1. **twoface_sym.py RICH/POOR chases the per-frame network density.** For poly (network ~balanced 1.01×) the label flips randomly → "RICH-face anion" averages over BOTH faces → spurious "equal." **For poly, ALWAYS use FIXED faces** (faceA=lower/anode, faceB=upper/cathode). Scripts: `field_fixedface.py`, `field_anion_zones.py`. (RICH/POOR is only OK when the network is stably skewed.)
+1. **Face detection has two traps.** `twoface_sym.py` RICH/POOR chases the per-frame network density; for poly (network ~balanced 1.01×) the label flips randomly. Also, the v3.5 fixed-face scripts inferred slab faces from trajectory-frame Mg positions; wrapped slab atoms in poly shifted the upper face to a false z. **For field metrics, use reference `em3dc.gro` slab faces** (two 1794-atom slabs), as now implemented in `field_fixedface.py` and `field_anion_zones.py`.
 2. **poly REQUIRES `periodic-molecules=yes`** (percolating NET1 gel) or `mshift` "inconsistent shifts over PBC" FATAL at startup (temperature-independent — a static graph check). bare doesn't need it.
 3. **GROMACS 2025.1 E-field keyword = `electric-field-x/y/z`** (per-axis, 4 vals: E0 omega t0 sigma). `electric-field` (12-val) and `E-z` are NOT recognized (silently ignored → no field). Static +z 0.3 V/nm: `electric-field-z = 0.3 0 0 0`. Verify with `gmx dump -s field.tpr | grep -A2 "z:" | grep E0`.
 4. **`-noappend` part-numbers xtc/edr/log but NOT cpt.** cpt is `prod3dc.cpt` (single, overwritten), NOT `prod3dc.part*.cpt`. (field_autofire.sh had this bug — must use `prod3dc.cpt` for `-t`.)
@@ -65,7 +65,7 @@ PY=/lyz/Claude_workplace/polyAPC/.viz_venv/bin/python
   - `sym/`: `prod_run.sh`, `anneal_run.sh`, `field_autofire.sh` (queue script; has the cpt-glob bug, fixed inline).
   - `twoface_sym.py` (per-face; RICH/POOR for poly — see gotcha #1), `field_fixedface.py`, `field_anion_zones.py`, `make_motion_gif.py`, `fig_field_anion_z.py`.
 - **Git repo:** `/lyz/Claude_workplace/PolyAPC_Calculations/` (branch `computational-v3-interface`; NEVER push to `main`; merge-pull EPYC = `git fetch origin` then ff-check before push).
-  - `results/T5_anion_interface/REPORT.md` (v3.5 — the live report), `fig_field_anion_z.png`, `scripts/` (field_fixedface.py, fig_field_anion_z.py), GIFs.
+  - `results/T5_anion_interface/REPORT.md` (v3.6 — the live report), `fig_field_anion_z.png`, `scripts/` (field_fixedface.py, fig_field_anion_z.py), GIFs.
   - `results/T21_metal_LJ_calibration/` (CPU's wall calibration).
   - **Local commits:** `c832f67` (v3.3 eq), `19872a2` (v3.4 field — WRONG), `0968462` (v3.5 correction — **LOCAL ONLY, unpushed**).
 - **Memory:** `/home/lyz/.claude/projects/-lyz-Claude-20260604/memory/polyapc-*.md` (campaign, twoface-asymmetry, metal-wall-t21, mg-forcefield, gromacs-interface, repo-location, v3-interface, mlff-gpu, slab-pbc-gotcha).
@@ -77,7 +77,7 @@ PY=/lyz/Claude_workplace/polyAPC/.viz_venv/bin/python
 - GitHub push has been FAILING (GnuTLS/TLS timeout) since 2026-06-30 — commits are local. Retry push when network recovers.
 
 ## 9. Open questions / next steps
-1. **⚠️ Push `0968462` (v3.5 correction) when GitHub recovers** — the remote currently has the WRONG v3.4 ("hypothesis supported"). This is the most urgent housekeeping item.
+1. **⚠️ Commit/push v3.6 correction when GitHub recovers** — remote/local history still contains superseded v3.4/v3.5 interpretations.
 2. **MLFF/const-V charged reference** — the original plan; the classical field test is inconclusive on the headline (anion still reaches the cathode via ion-pairing). The MLFF (T16/T17, blocked on EPYC's T10 per memory) is the real plating/image-charge test.
 3. **Longer field run** to confirm kinetic-vs-equilibrium (poly cathode plateaued at 1.86; bare still slowly rising at 2.15 — bare may eventually exceed poly more, strengthening the modest cathode signal). Cap 350 ns per the original gate.
 4. **2nd independent bare replica** (different seed) to confirm the anion 0.70× is stochastic spontaneous symmetry-breaking vs a hidden systematic.
@@ -85,6 +85,6 @@ PY=/lyz/Claude_workplace/polyAPC/.viz_venv/bin/python
 6. **Reframe the verdict** around the favorable evidence (total near-surface anion −31%, anode −63%, eq steric exclusion) if the campaign wants to report a partial benefit — but be honest that the cathode/plating-face suppression (the headline) is weak.
 
 ## 10. Pointers
-- Full narrative + numbers: `results/T5_anion_interface/REPORT.md` (v3.5 section is the live truth; v3.4 retained for provenance, marked superseded).
+- Full narrative + numbers: `results/T5_anion_interface/REPORT.md` (v3.6 section is the live truth; v3.4/v3.5 retained for provenance, marked superseded).
 - Cross-node protocol: `NODE_REQUESTS.md` in the repo (CPU/EPYC handoff). T21d wall = CPU's `results/T21_metal_LJ_calibration/gpu_build/mg_nbfix.itp`.
 - This campaign's lessons are also in memory `polyapc-twoface-asymmetry.md` (the RICH/POOR + whole-box-hot fix) and `polyapc-md-campaign.md` (Story T5 conclusion, corrected).

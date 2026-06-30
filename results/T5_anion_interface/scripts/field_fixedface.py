@@ -5,14 +5,20 @@ Unlike twoface's poly RICH/POOR (which chases the fluctuating network), this use
 faces so the trend is interpretable. Answers: does poly's cathode (faceB) accumulate like bare's?"""
 import sys, glob, os, numpy as np, MDAnalysis as mda
 ST="/lyz/Claude_workplace/polyAPC/storyT5"
+def reference_faces(gro):
+    ref = mda.Universe(gro)
+    z = np.sort(ref.select_atoms("resname MGE").positions[:,2]/10.0)
+    n = len(z)//2
+    return z[:n].max(), z[n:].min()
+
 def fixed_face(sysdir, t0):
     base=os.path.join(ST,"sym",sysdir,"field.xtc")
     parts=sorted(glob.glob(base.replace('.xtc','.part*.xtc')))
     xs=[x for x in [base]+parts if os.path.exists(x)]
-    u=mda.Universe(os.path.join(ST,"sym",sysdir,"em3dc.gro"), xs)
+    gro=os.path.join(ST,"sym",sysdir,"em3dc.gro")
+    s1max, s2min = reference_faces(gro)
+    u=mda.Universe(gro, xs)
     slab=u.select_atoms("resname MGE"); anion=u.select_atoms("resname ANI"); cation=u.select_atoms("resname MGC")
-    z=np.sort(slab.positions[:,2]/10.0); gaps=np.where(np.diff(z)>1.0)[0]
-    s1max=z[:gaps[0]+1].max(); s2min=z[gaps[0]+1:].min()  # lower face top, upper face bottom
     area=u.dimensions[0]*u.dimensions[1]/100.0
     aA=aB=cA=cB=n=0
     for ts in u.trajectory:

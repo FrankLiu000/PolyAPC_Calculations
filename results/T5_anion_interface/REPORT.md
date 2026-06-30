@@ -280,3 +280,18 @@ cation: BARE cathode 5.46→5.69; POLY cathode 4.54→4.27 (both pile at cathode
 **Drift severity (the question that surfaced this):** NOT severe for the conclusion. bare cathode accumulation is real and *growing* (1.38→1.51×, tail flat = plateaued at the higher level). poly is stable across windows (1.89→1.86). The drift flags were residual redistribution; the fixed-face tail is flat → the means are reliable. The earlier "DRIFT" alarm was partly the RICH/POOR label instability, not physical drift.
 
 **Lesson:** for poly (balanced network), per-face metrics MUST use FIXED faces (faceA/faceB), not network-chasing RICH/POOR — the latter averages away cathode accumulation. `twoface_sym.py`'s RICH/POOR is only valid when the network is stably skewed (it was, in the eq tail at 1.09×, barely). v3.4's twoface field numbers are retained above for provenance but **superseded by v3.5 fixed-face**. Caveats (kinetic-vs-equilibrium, solvent-structure model, MLFF charged ref, no fluorine) stand; if anything the non-suppression strengthens the case that the classical field test is inconclusive and the MLFF/const-V charged reference is needed.
+
+## ★ v3.6 (2026-06-30 late) — CORRECTION TO v3.5: fixed-face script still mis-identified the poly upper slab face
+
+**v3.5 was also not final.** The fixed-face scripts inferred Mg faces from the first trajectory frame. In `poly_t21`, a few wrapped slab Mg atoms created extra z-gaps, so the script placed the upper face at z≈11.65 nm instead of the reference upper inner Mg face at z≈17.55 nm. I patched `field_fixedface.py` and `field_anion_zones.py` to derive faces from the reference `em3dc.gro` structure (two 1794-atom Mg slabs) rather than from wrapped trajectory coordinates.
+
+**Reference-face field result** (0.6 nm shell, all ANI atoms/nm²; faceA = lower face, faceB = upper face, retaining the previous faceB=cathode convention):
+
+```text
+BARE 50-200 ns: faceA=1.232  faceB=1.906  (B/A=1.55) | 130-200 ns: 1.181 / 1.996
+POLY 50-200 ns: faceA=2.621  faceB=0.574  (B/A=0.22) | 130-200 ns: 2.555 / 0.538
+```
+
+**Corrected v3.6 verdict:** using the corrected reference faces, poly **does suppress ANI-atom density at faceB/cathode** relative to bare (0.574 vs 1.906 /nm²; ≈70% lower). However, the earlier v3.5 "total near-surface anion -31%" conclusion is no longer valid: total near-surface ANI density is nearly unchanged (bare 3.138 vs poly 3.196 /nm²). The classical field result is therefore best stated as **interfacial redistribution away from the faceB/plating front**, not global anion removal from Mg.
+
+**Important caveat for manuscript use:** all-ANI-atom density is not the same as Al-centre contact at the electron-transfer front. A quick Al-centre/COG reanalysis showed strong sensitivity to threshold, orientation, and PBC/molecule wrapping. Therefore v3.6 supports a solvent-structure statement ("the POSS network redistributes APC ion-pair occupancy away from the fixed cathode face in this classical model"), while the actual reduction/plating selectivity still requires DFT/AIMD/MLFF evidence. This keeps the story aligned with the main mechanism: **interface composition and redox selectivity, not bulk transport**.

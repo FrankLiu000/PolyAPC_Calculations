@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Anion number-density vs z under +0.3V/nm field, bare vs poly. Shows the cathode
-peak in bare (anion piled at one electrode) vs poly's flat profile (network suppresses
-cathode accumulation). Reads field.part*.xtc (discard t0 ns), wraps z, bins /nm^3."""
+"""Anion number-density vs z under +0.3V/nm field, bare vs poly.
+Uses reference em3dc.gro slab faces to avoid trajectory-wrapped Mg atoms shifting
+the face markers. Reads field.part*.xtc (discard t0 ns), wraps z, bins /nm^3."""
 import sys, glob, os, numpy as np, matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, MDAnalysis as mda
 ST="/lyz/Claude_workplace/polyAPC/storyT5"; OUT="/lyz/Claude_workplace/PolyAPC_Calculations/results/T5_anion_interface"
@@ -10,7 +10,8 @@ def anion_rho(sysdir, label, color):
     base=os.path.join(ST,"sym",sysdir,"field.xtc")
     parts=sorted(glob.glob(base.replace('.xtc','.part*.xtc')))
     xs=[x for x in [base]+parts if os.path.exists(x)]
-    u=mda.Universe(os.path.join(ST,"sym",sysdir,"em3dc.gro"), xs)
+    gro=os.path.join(ST,"sym",sysdir,"em3dc.gro")
+    u=mda.Universe(gro, xs)
     anion=u.select_atoms("resname ANI"); slab=u.select_atoms("resname MGE")
     Lz=u.dimensions[2]/10.0; area=u.dimensions[0]*u.dimensions[1]/100.0
     DZ=0.1; edges=np.arange(0,Lz+DZ,DZ); zc=edges[:-1]+DZ/2; H=np.zeros(len(zc))
@@ -20,8 +21,10 @@ def anion_rho(sysdir, label, color):
         az=np.mod(anion.positions[:,2]/10.0, Lz)
         h,_=np.histogram(az,bins=edges); H+=h; nfr+=1
     rho=H/(area*DZ*nfr)
-    z=np.sort(slab.positions[:,2]/10.0); gaps=np.where(np.diff(z)>1.0)[0]
-    s1max=z[:gaps[0]+1].max(); s2min=z[gaps[0]+1:].min()
+    ref=mda.Universe(gro)
+    z=np.sort(ref.select_atoms("resname MGE").positions[:,2]/10.0)
+    n=len(z)//2
+    s1max=z[:n].max(); s2min=z[n:].min()
     plt.plot(zc,rho,color,label=f"{label} (nfr={nfr})",lw=1.8)
     return zc,rho,s1max,s2min
 plt.figure(figsize=(7,4.5))
@@ -33,4 +36,4 @@ plt.xlabel("z (nm)"); plt.ylabel("anion number density (/nm$^3$)")
 plt.title(f"Anion rho(z) under +0.3 V/nm field (discard {t0:.0f} ns); dotted = slab inner faces")
 plt.legend(); plt.tight_layout()
 plt.savefig(f"{OUT}/fig_field_anion_z.png",dpi=110)
-print(f"WROTE {OUT}/fig_field_anion_z.png  bare[cathode peak] vs poly[flat]")
+print(f"WROTE {OUT}/fig_field_anion_z.png with reference slab-face markers")
