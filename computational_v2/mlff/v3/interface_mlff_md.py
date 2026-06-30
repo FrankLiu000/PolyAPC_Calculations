@@ -42,6 +42,8 @@ EFIELD = float(sys.argv[8]) if len(sys.argv)>8 else 0.0    # V/Å external z-fie
 QFILE  = sys.argv[9] if len(sys.argv)>9 else None          # per-atom charge .npy (required if EFIELD!=0)
 QTOT   = float(sys.argv[10]) if len(sys.argv)>10 else 0.0   # total system charge -> charge-conditioned models (MACELES)
 SEED   = int(sys.argv[11]) if len(sys.argv)>11 and sys.argv[11].lower() != "none" else None
+if QFILE is not None and QFILE.lower() == "none":
+    QFILE = None
 NSLAB  = 64
 
 def sha256_file(path):
