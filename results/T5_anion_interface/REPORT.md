@@ -263,3 +263,20 @@ POLY (+0.3V/nm):  net A=1427 / B=1413 (≈BALANCED 1.01×)
 - Transport NULL guardrail honoured at zero field; under the applied bias, ion migration *is* the measured signal (the network's effect on field-driven cathode access), reported as a structural/kinetic observation, not an invented equilibrium standoff.
 
 **Bottom line:** the cured POSS network suppresses field-driven cathode accumulation of the reducible Al-anion vs bare — the classical-MD solvent-structure test supports the SEI-anion-exclusion hypothesis, with the charged/plating reference deferred to the MLFF.
+
+## ★ v3.5 (2026-06-30) — CORRECTION: v3.4 verdict was a RICH/POOR label artifact; fixed-face shows poly does NOT suppress cathode anion
+
+**v3.4 was WRONG.** Its "poly suppresses cathode anion accumulation" came from `twoface_sym.py`'s **RICH/POOR** label, which chases the per-frame network density. poly's network is ~balanced (RICH/POOR 1.01×), so the label flipped randomly between frames and the "RICH-face anion" averaged over *both* physical faces → spurious "equal both faces." A drift/tail check surfaced the label flipping (RICH was faceA in one window, faceB in another), prompting a **fixed-face** re-analysis (faceA = lower/anode, faceB = upper/cathode — the cathode is a FIXED face, not network-chasing).
+
+**Fixed-face field result** (0.6 nm shell, anion atoms/nm²; faceB = cathode = Mg plating electrode):
+```
+BARE 50-200ns: anode=1.49  cathode=2.06  (1.38×)   | 130-200ns: 1.43 / 2.15 (1.51×, cathode growing, tail flat)
+POLY 50-200ns: anode=0.55  cathode=1.89  (3.45×)   | 130-200ns: 0.52 / 1.86 (3.58×, stable)
+cation: BARE cathode 5.46→5.69; POLY cathode 4.54→4.27 (both pile at cathode — ion-pairing)
+```
+
+**Corrected verdict:** poly's **cathode anion (1.89) ≈ bare's (2.06)** — ~8% less, within noise. **The network does NOT suppress anion accumulation at the Mg cathode.** Both systems pile the anion at the cathode (ion-pairing: the Mg₂Cl₃·6THF⁺ cation drags the paired AlCl₄⁻ to the cathode). The network's real effect is **anode depletion** (poly anode 0.55 vs bare 1.49 — the gel excludes ions from the anode face), which inflated the cathode/anode *ratio* (3.45×) without suppressing the cathode itself. **The SEI-anion-exclusion hypothesis is NOT supported by this field test** (the anion reaches the Mg plating electrode in poly just as in bare).
+
+**Drift severity (the question that surfaced this):** NOT severe for the conclusion. bare cathode accumulation is real and *growing* (1.38→1.51×, tail flat = plateaued at the higher level). poly is stable across windows (1.89→1.86). The drift flags were residual redistribution; the fixed-face tail is flat → the means are reliable. The earlier "DRIFT" alarm was partly the RICH/POOR label instability, not physical drift.
+
+**Lesson:** for poly (balanced network), per-face metrics MUST use FIXED faces (faceA/faceB), not network-chasing RICH/POOR — the latter averages away cathode accumulation. `twoface_sym.py`'s RICH/POOR is only valid when the network is stably skewed (it was, in the eq tail at 1.09×, barely). v3.4's twoface field numbers are retained above for provenance but **superseded by v3.5 fixed-face**. Caveats (kinetic-vs-equilibrium, solvent-structure model, MLFF charged ref, no fluorine) stand; if anything the non-suppression strengthens the case that the classical field test is inconclusive and the MLFF/const-V charged reference is needed.
