@@ -7,8 +7,8 @@
 
 - **GPU recovery after local crash:** old `computational_v2/mlff/umb_poly_reus` is retained as a failed-restart audit because `z0=5.0` produced nonphysical CV/fmax rows after reboot. Formal continuation now uses clean `umb_poly_reus_dt05` with `dt=0.5 fs`, `ForceCap60`, and hard sanity aborts.
 - **REUS resumed safely:** `umb_poly_reus_dt05` has passed the previously unstable `z0=5.0` 500 fs window with `fmax=3.691 eV/A`, no cap/nan/abort. It is evidence for poly desolvation/access gating, not by itself Al0 formation.
-- **CUDA filled safely:** REUS and T17 neutral MLFF-MD now run concurrently at ~94% GPU utilization, ~5.5/16.4 GB VRAM, ~26 GB WSL MemAvailable, swap=0. `safe_wsl_env.sh` now gates both RAM and free VRAM.
-- **T17 replicate production restarted:** `bare_neutral_seed2026070101_500ps` is running under `run_neutral_replicates.sh`; target is to move MLFF support from matched 500 ps x1 toward independent-seed publication-level support.
+- **CUDA fill attempt audited:** REUS + T17 neutral MLFF-MD briefly ran concurrently at ~94% GPU utilization and safe memory/VRAM, but `bare_neutral_seed2026070101_500ps` developed force-cap events and nonphysical T/geometry by 2-3.5 ps. It was stopped and retained only as failed-run evidence.
+- **T17 replicate production guard added:** `interface_mlff_md.py` now writes `*_abort.txt` / `*_done.json` and aborts on nonphysical T/geometry/NaN; `run_neutral_replicates.sh` defaults to `T17_ABORT_ON_CAP=1` and only treats `*_done.json` as completed. Future T17 production must first pass a short cap=0/no-abort probe.
 - **T5 v3.7 fixed-face check added:** `results/T5_anion_interface/REPORT_v3_7_alcenter_molecule_check_CN.md` shows that in the 1.0 nm cathode layer, bare has ~3.5x higher Al-center density and ~4.3x higher Al/Cl reactive-atom density than poly. This strengthens contact-opportunity gating but remains classical-MD structural evidence, not redox proof.
 
 ## Ticket tracker (T0–T15 here; T16–T17 GPU)

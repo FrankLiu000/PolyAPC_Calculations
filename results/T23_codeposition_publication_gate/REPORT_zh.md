@@ -32,6 +32,17 @@ WSL:  MemAvailable ~26 GB, swap = 0
 
 这些计算只补强 **poly 降低 Al 阴离子进入 productive contact / desolvation pathway 的统计证据**。它们不能替代 T23 AIMD publication gate；AIMD 仍需达到 bare 3 seeds x 3 ps sustained contact + low qAl，以及 matched poly negative controls。
 
+### 07:52 CST 纠正：T17 并跑尝试作废
+
+`bare_neutral_seed2026070101_500ps` 在约 2-3.5 ps 出现大量 force-cap 事件和非物理温度/几何：
+
+```text
+2 ps log: cap = 1238
+3.2-3.5 ps: T ~1.8-2.6e6 K, Al_height < -40 A to -22 A, Al_slabMin ~99-114 A
+```
+
+该 T17 run 已停止，partial `*_cv.csv` 只作为失败审计，不能进入 MLFF 生产统计。`interface_mlff_md.py` 已加入温度、几何、NaN 和可选 force-cap abort；`run_neutral_replicates.sh` 默认 `T17_ABORT_ON_CAP=1`，并只把 `*_done.json` 作为完成标志。当前 GPU 仅保留 `umb_poly_reus_dt05` 稳定推进；后续 T17 需要先短探针通过 cap=0 / no-abort 后再恢复 500 ps 生产。
+
 ## 结论先行
 
 目前证据链已经足以支撑一个谨慎机制：**APC Al 阴离子不是在远离金属表面时自发还原，而是在进入 Mg 内层接触区后发生 contact-gated electron transfer，随后形成 metallic / alloy-like Al-Mg 电子态；poly-APC 通过降低 cathode 还原前沿的 Al 阴离子接触机会并保持 Si/O-rich、Al-poor 接触层，降低这一路径概率。**

@@ -19,6 +19,8 @@ dt_fs="${DT_FS:-0.5}"
 ps="${PS:-500}"
 temperature="${T_K:-300}"
 fcap="${FCAP:-60}"
+export T17_ABORT_ON_CAP="${T17_ABORT_ON_CAP:-1}"
+export T17_MAX_T_K="${T17_MAX_T_K:-1500}"
 steps="$(python3 - <<PY
 print(int(round(float("$ps") * 1000.0 / float("$dt_fs"))))
 PY
@@ -41,9 +43,16 @@ for seed in "${seeds[@]}"; do
   for system in bare poly; do
     start="${system}_start.xyz"
     label="${system}_neutral_seed${seed}_${ps}ps"
-    if [ -s "${label}_cv.csv" ] && [ -s "${label}_meta.json" ]; then
+    if [ -s "${label}_done.json" ]; then
       echo "skip existing $label"
       continue
+    fi
+    if compgen -G "${label}_*" >/dev/null; then
+      stamp="$(date +%Y%m%d_%H%M%S)"
+      mkdir -p failed
+      echo "archive partial/failed $label -> failed/${label}_${stamp}/"
+      mkdir -p "failed/${label}_${stamp}"
+      mv "${label}_"* "failed/${label}_${stamp}/"
     fi
     echo "launch $label"
     "$py" "$driver" "$model" "$start" "$label" "$steps" "$temperature" "$dt_fs" "$fcap" 0.0 None 0.0 "$seed" \

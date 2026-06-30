@@ -4,7 +4,7 @@ works where classical GROMACS cannot (MACE is geometry-based: no molecule-unwrap
 so the percolating/POSS network is fine). Slab = first 64 atoms (EPYC convention,
 the DFT-masked rigid electrode). Tracks the Al-ANION approach to the front.
 usage: interface_mlff_md.py <model> <start.xyz> <label> [n_steps] [T_K] [DT] [FCAP] [EFIELD] [QFILE] [QTOT] [SEED]"""
-import sys, json, hashlib, numpy as np
+import sys, os, json, hashlib, time, numpy as np
 from ase.io import read, write
 from ase import units
 from ase.md.langevin import Langevin
@@ -45,6 +45,10 @@ SEED   = int(sys.argv[11]) if len(sys.argv)>11 and sys.argv[11].lower() != "none
 if QFILE is not None and QFILE.lower() == "none":
     QFILE = None
 NSLAB  = 64
+MAX_T_K = float(os.environ.get("T17_MAX_T_K", "1500"))
+MAX_AL_SLAB_A = float(os.environ.get("T17_MAX_AL_SLAB_A", "30"))
+MAX_ABS_AL_HEIGHT_A = float(os.environ.get("T17_MAX_ABS_AL_HEIGHT_A", "30"))
+ABORT_ON_CAP = os.environ.get("T17_ABORT_ON_CAP", "0") == "1"
 
 def sha256_file(path):
     h = hashlib.sha256()
@@ -90,12 +94,35 @@ dyn = Langevin(at, DT*units.fs, temperature_K=T_K, friction=0.02, rng=rng)
 cv = open(f"{label}_cv.csv","w")
 cv.write("step,t_ps,T_K,Epot_eV,Al_height_A,Al_slabMin_A,Al_nCl,Al_nO,Al_SiMin_A\n")
 frames=[]
+def abort_run(step, message):
+    msg = f"{time.strftime('%F %T')} abort step={step} label={label}: {message}"
+    with open(f"{label}_abort.txt", "w") as handle:
+        handle.write(msg + "\n")
+    write(f"{label}_traj.xyz", frames + [at.copy()])
+    cv.close()
+    raise RuntimeError(msg)
+
+def sanity(step, temp, epot, h, dsl, dsi):
+    values = np.array([temp, epot, h, dsl, dsi if np.isfinite(dsi) else 0.0], dtype=float)
+    if not np.isfinite(values).all():
+        abort_run(step, f"nonfinite state T={temp} E={epot} h={h} dsl={dsl} dsi={dsi}")
+    if temp > MAX_T_K:
+        abort_run(step, f"T={temp:.1f} K > {MAX_T_K:.1f} K")
+    if dsl > MAX_AL_SLAB_A or abs(h) > MAX_ABS_AL_HEIGHT_A:
+        abort_run(step, f"geometry out of range Al_height={h:.3f} Al_slab={dsl:.3f}")
+    if at.calc.nnan:
+        abort_run(step, f"nan force events={at.calc.nnan}")
+    if ABORT_ON_CAP and at.calc.ncap:
+        abort_run(step, f"force-cap events={at.calc.ncap}")
+
 def log(step):
     p=at.get_positions(); st=p[slab,2].max()
     a=Al[0]; h=p[a,2]-st; dsl=np.linalg.norm(p[slab]-p[a],axis=1).min()
     ncl=int((np.linalg.norm(p[Cl]-p[a],axis=1)<2.8).sum()); no=int((np.linalg.norm(p[O]-p[a],axis=1)<3.0).sum())
     dsi=(np.linalg.norm(p[Si]-p[a],axis=1).min() if len(Si) else np.nan)
-    cv.write(f"{step},{step*DT/1000:.3f},{at.get_temperature():.1f},{at.get_potential_energy():.3f},{h:.3f},{dsl:.3f},{ncl},{no},{dsi:.3f}\n"); cv.flush()
+    temp = at.get_temperature(); epot = at.get_potential_energy()
+    sanity(step, temp, epot, h, dsl, dsi)
+    cv.write(f"{step},{step*DT/1000:.3f},{temp:.1f},{epot:.3f},{h:.3f},{dsl:.3f},{ncl},{no},{dsi:.3f}\n"); cv.flush()
     return h,dsl
 h0,d0=log(0); frames.append(at.copy())
 print(f"# {label}: {nsteps*DT/1000:.0f} ps NVT {T_K}K; Al height0={h0:.2f} Al-slab0={d0:.2f} A")
@@ -105,4 +132,8 @@ for step in range(1,nsteps+1):
     if step%200==0: frames.append(at.copy())
     if step%5000==0:
         h,d=log(step); print(f"  t={step*DT/1000:.0f}ps Al_height={h:.2f} Al-slab={d:.2f} A cap={at.calc.ncap} nan={at.calc.nnan}",flush=True); write(f"{label}_traj.xyz",frames)
-write(f"{label}_traj.xyz",frames); cv.close(); print(f"# DONE {label}: {len(frames)} frames cap={at.calc.ncap} nan={at.calc.nnan}")
+write(f"{label}_traj.xyz",frames); cv.close()
+done = {"label": label, "frames": len(frames), "cap": at.calc.ncap, "nan": at.calc.nnan}
+with open(f"{label}_done.json", "w") as handle:
+    json.dump(done, handle, indent=2)
+print(f"# DONE {label}: {len(frames)} frames cap={at.calc.ncap} nan={at.calc.nnan}")
