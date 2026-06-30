@@ -1,0 +1,7 @@
+label,role,production_valid,n_prod_rows,teq_ps_per_segment,Al_slabMin_mean_A,Al_slabMin_sd_A,Al_slabMin_min_A,Al_slabMin_p05_A,Al_slabMin_p50_A,Al_slabMin_p95_A,Al_height_mean_A,Al_height_sd_A,Al_nCl_mean,Al_nCl_min,front_lt3p2_frac,near_lt4p0_frac,near_lt5p0_frac,near_lt6p0_frac,Al_SiMin_mean_A,Al_SiMin_p50_A,exclusion_reason
+bare_neutral_matched_500ps,primary neutral matched,True,16000,50.0,4.5792445625000004,0.18908129171518687,3.905,4.26,4.58,4.884,4.181352437499999,0.17397062676011887,2.0,2.0,0.0,0.0005,0.989125,1.0,,,
+poly_neutral_matched_500ps,primary neutral matched,True,16000,50.0,7.570035,0.7864422610878691,5.516,6.297,7.506,8.838049999999999,3.6675860625,0.7823933511784504,2.0,2.0,0.0,0.0,0.0,0.0195,7.190620375000001,7.186,
+bare_qcond_100ps,charge-conditioned q run,True,2000,50.0,5.553541999999999,0.1666687590281994,4.868,5.28795,5.552,5.83305,5.117945499999999,0.20014515864679316,2.0,2.0,0.0,0.0,0.0015,0.9925,,,
+poly_qcond_100ps,charge-conditioned q run,True,2000,50.0,9.043381,0.4091488663542892,8.056,8.42695,9.005500000000001,9.754,5.652981,0.2677269329727586,1.9985,1.0,0.0,0.0,0.0,0.0,6.3631375,6.385,
+poly_qm2_1ns,poly q=-2 long negative control,True,38000,50.0,8.456246921052632,0.31958099525784345,7.036,7.921,8.463,8.964,4.38469897368421,0.3315810148507797,1.9999473684210527,1.0,0.0,0.0,0.0,0.0,6.272712552631579,6.307,
+bare_qm1_unstable,excluded unstable charged run,False,0,5.0,,,,,,,,,,,,,,,,,"no finite, T<1000 K production rows after equilibration cut"

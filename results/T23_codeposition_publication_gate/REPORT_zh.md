@@ -49,7 +49,7 @@
 | T10 unbiased / field AIMD | 已完成负结果 | 中-强 | 短时无偏 AIMD 不显示自发 Al plating，事件是 rare / activated | 不能声称已在自由 AIMD 看到 spontaneous plating |
 | T10b steered contact AIMD | 已完成 | 强机制证据 | Al-Mg 距离进入约 2.6 A 后 qAl 从约 0.45 降到约 0.23；Al-Cl 同步弱化；ET-first/contact-gated | 不能称为 spontaneous；release 太短且回退 |
 | T23 contact-frame release | 进行中 | 当前为支持性早期证据 | s1 已到 320 fs，near_slab_contact_low_qAl 连续 320 fs，MgCoord low-qAl 连续 320 fs；s2 已启动 50 fs | 未过 0.5 ps interim，更未过 3 ps x 3 publication gate |
-| T17 neutral MLFF-MD | 现有生产不足 | 支持性，不够发表级 | bare r2 23.65 ps、poly 50 ps，显示 poly standoff 更大 | 不能当 200/500 ps x3 的 source-verified 生产 |
+| T17 neutral MLFF-MD | 长轨迹已找回并审计 | 强支持性，但不是直接 Al0 证据 | matched 500 ps x1：bare Al_slabMin 4.58 ± 0.19 A，poly 7.57 ± 0.79 A；poly q=-2 1 ns 仍为 8.46 ± 0.32 A | 不能单独证明 Al0/Mg-Al；仍未达到 200/500 ps x3 independent seeds |
 | REUS / MLFF PMF | 已恢复运行 | 正在补 desolvation/access 门控 | 可望提供 poly approach/desolvation gate 的更强统计 | 不是 Al0 形成证据 |
 | T5 classical-MD v3.6 | 已修正并提交 | 对接触机会有利 | cathode/faceB 侧 ANI atom density：bare 1.906 vs poly 0.574 /nm2；poly 降低还原前沿 anion 接触机会 | 不能证明 Al0/Mg-Al；total near-surface ANI 未降低 |
 
@@ -89,15 +89,39 @@ t23b_codep_contact_release_bare_qm2_s3_350K
 
 ## 当前 MLFF-MD / REUS 状态
 
+### T17 source-verified audit 更新（2026-07-01）
+
+WSL 原始目录 `computational_v2/mlff/v3/t17/` 中已经找回并审计 T17 长轨迹，输出见：
+
+```text
+results/T17_reactive/audit_t17_mlff.py
+results/T17_reactive/mlff_production_audit.csv
+results/T17_reactive/mlff_production_audit.json
+results/T17_reactive/REPORT.md
+```
+
+关键数值：
+
+```text
+neutral matched 500 ps x1:
+  bare Al_slabMin = 4.58 ± 0.19 A, Al_slabMin < 5 A = 98.9%
+  poly Al_slabMin = 7.57 ± 0.79 A, Al_slabMin < 5 A = 0%
+
+poly q=-2 1 ns negative control:
+  Al_slabMin = 8.46 ± 0.32 A, Al_slabMin < 6 A = 0%, cap=0, nan=0
+```
+
+这修正了旧判断“当前 source-verified 只有 bare r2 23.65 ps 和 poly 50 ps”。现在 T17 可作为长时 MLFF-MD support 写入主线：poly 确实降低 Al 阴离子进入 Mg 电子转移前沿的概率。但它仍不能替代 AIMD 直接共沉积证据，也还未达到 200/500 ps x3 independent seeds 的最严格 MLFF 发表门槛。
+
 GPU 上已恢复 poly REUS：
 
 ```text
 目录：/lyz/Claude_workplace/PolyAPC_Calculations/computational_v2/mlff
 脚本：run_poly_reus.sh
 进程：python reus.py ... umb_poly_reus ...
-恢复点：cycle 6, step 3000 fs
+恢复点：cycle 6, step 3000 fs；2026-07-01 00:24 CST 已确认跨过坏 checkpoint z=5.0/5.2 并继续推进
 目标：50 cycles, 28 windows, z0 = 4.0-9.4 A
-预计完成：2026-07-01 09:15-10:00 CST
+预计完成：需按 guarded run 重新估算；不要高频刷新
 ```
 
 该计算对“poly 如何阻止 Al 阴离子进入 productive contact / desolvation pathway”有用，但仍需与 DFT/AIMD 的 qAl / Al-Cl / Al-Mg 证据闭环。
@@ -105,13 +129,12 @@ GPU 上已恢复 poly REUS：
 ## 目前最短板
 
 1. **AIMD publication gate 未过。** T23 需要继续到至少 0.5 ps interim，并最终 3 ps x 3 bare seeds + matched poly negative controls。
-2. **T17 MLFF-MD 原始长轨迹缺失。** 当前 source-verified 只有 bare r2 23.65 ps 和 poly 50 ps，不足以支撑 200/500 ps x3。
+2. **T17 MLFF-MD 已补强但 replicates 不足。** 当前已有 matched 500 ps x1 + poly q=-2 1 ns 负控，足以支撑 access/standoff 机制；但还不足以宣称 MLFF production 达到 200/500 ps x3 independent seeds。
 3. **classical-MD 已可用于结构分布，但不证明还原。** v3.6 cathode 指标对 poly 有利，但必须作为 contact-opportunity 证据，而不是 Al0 证据。
 
 ## 下一步执行顺序
 
 1. 在 ETA 附近检查 T23：若 s1 达到 >=0.5 ps near_slab_contact_low_qAl，并且 qAl 维持低值，立即归档 interim milestone；若失败，启动 T23c/T23d weak-hold-and-release。
 2. 等 poly REUS 完成后运行 WHAM，生成 PMF / convergence drift / bootstrap error；若未完成，估算新 ETA。
-3. 恢复或重跑 T17 neutral/biased MLFF-MD：目标至少 200 ps x3，优先 source-verified `*_traj.xyz` 和 `*_cv.csv`。
+3. 视主稿风险决定是否继续补 T17 neutral/biased MLFF-MD replicates：目标至少 200 ps x3，推荐 500 ps x3；现有 `*_cv.csv` 已 source-verified，优先补 independent seeds 而不是重复同一 seed。
 4. 对 classical-MD 的 cathode face 结果做 Al-center / molecule-whole PBC 复核，只把可靠指标纳入主稿。
-

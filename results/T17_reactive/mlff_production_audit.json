@@ -1,0 +1,267 @@
+[
+  {
+    "label": "bare_neutral_matched_500ps",
+    "role": "primary neutral matched",
+    "files": [
+      "bare_final_s1_cv.csv",
+      "bare_final_cv.csv"
+    ],
+    "teq_ps_per_segment": 50.0,
+    "segments": [
+      {
+        "file": "bare_final_s1_cv.csv",
+        "rows_dedup": 4179,
+        "tmax_ps": 104.45,
+        "prod_rows_after_teq": 2178
+      },
+      {
+        "file": "bare_final_cv.csv",
+        "rows_dedup": 15823,
+        "tmax_ps": 395.55,
+        "prod_rows_after_teq": 13822
+      }
+    ],
+    "n_prod_rows": 16000,
+    "production_valid": true,
+    "log_bare_final_s1_cv": {
+      "log": "bare_final_s1.log",
+      "exists": 0,
+      "cap": null,
+      "nan": null,
+      "done": 0
+    },
+    "log_bare_final_cv": {
+      "log": "bare_final.log",
+      "exists": 1,
+      "cap": 0,
+      "nan": 0,
+      "done": 1
+    },
+    "sampling_dt_ps": 0.025000000000005684,
+    "Al_slabMin_mean_A": 4.5792445625000004,
+    "Al_slabMin_sd_A": 0.18908129171518687,
+    "Al_slabMin_min_A": 3.905,
+    "Al_slabMin_p05_A": 4.26,
+    "Al_slabMin_p50_A": 4.58,
+    "Al_slabMin_p95_A": 4.884,
+    "Al_height_mean_A": 4.181352437499999,
+    "Al_height_sd_A": 0.17397062676011887,
+    "Al_nCl_mean": 2.0,
+    "Al_nCl_min": 2.0,
+    "Al_nCl_le1_frac": 0.0,
+    "front_lt3p2_frac": 0.0,
+    "near_lt4p0_frac": 0.0005,
+    "near_lt5p0_frac": 0.989125,
+    "near_lt6p0_frac": 1.0
+  },
+  {
+    "label": "poly_neutral_matched_500ps",
+    "role": "primary neutral matched",
+    "files": [
+      "poly_r6_s1_cv.csv",
+      "poly_r6_cv.csv"
+    ],
+    "teq_ps_per_segment": 50.0,
+    "segments": [
+      {
+        "file": "poly_r6_s1_cv.csv",
+        "rows_dedup": 6687,
+        "tmax_ps": 167.15,
+        "prod_rows_after_teq": 4686
+      },
+      {
+        "file": "poly_r6_cv.csv",
+        "rows_dedup": 13315,
+        "tmax_ps": 332.85,
+        "prod_rows_after_teq": 11314
+      }
+    ],
+    "n_prod_rows": 16000,
+    "production_valid": true,
+    "log_poly_r6_s1_cv": {
+      "log": "poly_r6_s1.log",
+      "exists": 0,
+      "cap": null,
+      "nan": null,
+      "done": 0
+    },
+    "log_poly_r6_cv": {
+      "log": "poly_r6.log",
+      "exists": 1,
+      "cap": 0,
+      "nan": 0,
+      "done": 1
+    },
+    "sampling_dt_ps": 0.025000000000005684,
+    "Al_slabMin_mean_A": 7.570035,
+    "Al_slabMin_sd_A": 0.7864422610878691,
+    "Al_slabMin_min_A": 5.516,
+    "Al_slabMin_p05_A": 6.297,
+    "Al_slabMin_p50_A": 7.506,
+    "Al_slabMin_p95_A": 8.838049999999999,
+    "Al_height_mean_A": 3.6675860625,
+    "Al_height_sd_A": 0.7823933511784504,
+    "Al_nCl_mean": 2.0,
+    "Al_nCl_min": 2.0,
+    "Al_nCl_le1_frac": 0.0,
+    "front_lt3p2_frac": 0.0,
+    "near_lt4p0_frac": 0.0,
+    "near_lt5p0_frac": 0.0,
+    "near_lt6p0_frac": 0.0195,
+    "Al_SiMin_mean_A": 7.190620375000001,
+    "Al_SiMin_p50_A": 7.186
+  },
+  {
+    "label": "bare_qcond_100ps",
+    "role": "charge-conditioned q run",
+    "files": [
+      "bare_qcond_cv.csv"
+    ],
+    "teq_ps_per_segment": 50.0,
+    "segments": [
+      {
+        "file": "bare_qcond_cv.csv",
+        "rows_dedup": 4001,
+        "tmax_ps": 100.0,
+        "prod_rows_after_teq": 2000
+      }
+    ],
+    "n_prod_rows": 2000,
+    "production_valid": true,
+    "log_bare_qcond_cv": {
+      "log": "bare_qcond.log",
+      "exists": 1,
+      "cap": 0,
+      "nan": 0,
+      "done": 1
+    },
+    "sampling_dt_ps": 0.02499999999999858,
+    "Al_slabMin_mean_A": 5.553541999999999,
+    "Al_slabMin_sd_A": 0.1666687590281994,
+    "Al_slabMin_min_A": 4.868,
+    "Al_slabMin_p05_A": 5.28795,
+    "Al_slabMin_p50_A": 5.552,
+    "Al_slabMin_p95_A": 5.83305,
+    "Al_height_mean_A": 5.117945499999999,
+    "Al_height_sd_A": 0.20014515864679316,
+    "Al_nCl_mean": 2.0,
+    "Al_nCl_min": 2.0,
+    "Al_nCl_le1_frac": 0.0,
+    "front_lt3p2_frac": 0.0,
+    "near_lt4p0_frac": 0.0,
+    "near_lt5p0_frac": 0.0015,
+    "near_lt6p0_frac": 0.9925
+  },
+  {
+    "label": "poly_qcond_100ps",
+    "role": "charge-conditioned q run",
+    "files": [
+      "poly_qcond_cv.csv"
+    ],
+    "teq_ps_per_segment": 50.0,
+    "segments": [
+      {
+        "file": "poly_qcond_cv.csv",
+        "rows_dedup": 4001,
+        "tmax_ps": 100.0,
+        "prod_rows_after_teq": 2000
+      }
+    ],
+    "n_prod_rows": 2000,
+    "production_valid": true,
+    "log_poly_qcond_cv": {
+      "log": "poly_qcond.log",
+      "exists": 1,
+      "cap": 0,
+      "nan": 0,
+      "done": 1
+    },
+    "sampling_dt_ps": 0.02499999999999858,
+    "Al_slabMin_mean_A": 9.043381,
+    "Al_slabMin_sd_A": 0.4091488663542892,
+    "Al_slabMin_min_A": 8.056,
+    "Al_slabMin_p05_A": 8.42695,
+    "Al_slabMin_p50_A": 9.005500000000001,
+    "Al_slabMin_p95_A": 9.754,
+    "Al_height_mean_A": 5.652981,
+    "Al_height_sd_A": 0.2677269329727586,
+    "Al_nCl_mean": 1.9985,
+    "Al_nCl_min": 1.0,
+    "Al_nCl_le1_frac": 0.0015,
+    "front_lt3p2_frac": 0.0,
+    "near_lt4p0_frac": 0.0,
+    "near_lt5p0_frac": 0.0,
+    "near_lt6p0_frac": 0.0,
+    "Al_SiMin_mean_A": 6.3631375,
+    "Al_SiMin_p50_A": 6.385
+  },
+  {
+    "label": "poly_qm2_1ns",
+    "role": "poly q=-2 long negative control",
+    "files": [
+      "poly_qm2_1ns_cv.csv"
+    ],
+    "teq_ps_per_segment": 50.0,
+    "segments": [
+      {
+        "file": "poly_qm2_1ns_cv.csv",
+        "rows_dedup": 40001,
+        "tmax_ps": 1000.0,
+        "prod_rows_after_teq": 38000
+      }
+    ],
+    "n_prod_rows": 38000,
+    "production_valid": true,
+    "log_poly_qm2_1ns_cv": {
+      "log": "poly_qm2_1ns.log",
+      "exists": 1,
+      "cap": 0,
+      "nan": 0,
+      "done": 1
+    },
+    "sampling_dt_ps": 0.024999999999977263,
+    "Al_slabMin_mean_A": 8.456246921052632,
+    "Al_slabMin_sd_A": 0.31958099525784345,
+    "Al_slabMin_min_A": 7.036,
+    "Al_slabMin_p05_A": 7.921,
+    "Al_slabMin_p50_A": 8.463,
+    "Al_slabMin_p95_A": 8.964,
+    "Al_height_mean_A": 4.38469897368421,
+    "Al_height_sd_A": 0.3315810148507797,
+    "Al_nCl_mean": 1.9999473684210527,
+    "Al_nCl_min": 1.0,
+    "Al_nCl_le1_frac": 5.2631578947368424e-05,
+    "front_lt3p2_frac": 0.0,
+    "near_lt4p0_frac": 0.0,
+    "near_lt5p0_frac": 0.0,
+    "near_lt6p0_frac": 0.0,
+    "Al_SiMin_mean_A": 6.272712552631579,
+    "Al_SiMin_p50_A": 6.307
+  },
+  {
+    "label": "bare_qm1_unstable",
+    "role": "excluded unstable charged run",
+    "files": [
+      "bare_qm1_cv.csv"
+    ],
+    "teq_ps_per_segment": 5.0,
+    "segments": [
+      {
+        "file": "bare_qm1_cv.csv",
+        "rows_dedup": 1709,
+        "tmax_ps": 42.7,
+        "prod_rows_after_teq": 0
+      }
+    ],
+    "n_prod_rows": 0,
+    "production_valid": false,
+    "log_bare_qm1_cv": {
+      "log": "bare_qm1.log",
+      "exists": 1,
+      "cap": 74602,
+      "nan": 0,
+      "done": 0
+    },
+    "exclusion_reason": "no finite, T<1000 K production rows after equilibration cut"
+  }
+]
