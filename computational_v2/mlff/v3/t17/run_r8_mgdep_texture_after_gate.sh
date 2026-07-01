@@ -104,4 +104,5 @@ for seed in "${seeds[@]}"; do
 done
 
 "$py" ./summarize_r8_codeposition_texture.py
+"$py" ./select_post_r8_dft_frames.py
 echo "# T17 Mg-deposit texture launcher complete"
