@@ -53,6 +53,31 @@ purpose = DFT labelling / active-learning retrain
 
 因此当前 MLFF replicate 结论是 **新 bare seed 暴露出 near-contact 外推缺口**，不是新增 500 ps 生产统计。REUS 仍是当前唯一长时 GPU production。
 
+## 2026-07-01 08:28 CST T23 live update
+
+远端 CPU 节点 `/home/ls/PolyAPC_DFT_work/hpc/t23` 的 live monitor 已归档到：
+
+```text
+results/T23_codeposition_publication_gate/live_20260701_0828/
+```
+
+当前判断：
+
+- `publication_ready = false`
+- strict interim 0.5 ps event 仍未通过；
+- near-contact 0.5 ps event 已通过，且已有 2 个 bare seeds 支持；
+- near-contact + `nCl<=1` 支持已通过 1 个 seed，第二个 seed 正接近 0.5 ps；
+- 两个运行中的 T23b bare contact-release jobs 数值健康：fatal/warning = 0。
+
+关键数值：
+
+| seed | last geom fs | Al-slab / A | qAl Mulliken | strict longest/current fs | near longest/current fs | near+nCl<=1 longest/current fs | MgCoord longest/current fs | verdict |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| bare s1 300 K | 1785 | 2.784 | 0.1817 | 240 / 55 | 915 / 320 | 740 / 320 | 1785 / 1785 | promising early slab-contact+low-qAl; continue |
+| bare s2 325 K | 845 | 2.829 | 0.2107 | 200 / 0 | 720 / 720 | 475 / 475 | 720 / 720 | near-contact low-qAl with nCl<=1; continue |
+
+这比 07:24 的 support-level evidence 更强：s1 已接近 1.8 ps release，MgCoord low-qAl 全程连续；s2 的 near-contact low-qAl 当前连续 720 fs，near+nCl<=1 当前连续 475 fs，离 0.5 ps supporting diagnostic 只差约 25 fs。**但 strict slab-contact longest 仍只有 240/200 fs，所以不能写成 strict AIMD interim，更不能写成 publication-ready spontaneous Al plating。**
+
 ## 结论先行
 
 目前证据链已经足以支撑一个谨慎机制：**APC Al 阴离子不是在远离金属表面时自发还原，而是在进入 Mg 内层接触区后发生 contact-gated electron transfer，随后形成 metallic / alloy-like Al-Mg 电子态；poly-APC 通过降低 cathode 还原前沿的 Al 阴离子接触机会并保持 Si/O-rich、Al-poor 接触层，降低这一路径概率。**
