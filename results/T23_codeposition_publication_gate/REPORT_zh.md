@@ -43,6 +43,16 @@ WSL:  MemAvailable ~26 GB, swap = 0
 
 该 T17 run 已停止，partial `*_cv.csv` 只作为失败审计，不能进入 MLFF 生产统计。`interface_mlff_md.py` 已加入温度、几何、NaN 和可选 force-cap abort；`run_neutral_replicates.sh` 默认 `T17_ABORT_ON_CAP=1`，并只把 `*_done.json` 作为完成标志。当前 GPU 仅保留 `umb_poly_reus_dt05` 稳定推进；后续 T17 需要先短探针通过 cap=0 / no-abort 后再恢复 500 ps 生产。
 
+08:09 CST guarded 重启的结果：同一 seed/start 的 2.5 ps probe 通过 `cap=0,nan=0`，但 500 ps 生产重启在 `step=8450`（4.225 ps）触发第一个 force-cap 事件后按设计 abort。已抽取 9 个 abort 前后帧到：
+
+```text
+computational_v2/mlff/incoming/t17_bare_seed2026070101_abort_unlabeled.xyz
+source_time = 3.5-4.225 ps
+purpose = DFT labelling / active-learning retrain
+```
+
+因此当前 MLFF replicate 结论是 **新 bare seed 暴露出 near-contact 外推缺口**，不是新增 500 ps 生产统计。REUS 仍是当前唯一长时 GPU production。
+
 ## 结论先行
 
 目前证据链已经足以支撑一个谨慎机制：**APC Al 阴离子不是在远离金属表面时自发还原，而是在进入 Mg 内层接触区后发生 contact-gated electron transfer，随后形成 metallic / alloy-like Al-Mg 电子态；poly-APC 通过降低 cathode 还原前沿的 Al 阴离子接触机会并保持 Si/O-rich、Al-poor 接触层，降低这一路径概率。**
