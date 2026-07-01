@@ -27,7 +27,7 @@ PY
 )"
 seeds=(${SEEDS:-2026070101 2026070102})
 
-if pgrep -af 'reus.py.*umb_poly_reus' >/dev/null && [ "${ALLOW_WITH_REUS:-0}" != "1" ]; then
+if pgrep -af '[r]eus.py.*umb_poly_reus' >/dev/null && [ "${ALLOW_WITH_REUS:-0}" != "1" ]; then
   echo "REUS is still running on the GPU; not launching T17 replicates. Set ALLOW_WITH_REUS=1 to override." >&2
   exit 2
 fi

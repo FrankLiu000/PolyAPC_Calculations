@@ -100,6 +100,34 @@ GPU memory ~3.8 GB / 16.4 GB; WSL swap = 0
 
 健康判断：第二个 cycle 后所有窗口都至少覆盖到 1000 fs；写出的自由区 fmax 分布总体正常，绝大多数窗口最大 fmax 为 3-6 eV/A，只有 `z0=7.0 A` 出现 1 个 `fmax=30.9 eV/A` 点，未出现 `fmax>40` 或 NaN。`cap=7` 说明仍有少量 raw force spike 或固定区/外推事件，最终 PMF 必须报告该 caveat；当前只可作为 live progress / health evidence，不是 PMF 收敛结论。
 
+## 2026-07-01 09:16 CST T23 live support update
+
+新的 live 快照已归档：
+
+```text
+results/T23_codeposition_publication_gate/live_20260701_0916/
+```
+
+关键变化：
+
+```text
+t23b_codep_contact_release_bare_qm2_s1_300K:
+  last geom = 1845 fs
+  Al-slab min = 2.698 A
+  qAl(Mulliken) = 0.1427 e
+  MgCoord low-qAl continuous = 1845 fs
+  near+nCl<=1 current continuous = 380 fs
+
+t23b_codep_contact_release_bare_qm2_s2_325K:
+  last geom = 870 fs
+  Al-slab min = 2.783 A
+  qAl(Mulliken) = 0.2237 e
+  near-contact low-qAl current = 745 fs
+  near+nCl<=1 current = 500 fs
+```
+
+这使 s2 通过了 **near-contact + low-qAl + nCl<=1 连续 0.5 ps** 的辅助诊断门槛，是目前最接近“poly-free spontaneous Al plating”主线的 AIMD 支撑证据。限制仍然明确：strict slab-contact low-qAl 的最长连续段仍只有 240 fs (s1) / 200 fs (s2)，3 个 bare seeds 的 3 ps publication gate 还没有通过；因此只能写成 contact-gated reduction/dechlorination support，不可写成最终发表级自发共沉积结论。
+
 ## 结论先行
 
 目前证据链已经足以支撑一个谨慎机制：**APC Al 阴离子不是在远离金属表面时自发还原，而是在进入 Mg 内层接触区后发生 contact-gated electron transfer，随后形成 metallic / alloy-like Al-Mg 电子态；poly-APC 通过降低 cathode 还原前沿的 Al 阴离子接触机会并保持 Si/O-rich、Al-poor 接触层，降低这一路径概率。**

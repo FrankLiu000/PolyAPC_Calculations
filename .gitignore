@@ -93,6 +93,7 @@ computational_v2/mlff/*_pmf.dat
 computational_v2/mlff/poly_reus*.log
 computational_v2/mlff/umb_poly_reus_DONE
 computational_v2/mlff/v3/data/
+computational_v2/mlff/v3/data_r8_keyholdout/*.xyz
 computational_v2/mlff/v3/t17/*_traj.xyz
 computational_v2/mlff/v3/incoming/
 computational_v2/mlff/v3/models/
