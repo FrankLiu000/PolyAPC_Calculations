@@ -103,4 +103,5 @@ for seed in "${seeds[@]}"; do
   done
 done
 
+"$py" ./summarize_r8_codeposition_texture.py
 echo "# T17 Mg-deposit texture launcher complete"

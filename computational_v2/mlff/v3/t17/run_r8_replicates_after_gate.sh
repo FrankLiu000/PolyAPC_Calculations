@@ -37,3 +37,4 @@ fi
 cd "$v3/t17"
 MODEL="$model" LABEL_TAG="${LABEL_TAG:-r8neutral}" PS="${PS:-500}" SEEDS="${SEEDS:-2026070201 2026070202}" \
   ./run_neutral_replicates.sh
+"${PY:-/lyz/Claude_workplace/polyAPC/.mlff_venv/bin/python}" ./summarize_r8_codeposition_texture.py
