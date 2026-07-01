@@ -6,8 +6,6 @@ post-r8 queue may contain bare, poly, and Mg-deposit probes with different atom
 counts, so this helper writes one scaffold xyz per compatible group plus a TSV
 manifest consumed by ``submit_post_r8_label.sbatch``.
 """
-from __future__ import annotations
-
 import csv
 import hashlib
 import json
@@ -20,7 +18,7 @@ LATTICE_RE = re.compile(r'Lattice="([^"]+)"')
 CHARGE_RE = re.compile(r"(?:^|\s)charge=([-+0-9.eE]+)")
 
 
-def frames(path: Path):
+def frames(path):
     if not path.exists() or path.stat().st_size == 0:
         return
     with path.open() as handle:
@@ -41,14 +39,14 @@ def frames(path: Path):
             yield nat, comment.rstrip("\n"), atoms
 
 
-def lattice_csv(comment: str) -> str:
+def lattice_csv(comment):
     match = LATTICE_RE.search(comment)
     if not match:
         raise ValueError("missing Lattice field")
     return ",".join(match.group(1).split())
 
 
-def charge(comment: str) -> str:
+def charge(comment):
     match = CHARGE_RE.search(comment)
     if not match:
         return "0"
@@ -58,17 +56,17 @@ def charge(comment: str) -> str:
     return f"{val:g}"
 
 
-def gid(nat: int, chg: str, lat: str) -> str:
+def gid(nat, chg, lat):
     digest = hashlib.sha1(lat.encode("utf-8")).hexdigest()[:8]
     clean_charge = chg.replace("+", "p").replace("-", "m").replace(".", "p")
     return f"N{nat}_q{clean_charge}_lat{digest}"
 
 
-def main(argv: list[str]) -> int:
+def main(argv):
     src = Path(argv[0]) if argv else Path("post_r8_dft_candidates.xyz")
     outdir = Path(argv[1]) if len(argv) > 1 else Path("post_r8_label_batches")
     outdir.mkdir(parents=True, exist_ok=True)
-    groups: dict[tuple[int, str, str], list[tuple[str, list[str]]]] = {}
+    groups = {}
     errors = []
     for idx, frame in enumerate(frames(src) or []):
         nat, comment, atoms = frame
