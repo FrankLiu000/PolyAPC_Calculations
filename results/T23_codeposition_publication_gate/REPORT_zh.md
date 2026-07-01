@@ -78,6 +78,28 @@ results/T23_codeposition_publication_gate/live_20260701_0828/
 
 这比 07:24 的 support-level evidence 更强：s1 已接近 1.8 ps release，MgCoord low-qAl 全程连续；s2 的 near-contact low-qAl 当前连续 720 fs，near+nCl<=1 当前连续 475 fs，离 0.5 ps supporting diagnostic 只差约 25 fs。**但 strict slab-contact longest 仍只有 240/200 fs，所以不能写成 strict AIMD interim，更不能写成 publication-ready spontaneous Al plating。**
 
+## 2026-07-01 08:34 CST REUS dt05 progress
+
+WSL GPU REUS 进度摘要已归档：
+
+```text
+results/T17_reactive/reus_dt05_progress_20260701_0834.{md,csv,json}
+```
+
+状态：
+
+```text
+out_dir = computational_v2/mlff/umb_poly_reus_dt05
+state = 1000 fs
+completed cycles = 2 / 50
+windows >= state = 28 / 28
+exchange acceptance = 9/27 = 33%
+cap/nan = 7 / 0
+GPU memory ~3.8 GB / 16.4 GB; WSL swap = 0
+```
+
+健康判断：第二个 cycle 后所有窗口都至少覆盖到 1000 fs；写出的自由区 fmax 分布总体正常，绝大多数窗口最大 fmax 为 3-6 eV/A，只有 `z0=7.0 A` 出现 1 个 `fmax=30.9 eV/A` 点，未出现 `fmax>40` 或 NaN。`cap=7` 说明仍有少量 raw force spike 或固定区/外推事件，最终 PMF 必须报告该 caveat；当前只可作为 live progress / health evidence，不是 PMF 收敛结论。
+
 ## 结论先行
 
 目前证据链已经足以支撑一个谨慎机制：**APC Al 阴离子不是在远离金属表面时自发还原，而是在进入 Mg 内层接触区后发生 contact-gated electron transfer，随后形成 metallic / alloy-like Al-Mg 电子态；poly-APC 通过降低 cathode 还原前沿的 Al 阴离子接触机会并保持 Si/O-rich、Al-poor 接触层，降低这一路径概率。**
