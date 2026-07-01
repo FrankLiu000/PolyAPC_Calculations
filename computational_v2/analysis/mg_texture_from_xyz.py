@@ -8,7 +8,7 @@ trajectory cannot address plated-Mg texture rather than producing a slab-driven
 false positive.
 
 Usage:
-    mg_texture_from_xyz.py <trajectory.xyz> <out_prefix> [tail_frac] [deposited_index_file|--auto-detect]
+    mg_texture_from_xyz.py <trajectory.xyz> <out_prefix> [tail_frac] [deposited_index_file|--auto-detect] [--nslab N]
 """
 from __future__ import annotations
 
@@ -33,8 +33,14 @@ MAX_SOLVATION_NEIGHBORS = 1
 SLAB_GAP_MIN_A = 3.8
 
 
-def slab_indices(at) -> tuple[np.ndarray, float]:
+def slab_indices(at, nslab: int | None = None) -> tuple[np.ndarray, float]:
     sym = np.array(at.get_chemical_symbols())
+    if nslab is not None:
+        slab = np.arange(nslab, dtype=int)
+        slab = slab[slab < len(sym)]
+        slab = slab[sym[slab] == "Mg"]
+        if len(slab):
+            return slab, float(at.get_positions()[slab, 2].max())
     mg = np.where(sym == "Mg")[0]
     z = at.get_positions()[mg, 2]
     order = np.argsort(z)
@@ -143,18 +149,25 @@ def main(argv: list[str]) -> int:
     tail = float(argv[2]) if len(argv) > 2 else 0.5
     explicit = None
     auto_detect = False
+    nslab = None
     mode = "explicit-index-required"
-    if len(argv) > 3:
-        if argv[3] == "--auto-detect":
+    args = list(argv[3:])
+    while args:
+        arg = args.pop(0)
+        if arg == "--auto-detect":
             auto_detect = True
             mode = "auto-detect"
+        elif arg == "--nslab":
+            if not args:
+                raise ValueError("--nslab requires an integer")
+            nslab = int(args.pop(0))
         else:
-            explicit = np.loadtxt(argv[3], dtype=int, ndmin=1)
-            mode = f"explicit-index-file:{argv[3]}"
+            explicit = np.loadtxt(arg, dtype=int, ndmin=1)
+            mode = f"explicit-index-file:{arg}"
     atoms = read(traj, index=":")
     start = int(len(atoms) * (1.0 - tail))
     atoms = atoms[start:]
-    slab, slab_top = slab_indices(atoms[0])
+    slab, slab_top = slab_indices(atoms[0], nslab=nslab)
     rows = []
     for i, at in enumerate(atoms):
         rec = frame_metrics(at, slab, slab_top, explicit, auto_detect)
@@ -177,6 +190,7 @@ def main(argv: list[str]) -> int:
         f"- trajectory: `{traj}`",
         f"- analyzed_frames: {len(rows)} (tail_frac={tail})",
         f"- selection_mode: {mode}",
+        f"- nslab_override: {nslab if nslab is not None else 'auto'}",
         f"- slab_top_A: {slab_top:.3f}",
         f"- deposited Mg/frame: mean={np.nanmean(n):.2f}, max={np.nanmax(n):.0f}",
     ]

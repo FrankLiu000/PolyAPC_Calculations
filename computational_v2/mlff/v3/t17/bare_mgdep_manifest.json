@@ -1,0 +1,82 @@
+{
+  "system": "bare",
+  "source_start": "/lyz/Claude_workplace/PolyAPC_Calculations/computational_v2/mlff/v3/t17/bare_start.xyz",
+  "output_start": "/lyz/Claude_workplace/PolyAPC_Calculations/computational_v2/mlff/v3/t17/bare_mgdep_start.xyz",
+  "index_file_0based": "/lyz/Claude_workplace/PolyAPC_Calculations/computational_v2/mlff/v3/t17/bare_mgdep_indices0.txt",
+  "n_seeded_deposited_mg": 4,
+  "z_offset_A": 2.65,
+  "new_indices0": [
+    172,
+    173,
+    174,
+    175
+  ],
+  "positions": [
+    {
+      "position_A": [
+        3.7854257166666665,
+        4.1987357466666655,
+        26.899644809999998
+      ],
+      "frac_xy": [
+        0.10604694809886643,
+        0.37772002039102787
+      ],
+      "slab_min_A": 2.994878292589395,
+      "nearest_nonslab_A": 2.4981177259548506,
+      "nearest_nonslab_index0": 114,
+      "clearance_margin_A": 1.1481177259548505,
+      "site_score": 1.0791420674369716
+    },
+    {
+      "position_A": [
+        11.495869816666666,
+        8.310175266666667,
+        26.227808869999997
+      ],
+      "frac_xy": [
+        0.5218025478772201,
+        0.7475868357922514
+      ],
+      "slab_min_A": 2.6884729578717064,
+      "nearest_nonslab_A": 1.8781986484120248,
+      "nearest_nonslab_index0": 75,
+      "clearance_margin_A": 0.5281986484120247,
+      "site_score": 0.5205040568376834
+    },
+    {
+      "position_A": [
+        13.67597406,
+        5.980516069999999,
+        26.227808869999997
+      ],
+      "frac_xy": [
+        0.7964340654456851,
+        0.5380097220223101
+      ],
+      "slab_min_A": 2.915665300193772,
+      "nearest_nonslab_A": 2.2385413389943283,
+      "nearest_nonslab_index0": 109,
+      "clearance_margin_A": 0.2885413389943283,
+      "site_score": 0.23540827895557395
+    },
+    {
+      "position_A": [
+        9.948460596666667,
+        5.61310677,
+        26.559732989999997
+      ],
+      "frac_xy": [
+        0.5225649597662382,
+        0.5049574280316661
+      ],
+      "slab_min_A": 2.9639945186118273,
+      "nearest_nonslab_A": 1.7851416751372942,
+      "nearest_nonslab_index0": 115,
+      "clearance_margin_A": 0.43514167513729407,
+      "site_score": 0.3723427714149286
+    }
+  ],
+  "matched_fractional_sites": true,
+  "interpretation": "controlled deposited-Mg texture probe; not spontaneous Mg plating"
+}

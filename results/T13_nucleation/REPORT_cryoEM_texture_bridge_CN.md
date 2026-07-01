@@ -60,6 +60,28 @@ results/T13_nucleation/texture_audit_poly_r6.md
 
 两者均显示没有显式新沉积Mg群体。因此，当前T17 Al阴离子轨迹可以支持Al排斥/Al接触机会这一机制，但**不能**作为直接Mg(0002)织构证据。
 
+为下一步直接对应cryo-EM，已经准备了一个受控Mg-deposit texture probe：
+
+```text
+computational_v2/mlff/v3/t17/build_mgdep_starts.py
+computational_v2/mlff/v3/t17/run_r8_mgdep_texture_after_gate.sh
+computational_v2/mlff/v3/t17/bare_mgdep_start.xyz
+computational_v2/mlff/v3/t17/poly_mgdep_start.xyz
+computational_v2/mlff/v3/t17/bare_mgdep_indices0.txt
+computational_v2/mlff/v3/t17/poly_mgdep_indices0.txt
+```
+
+这组输入在bare和poly中使用同一组表面分数坐标加入4个中性Mg adatom/小岛原子，并用0-based索引文件显式标记“新沉积Mg”。它的用途是测试：在相同初始Mg-deposit probe下，bare中Al-rich接触/脱氯/沉积是否导致Mg小岛失序，而poly中Al排斥是否允许Mg(0002)有序保持。它不是“自发Mg plating”的证据。
+
+起始结构审计已写入：
+
+```text
+results/T13_nucleation/mgdep_seed_audit/bare_mgdep_start_texture.md
+results/T13_nucleation/mgdep_seed_audit/poly_mgdep_start_texture.md
+```
+
+这些初态数值只作为baseline。后续图中应报告末段相对于初态的变化，而不是用初态本身证明poly更好。`run_r8_mgdep_texture_after_gate.sh`默认在r8 key-holdout通过后运行500 ps、两个seed的bare/poly配对轨迹，并用`--nslab 64`保证电极定义与T17 driver一致。
+
 ### 层级3：模拟衍射/图形输出
 
 如果要做成论文图，应始终并列报告bare与poly：

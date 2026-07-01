@@ -3,7 +3,7 @@
 **Node:** EPYC CPU (192 core) — DFT (G16/ORCA) + AIMD/periodic (CP2K 2025.1). GPU/MLFF tickets (T5,T16,T17) are the other node.
 **Started:** 2026-06-18 (this session). Branch `computational-v3-interface` (two-node: CPU commits + GPU pushes T5/T16/T17 here).
 
-## Live update — 2026-07-01 07:46 CST
+## Live update — 2026-07-01 09:45 CST
 
 - **GPU recovery after local crash:** old `computational_v2/mlff/umb_poly_reus` is retained as a failed-restart audit because `z0=5.0` produced nonphysical CV/fmax rows after reboot. Formal continuation now uses clean `umb_poly_reus_dt05` with `dt=0.5 fs`, `ForceCap60`, and hard sanity aborts.
 - **REUS resumed safely:** `umb_poly_reus_dt05` has passed the previously unstable `z0=5.0` 500 fs window with `fmax=3.691 eV/A`, no cap/nan/abort. It is evidence for poly desolvation/access gating, not by itself Al0 formation.
@@ -16,6 +16,7 @@
 - **T17 key-reactive MLFF gate added:** CPU validation shows `r6_qcond` has not seen the key co-deposition chemistry and fails on Cl-strip / Al-nearsurface frames (83.5-98.9 meV/A), while `apc_v3_broad` passes the in-manifold Al-deposition/Cl-strip check (35.6 meV/A) but is borderline on T17 near-surface (52.7 meV/A). A deterministic r8 split now reserves key holdout frames (`data_r8_keyholdout`, train/val/test_key=790/69/72); do not claim publication-grade T17 MLFF until r8 passes key-holdout validation.
 - **Post-r8 T17 production is gated:** `gate_key_holdout.py` and `t17/run_r8_replicates_after_gate.sh` now require a passed r8 key-holdout JSON before launching matched bare/poly T17 MLFF-MD, preventing accidental production from an unvalidated model.
 - **cryo-EM Mg(0002) texture bridge added:** `results/T13_nucleation/REPORT_cryoEM_texture_bridge_CN.md` maps poly Mg(0002) texture vs bare low crystallinity onto the existing composition mechanism: Al/Mg-Al heterogeneity disrupts Mg homoepitaxy in bare, while Al exclusion permits cleaner Mg(0002)-aligned growth in poly. `computational_v2/analysis/mg_texture_from_xyz.py` provides a conservative deposited-Mg I0002/I10-10 proxy; blank audits show existing T17 Al-anion trajectories contain no explicit deposited-Mg population and must not be overclaimed as direct texture evidence.
+- **Post-r8 Mg-deposit texture probe prepared:** `t17/build_mgdep_starts.py` creates matched bare/poly fractional-site Mg-deposit seeds plus explicit 0-based deposited-Mg index files; `t17/run_r8_mgdep_texture_after_gate.sh` refuses to launch while r8 is training or while key-holdout is ungated, then runs 500 ps matched bare/poly probes and analyzes texture with `--nslab 64`. Seed audits are in `results/T13_nucleation/mgdep_seed_audit/`; they are baselines, not endpoint evidence.
 - **T5 v3.7 fixed-face check added:** `results/T5_anion_interface/REPORT_v3_7_alcenter_molecule_check_CN.md` shows that in the 1.0 nm cathode layer, bare has ~3.5x higher Al-center density and ~4.3x higher Al/Cl reactive-atom density than poly. This strengthens contact-opportunity gating but remains classical-MD structural evidence, not redox proof.
 
 ## Ticket tracker (T0–T15 here; T16–T17 GPU)
