@@ -83,3 +83,23 @@ The r8 gate is:
 - no key group above ~75 meV/A without explanation,
 - then rerun matched bare/poly T17 replicates with `run_neutral_replicates.sh`,
 - any new Al-plating candidate frames must go back to CPU DFT validation before being used as evidence.
+
+## 2026-07-01 gate automation
+
+To prevent an accidental premature T17 production run, two lightweight gate scripts were added:
+
+```text
+computational_v2/mlff/v3/gate_key_holdout.py
+computational_v2/mlff/v3/t17/run_r8_replicates_after_gate.sh
+```
+
+The gate requires:
+
+```text
+GLOBAL force MAE <= 50 meV/A
+al_bare_nearsurface weighted force MAE <= 75 meV/A
+dep_bare weighted force MAE <= 75 meV/A
+react_bare_clstrip weighted force MAE <= 75 meV/A
+```
+
+`run_r8_replicates_after_gate.sh` refuses to launch while r8 training is still running, while the r8 model or key-holdout metrics are missing, or while the gate JSON is absent/failed. It calls `run_neutral_replicates.sh` only with the r8 model and labels the trajectories as `bare_r8neutral_*` / `poly_r8neutral_*`, preserving the previous failed/partial neutral runs as separate evidence.

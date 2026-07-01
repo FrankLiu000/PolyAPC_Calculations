@@ -15,6 +15,7 @@ require_vram_free_gb "${T17_MIN_VRAM_FREE_GB:-6}"
 py="${PY:-/lyz/Claude_workplace/polyAPC/.mlff_venv/bin/python}"
 driver="$mlff/v3/interface_mlff_md.py"
 model="${MODEL:-$mlff/v3/models/t16_broad_r6.model}"
+label_tag="${LABEL_TAG:-neutral}"
 dt_fs="${DT_FS:-0.5}"
 ps="${PS:-500}"
 temperature="${T_K:-300}"
@@ -42,7 +43,7 @@ echo "# T17 neutral replicates: ps=$ps dt_fs=$dt_fs steps=$steps T=$temperature 
 for seed in "${seeds[@]}"; do
   for system in bare poly; do
     start="${system}_start.xyz"
-    label="${system}_neutral_seed${seed}_${ps}ps"
+    label="${system}_${label_tag}_seed${seed}_${ps}ps"
     if [ -s "${label}_done.json" ]; then
       echo "skip existing $label"
       continue

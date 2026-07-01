@@ -55,6 +55,9 @@ for ct,r in sorted(rows.items()):
 allF_ref=np.concatenate(allF_ref) if allF_ref else np.array([])
 allF_ml=np.concatenate(allF_ml) if allF_ml else np.array([])
 gmae=np.abs(allF_ml-allF_ref).mean()*1000 if allF_ref.size else float("nan")
+grmse=np.sqrt(((allF_ml-allF_ref)**2).mean())*1000 if allF_ref.size else float("nan")
+gemae=np.mean(np.abs(np.array(allE_ml)-np.array(allE_ref)))*1000 if allE_ref else float("nan")
+csv_rows.append({"config_type": "GLOBAL", "n": len(ats), "force_mae_mev_A": gmae, "force_rmse_mev_A": grmse, "energy_mae_mev_atom": gemae})
 print(f"\nGLOBAL force MAE = {gmae:.1f} meV/Å   (target <= 50)   reactive(t10) worst = {worst:.1f}")
 print(f"==> {'PASS' if gmae<=50 else 'NEEDS MORE DATA/TRAINING'} (T16 DoD: force MAE <=50 meV/Å)")
 # parity
