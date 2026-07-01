@@ -4,6 +4,19 @@ Date: 2026-07-01
 Priority: high for T17 publication-level MLFF-MD stability and DFT validation  
 Source commit: `06c2b66` plus follow-up request files
 
+## CPU scheduling note
+
+Submitted on the CPU node as Slurm job `1741` (`t17_abort_label`), but deliberately placed **after** the
+T23 AIMD publication-gate queue:
+
+```text
+scontrol update JobId=1741 Dependency=afterany:1737
+```
+
+where `1737` is `t23_post`, which itself depends on the active/pending T23 release and hold-release jobs.
+This keeps T23 AIMD as the CPU priority; the T17 labels start only after the T23 chain has finished and
+post-processing has run.
+
 ## Why
 
 The guarded T17 neutral bare replicate
